@@ -107,7 +107,7 @@ function renderPricing() {
       <div class="price">${p.price}</div>
       <p class="recipe-count">${p.recipes} recipes</p>
       <ul>${p.features.map(f => `<li>✓ ${f}</li>`).join('')}</ul>
-      <a href="auth.html" class="btn ${popular ? 'btn-primary' : 'btn-outline'} btn-full">
+      <a href="auth.html${k === 'free' ? '#signup' : '#login'}" class="btn ${popular ? 'btn-primary' : 'btn-outline'} btn-full">
         ${k === 'free' ? 'Start Free' : 'Get ' + p.name}
       </a>
     </div>`;
@@ -130,6 +130,7 @@ function scrollToSection(id) {
 
 // ===================== AUTH PAGE =====================
 function initAuth() {
+  initScrollAnimations();
   if (isLoggedIn()) { window.location.href = 'dashboard.html'; return; }
 
   const loginTab = $('#loginTab');
@@ -165,16 +166,38 @@ function initAuth() {
   signupForm.addEventListener('submit', e => {
     e.preventDefault();
     const name = $('#signupName').value;
+    const phone = $('#signupPhone').value;
     const email = $('#signupEmail').value;
+    const age = $('#signupAge').value;
+    const country = $('#signupCountry').value;
     const pass = $('#signupPass').value;
     const confirm = $('#signupConfirm').value;
-    if (!name || !email || !pass || !confirm) return showToast('Please fill all fields', 'error');
+    
+    if (!name || !phone || !email || !age || !country || !pass || !confirm) {
+      return showToast('Please fill all fields', 'error');
+    }
     if (pass !== confirm) return showToast('Passwords do not match', 'error');
     if (pass.length < 6) return showToast('Password must be at least 6 characters', 'error');
+    
     saveUser({ name, email, plan: 'free' });
     showToast('Account created!', 'success');
     setTimeout(() => window.location.href = 'dashboard.html', 800);
   });
+
+  const loginToSignupBtn = $('#loginToSignupBtn');
+  if (loginToSignupBtn) {
+    loginToSignupBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      signupTab.click();
+      window.history.pushState(null, null, '#signup');
+    });
+  }
+
+  if (window.location.hash === '#signup') {
+    signupTab.click();
+  } else if (window.location.hash === '#login') {
+    loginTab.click();
+  }
 }
 
 // ===================== DASHBOARD =====================
