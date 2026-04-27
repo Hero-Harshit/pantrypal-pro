@@ -2,6 +2,11 @@
 
 // ---------- State ----------
 let currentUser = JSON.parse(localStorage.getItem('pp_user')) || null;
+// Fix for older 'poor' plan contamination
+if (currentUser && currentUser.plan === 'poor') {
+  currentUser.plan = 'free';
+  localStorage.setItem('pp_user', JSON.stringify(currentUser));
+}
 let darkMode = localStorage.getItem('pp_dark') === 'true';
 let activeFilters = new Set();
 let detectedIngredients = [];
@@ -31,7 +36,7 @@ function saveUser(user) {
 function logout() {
   currentUser = null;
   localStorage.removeItem('pp_user');
-  window.location.href = 'index.html';
+  window.location.href = 'landing.html';
 }
 
 function isLoggedIn() { return !!currentUser; }
@@ -101,7 +106,7 @@ function renderPricing() {
     const p = PLANS[k];
     const popular = k === 'pro';
     return `
-    <div class="pricing-card glass-card ${popular ? 'popular' : ''}">
+    <div class="pricing-card glass-card tier-${k} ${popular ? 'popular' : ''}">
       ${popular ? '<span class="badge-popular">Most Popular</span>' : ''}
       <h3>${p.name}</h3>
       <div class="price">${p.price}</div>
@@ -172,13 +177,13 @@ function initAuth() {
     const country = $('#signupCountry').value;
     const pass = $('#signupPass').value;
     const confirm = $('#signupConfirm').value;
-    
+
     if (!name || !phone || !email || !age || !country || !pass || !confirm) {
       return showToast('Please fill all fields', 'error');
     }
     if (pass !== confirm) return showToast('Passwords do not match', 'error');
     if (pass.length < 6) return showToast('Password must be at least 6 characters', 'error');
-    
+
     saveUser({ name, email, plan: 'free' });
     showToast('Account created!', 'success');
     setTimeout(() => window.location.href = 'dashboard.html', 800);
@@ -332,12 +337,47 @@ window.scanPantry = function () {
   }, 1500);
 }
 
+let activeTier = 'all';
+let activeMeal = 'all';
+
+window.setTierFilter = function (tier) {
+  activeTier = tier;
+  $$('.tier-tab').forEach(b => b.classList.remove('active'));
+  const el = $('#tier-' + tier);
+  if (el) el.classList.add('active');
+  renderRecipes();
+};
+
+window.setMealFilter = function (meal) {
+  activeMeal = meal;
+  $$('.meal-tab').forEach(b => b.classList.remove('active'));
+  const el = $('#meal-' + meal);
+  if (el) el.classList.add('active');
+  renderRecipes();
+};
+
 function renderRecipes() {
   const grid = $('#recipeGrid');
   if (!grid) return;
 
   let filtered = [...RECIPES];
-  if (activeFilters.size > 0) {
+
+  if (activeTier !== 'all') {
+    if (activeTier === 'plus') {
+      filtered = filtered.filter(r => r.tier === 'free' || r.tier === 'plus');
+    } else if (activeTier === 'pro') {
+      // Pro includes all tiers, so no filtering needed
+    } else {
+      // Free includes only 'free'
+      filtered = filtered.filter(r => r.tier === 'free');
+    }
+  }
+
+  if (activeMeal !== 'all') {
+    filtered = filtered.filter(r => r.meal === activeMeal);
+  }
+
+  if (activeFilters && activeFilters.size > 0) {
     filtered = filtered.filter(r => [...activeFilters].some(f => r.tags.includes(f)));
   }
 
@@ -345,9 +385,9 @@ function renderRecipes() {
 
   if (sortOpt === 'popular') {
     filtered.sort((a, b) => b.rating - a.rating);
-  } else if (sortOpt === 'time' || sortOpt === 'easy') {
+  } else if (sortOpt === 'easy') {
     filtered.sort((a, b) => parseInt(a.time) - parseInt(b.time));
-  } else if (sortOpt === 'calories') {
+  } else if (sortOpt === 'healthy') {
     filtered.sort((a, b) => parseInt(a.calories) - parseInt(b.calories));
   }
 
@@ -357,13 +397,19 @@ function renderRecipes() {
   }
 
   grid.innerHTML = filtered.map(r => {
-    const locked = r.premium && currentUser.plan === 'free';
+    let locked = false;
+    if (r.tier === 'pro' && currentUser.plan !== 'pro') {
+      locked = true;
+    } else if (r.tier === 'plus' && currentUser.plan === 'free') {
+      locked = true;
+    }
+    
     return `
-    <div class="recipe-card glass-card ${locked ? 'locked' : ''}">
+    <div class="recipe-card glass-card ${locked ? 'locked' : ''}" ${locked ? `onclick="showToast('Upgrade to ${r.tier === 'pro' ? 'Pro' : 'Plus'} to unlock!','info')"` : `onclick="openRecipeModal(${r.id})"`}>
       <div class="recipe-img-wrap">
         <img src="${r.image}" alt="${r.name}" loading="lazy">
-        ${locked ? '<div class="lock-overlay"><span>🔒</span><p>Premium Recipe</p></div>' : ''}
-        ${r.premium ? '<span class="premium-badge">PRO</span>' : ''}
+        ${locked ? `<div class="lock-overlay"><p style="font-weight: 700; font-size: 1.2rem;">${r.tier.charAt(0).toUpperCase() + r.tier.slice(1)} Recipe</p></div>` : ''}
+        ${r.tier !== 'free' ? `<span class="premium-badge">${r.tier.toUpperCase()}</span>` : ''}
       </div>
       <div class="recipe-info">
         <h3>${r.name}</h3>
@@ -373,14 +419,96 @@ function renderRecipes() {
           <span>🔥 ${r.calories}</span>
           <span>⭐ ${r.rating}</span>
         </div>
-        <div class="recipe-tags">
-          ${r.tags.map(t => `<span class="tag tag-${t}">${t}</span>`).join('')}
-        </div>
-        ${locked ? `<button class="btn btn-primary btn-full btn-sm" onclick="showToast('Upgrade to Pro to unlock!','info')">Unlock Recipe</button>` : `<button class="btn btn-outline btn-full btn-sm">View Recipe</button>`}
       </div>
     </div>`;
   }).join('');
 }
+
+window.openRecipeModal = function(id) {
+  const r = RECIPES.find(r => r.id === id);
+  if (!r) return;
+  
+  $('#modalRecipeTitle').textContent = r.name;
+  $('#modalRecipeDesc').textContent = r.description;
+  
+  const ings = r.ingredients || ['Ingredient 1', 'Ingredient 2', 'Ingredient 3'];
+  $('#modalIngredients').innerHTML = ings.map(i => `<li>${i}</li>`).join('');
+  
+  const steps = r.steps || [
+    'Prepare all ingredients and wash vegetables.',
+    'Heat oil in a pan over medium-high heat.',
+    'Cook the main ingredients until golden brown.',
+    'Mix in the spices and sauces, let it simmer.',
+    'Serve hot and enjoy!'
+  ];
+  $('#modalSteps').innerHTML = steps.map(s => `<li>${s}</li>`).join('');
+  
+  const videoContainer = $('#modalVideoContainer');
+  const playbarHtml = `<div class="video-playbar"></div>`;
+  if (currentUser.plan === 'pro') {
+    videoContainer.innerHTML = `
+      <div style="text-align: center; position: relative; z-index: 5;">
+        <span style="font-size: 3rem;">▶</span>
+        <p style="margin-top: 1rem; font-weight: 600;">Play Premium Video Tutorial</p>
+      </div>
+      ${playbarHtml}`;
+  } else {
+    videoContainer.innerHTML = `
+      <div class="video-locked">
+        <h3 style="margin-bottom: 0.5rem; font-size: 1.5rem; color: #fff; position: relative; z-index: 5;">Video Tutorial Locked</h3>
+        <p style="margin-bottom: 1.5rem; color: #cbd5e1; position: relative; z-index: 5; max-width: 400px;">Upgrade to Pro to watch guided video tutorials from our expert chefs.</p>
+        <button class="btn btn-primary" style="position: relative; z-index: 5;" onclick="window.location.href='dashboard.html'; currentUser.plan='pro'; saveUser(currentUser); location.reload();">Upgrade to Pro</button>
+      </div>
+      ${playbarHtml}`;
+  }
+
+  const commentsContainer = $('#modalCommentsContainer');
+  if (currentUser.plan === 'free') {
+    commentsContainer.innerHTML = `
+      <div style="text-align: center; padding: 3rem; background: var(--bg-secondary); border-radius: var(--radius-lg); border: 1px dashed var(--border);">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 1rem; opacity: 0.5;">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+        </svg>
+        <h3>Community Comments Locked</h3>
+        <p class="text-muted" style="margin-bottom: 1.5rem;">Join Plus or Pro to read reviews, tips, and share your own cooking experience.</p>
+        <button class="btn btn-outline" onclick="window.location.href='dashboard.html'; currentUser.plan='plus'; saveUser(currentUser); location.reload();">Unlock Comments</button>
+      </div>
+    `;
+  } else {
+    commentsContainer.innerHTML = `
+      <h3>Community Comments <span style="color: var(--text-muted); font-size: 1rem; font-weight: normal;">(2)</span></h3>
+      <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+        <div style="padding: 1.5rem; background: var(--glass-bg); border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <strong>Sarah M.</strong>
+            <span class="text-muted" style="font-size: 0.8rem;">2 hours ago</span>
+          </div>
+          <p style="margin-top: 0.5rem; font-size: 0.95rem;">Turned out absolutely amazing! Added a bit of extra garlic and it was perfect.</p>
+        </div>
+        <div style="padding: 1.5rem; background: var(--glass-bg); border-radius: var(--radius-md); border: 1px solid var(--border);">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <strong>Chef John <span class="tag" style="margin-left: 0.5rem; font-size: 0.6rem; padding: 0.1rem 0.3rem;">PRO</span></strong>
+            <span class="text-muted" style="font-size: 0.8rem;">Yesterday</span>
+          </div>
+          <p style="margin-top: 0.5rem; font-size: 0.95rem;">Great recipe. Highly recommend roasting the veggies first for extra flavor.</p>
+        </div>
+      </div>
+      <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+        <input type="text" class="input" placeholder="Add a comment..." style="flex: 1; padding: 0.75rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--bg);">
+        <button class="btn btn-primary" onclick="showToast('Comment posted!','success')">Post</button>
+      </div>
+    `;
+  }
+  
+  $('#recipeModalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeRecipeModal = function(e) {
+  if (e && e.target !== $('#recipeModalOverlay') && e.target.className !== 'modal-close') return;
+  $('#recipeModalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+};
 
 // ---------- Toast Notifications ----------
 window.showToast = function (msg, type = 'info') {

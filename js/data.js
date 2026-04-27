@@ -1,101 +1,53 @@
 // Mock Recipe Data for PantryPal Pro
 const RECIPES = [
-  {
-    id: 1,
-    name: "Quinoa Veggie Bowl",
-    image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop",
-    time: "25 min",
-    calories: "320 kcal",
-    rating: 4.8,
-    tags: ["veg", "high-protein", "gluten-free"],
-    ingredients: ["Quinoa", "Broccoli", "Bell Pepper", "Olive Oil", "Chickpeas"],
-    premium: false,
-    description: "A nutritious bowl packed with protein-rich quinoa and fresh vegetables."
-  },
-  {
-    id: 2,
-    name: "Grilled Chicken Salad",
-    image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop",
-    time: "20 min",
-    calories: "410 kcal",
-    rating: 4.6,
-    tags: ["high-protein", "keto", "low-carb"],
-    ingredients: ["Chicken Breast", "Lettuce", "Tomato", "Olive Oil", "Lemon"],
-    premium: false,
-    description: "Perfectly grilled chicken on a bed of fresh greens with zesty dressing."
-  },
-  {
-    id: 3,
-    name: "Vegan Buddha Bowl",
-    image: "https://images.unsplash.com/photo-1540914124281-342587941389?w=400&h=300&fit=crop",
-    time: "30 min",
-    calories: "380 kcal",
-    rating: 4.7,
-    tags: ["vegan", "veg", "gluten-free"],
-    ingredients: ["Sweet Potato", "Avocado", "Chickpeas", "Quinoa", "Tahini"],
-    premium: false,
-    description: "A colorful plant-based bowl with roasted sweet potato and creamy tahini."
-  },
-  {
-    id: 4,
-    name: "Keto Avocado Eggs",
-    image: "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=400&h=300&fit=crop",
-    time: "15 min",
-    calories: "290 kcal",
-    rating: 4.9,
-    tags: ["keto", "high-protein", "low-carb"],
-    ingredients: ["Avocado", "Eggs", "Cheese", "Bacon", "Chives"],
-    premium: true,
-    description: "Baked eggs nestled in creamy avocado halves — keto perfection."
-  },
-  {
-    id: 5,
-    name: "Mediterranean Pasta",
-    image: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=400&h=300&fit=crop",
-    time: "35 min",
-    calories: "520 kcal",
-    rating: 4.5,
-    tags: ["veg"],
-    ingredients: ["Pasta", "Tomato", "Olives", "Feta Cheese", "Basil"],
-    premium: true,
-    description: "Sun-kissed Mediterranean flavors in a comforting pasta dish."
-  },
-  {
-    id: 6,
-    name: "Protein Power Smoothie",
-    image: "https://images.unsplash.com/photo-1502741224143-90386d7f8c82?w=400&h=300&fit=crop",
-    time: "5 min",
-    calories: "250 kcal",
-    rating: 4.4,
-    tags: ["veg", "high-protein", "vegan"],
-    ingredients: ["Banana", "Peanut Butter", "Oat Milk", "Protein Powder", "Berries"],
-    premium: false,
-    description: "A thick, creamy smoothie loaded with plant-based protein."
-  },
-  {
-    id: 7,
-    name: "Thai Green Curry",
-    image: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=400&h=300&fit=crop",
-    time: "40 min",
-    calories: "450 kcal",
-    rating: 4.8,
-    tags: ["vegan", "veg", "gluten-free"],
-    ingredients: ["Coconut Milk", "Tofu", "Green Beans", "Thai Basil", "Rice"],
-    premium: true,
-    description: "Aromatic Thai curry with silky tofu and fresh vegetables."
-  },
-  {
-    id: 8,
-    name: "Steak & Veggies",
-    image: "https://images.unsplash.com/photo-1432139509613-5c4255a1d197?w=400&h=300&fit=crop",
-    time: "30 min",
-    calories: "580 kcal",
-    rating: 4.9,
-    tags: ["high-protein", "keto", "low-carb"],
-    ingredients: ["Beef Steak", "Asparagus", "Garlic", "Butter", "Rosemary"],
-    premium: true,
-    description: "Juicy seared steak with perfectly roasted seasonal vegetables."
-  }
+  {"id":1,"name":"Quinoa Veggie Bowl","image":"../assets/recipe-1.jpg","time":"25 min","calories":"320 kcal","rating":4.8,"tags":["veg","high-protein","gluten-free"],"tier":"free","meal":"lunch","ingredients":["Quinoa","Broccoli","Bell Pepper","Olive Oil","Chickpeas"],"premium":false,"description":"A nutritious bowl packed with protein-rich quinoa and fresh vegetables."},
+  {"id":2,"name":"Grilled Chicken Salad","image":"../assets/recipe-13.jpg","time":"20 min","calories":"410 kcal","rating":4.6,"tags":["high-protein","keto","low-carb"],"tier":"plus","meal":"dinner","ingredients":["Chicken Breast","Lettuce","Tomato","Olive Oil","Lemon"],"premium":false,"description":"Perfectly grilled chicken on a bed of fresh greens with zesty dressing."},
+  {"id":3,"name":"Vegan Buddha Bowl","image":"../assets/recipe-3.jpg","time":"30 min","calories":"380 kcal","rating":4.7,"tags":["vegan","veg","gluten-free"],"tier":"free","meal":"lunch","ingredients":["Sweet Potato","Avocado","Chickpeas","Quinoa","Tahini"],"premium":false,"description":"A colorful plant-based bowl with roasted sweet potato and creamy tahini."},
+  {"id":4,"name":"Keto Avocado Eggs","image":"../assets/recipe-3.jpg","time":"15 min","calories":"290 kcal","rating":4.9,"tags":["keto","high-protein","low-carb"],"tier":"pro","meal":"breakfast","ingredients":["Avocado","Eggs","Cheese","Bacon","Chives"],"premium":true,"description":"Baked eggs nestled in creamy avocado halves — keto perfection."},
+  {"id":5,"name":"Mediterranean Pasta","image":"../assets/recipe-20.jpg","time":"35 min","calories":"520 kcal","rating":4.5,"tags":["veg"],"tier":"plus","meal":"dinner","ingredients":["Pasta","Tomato","Olives","Feta Cheese","Basil"],"premium":true,"description":"Sun-kissed Mediterranean flavors in a comforting pasta dish."},
+  {"id":6,"name":"Protein Power Smoothie","image":"../assets/recipe-6.jpg","time":"5 min","calories":"250 kcal","rating":4.4,"tags":["veg","high-protein","vegan"],"tier":"free","meal":"breakfast","ingredients":["Banana","Peanut Butter","Oat Milk","Protein Powder","Berries"],"premium":false,"description":"A thick, creamy smoothie loaded with plant-based protein."},
+  {"id":7,"name":"Thai Green Curry","image":"../assets/recipe-29.jpg","time":"40 min","calories":"450 kcal","rating":4.8,"tags":["vegan","veg","gluten-free"],"tier":"pro","meal":"dinner","ingredients":["Coconut Milk","Tofu","Green Beans","Thai Basil","Rice"],"premium":true,"description":"Aromatic Thai curry with silky tofu and fresh vegetables."},
+  {"id":8,"name":"Steak & Veggies","image":"../assets/recipe-20.jpg","time":"30 min","calories":"580 kcal","rating":4.9,"tags":["high-protein","keto","low-carb"],"tier":"pro","meal":"dinner","ingredients":["Beef Steak","Asparagus","Garlic","Butter","Rosemary"],"premium":true,"description":"Juicy seared steak with perfectly roasted seasonal vegetables."},
+  {"name":"Butter Chicken","time":"45 min","calories":"550 kcal","rating":4.9,"tags":["high-protein"],"tier":"pro","meal":"dinner","ingredients":["Chicken","Tomato","Butter","Cream","Spices"],"premium":true,"description":"Rich and creamy tomato curry with tender chicken.","id":9,"image":"../assets/recipe-29.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Paneer Tikka Masala","time":"40 min","calories":"450 kcal","rating":4.8,"tags":["veg"],"tier":"pro","meal":"dinner","ingredients":["Paneer","Yogurt","Tomato","Onion","Spices"],"premium":true,"description":"Grilled cottage cheese cubes in a spicy, creamy gravy.","id":10,"image":"../assets/recipe-20.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Chana Masala","time":"30 min","calories":"350 kcal","rating":4.7,"tags":["vegan","veg"],"tier":"plus","meal":"lunch","ingredients":["Chickpeas","Tomato","Onion","Ginger","Spices"],"premium":false,"description":"Hearty and spiced chickpea curry, perfect with rice.","id":11,"image":"../assets/recipe-13.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Palak Paneer","time":"35 min","calories":"400 kcal","rating":4.6,"tags":["veg"],"tier":"plus","meal":"dinner","ingredients":["Spinach","Paneer","Garlic","Cream","Spices"],"premium":false,"description":"Creamy spinach curry with soft paneer cubes.","id":12,"image":"../assets/recipe-1.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Aloo Gobi","time":"25 min","calories":"250 kcal","rating":4.5,"tags":["vegan","veg"],"tier":"free","meal":"lunch","ingredients":["Cauliflower","Potato","Turmeric","Cumin","Coriander"],"premium":false,"description":"Classic homestyle potato and cauliflower stir-fry.","id":13,"image":"../assets/recipe-13.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Chicken Biryani","time":"60 min","calories":"600 kcal","rating":4.9,"tags":["high-protein"],"tier":"pro","meal":"dinner","ingredients":["Basmati Rice","Chicken","Yogurt","Saffron","Spices"],"premium":true,"description":"Aromatic and flavorful layered rice dish with tender chicken.","id":14,"image":"../assets/recipe-29.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Dal Makhani","time":"120 min","calories":"420 kcal","rating":4.8,"tags":["veg"],"tier":"pro","meal":"dinner","ingredients":["Black Lentils","Kidney Beans","Butter","Cream","Tomato"],"premium":true,"description":"Slow-cooked creamy and buttery black lentils.","id":15,"image":"../assets/recipe-1.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Samosa Chaat","time":"20 min","calories":"380 kcal","rating":4.7,"tags":["veg"],"tier":"pro","meal":"lunch","ingredients":["Samosa","Chickpeas","Yogurt","Chutney","Onion"],"premium":true,"description":"Crushed samosas topped with spicy chickpeas and tangy chutneys.","id":16,"image":"../assets/recipe-6.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Malai Kofta","time":"50 min","calories":"500 kcal","rating":4.8,"tags":["veg"],"tier":"pro","meal":"dinner","ingredients":["Potato","Paneer","Cream","Tomato","Cashew"],"premium":true,"description":"Fried potato and paneer dumplings in a rich, creamy sauce.","id":17,"image":"../assets/recipe-1.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Rogan Josh","time":"90 min","calories":"550 kcal","rating":4.8,"tags":["high-protein"],"tier":"plus","meal":"dinner","ingredients":["Lamb","Yogurt","Onion","Garlic","Kashmiri Chili"],"premium":false,"description":"Aromatic lamb curry with deep red gravy from Kashmir.","id":18,"image":"../assets/recipe-29.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Classic French Onion Soup","time":"60 min","calories":"320 kcal","rating":4.7,"tags":["veg"],"tier":"plus","meal":"dinner","ingredients":["Onions","Beef Broth","Gruyere","Baguette","Butter"],"premium":false,"description":"Rich caramelized onion soup topped with cheesy bread.","id":19,"image":"../assets/recipe-13.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Italian Margherita Pizza","time":"25 min","calories":"450 kcal","rating":4.8,"tags":["veg"],"tier":"free","meal":"lunch","ingredients":["Pizza Dough","Tomato Sauce","Mozzarella","Basil","Olive Oil"],"premium":false,"description":"Simple, classic Neapolitan pizza with fresh basil.","id":20,"image":"../assets/recipe-20.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Beef Bourguignon","time":"180 min","calories":"650 kcal","rating":4.9,"tags":["high-protein"],"tier":"pro","meal":"dinner","ingredients":["Beef Chuck","Red Wine","Mushrooms","Bacon","Pearl Onions"],"premium":true,"description":"Traditional French beef stew braised in red wine.","id":21,"image":"../assets/recipe-6.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Spanish Paella","time":"45 min","calories":"550 kcal","rating":4.8,"tags":["high-protein"],"tier":"pro","meal":"dinner","ingredients":["Bomba Rice","Seafood","Chicken","Saffron","Peas"],"premium":true,"description":"Iconic Spanish rice dish with a mix of seafood and meat.","id":22,"image":"../assets/recipe-1.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Coq au Vin","time":"90 min","calories":"580 kcal","rating":4.7,"tags":["high-protein"],"tier":"pro","meal":"dinner","ingredients":["Chicken","Red Wine","Bacon","Mushrooms","Garlic"],"premium":true,"description":"Classic French chicken braised with wine, lardons, and mushrooms.","id":23,"image":"../assets/recipe-13.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Pasta Carbonara","time":"20 min","calories":"520 kcal","rating":4.8,"tags":[],"tier":"plus","meal":"dinner","ingredients":["Spaghetti","Pancetta","Eggs","Parmesan","Black Pepper"],"premium":false,"description":"Creamy Roman pasta made with egg, cheese, and cured pork.","id":24,"image":"../assets/recipe-39.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Greek Moussaka","time":"75 min","calories":"480 kcal","rating":4.7,"tags":["high-protein"],"tier":"pro","meal":"dinner","ingredients":["Eggplant","Ground Lamb","Tomato","Bechamel","Nutmeg"],"premium":true,"description":"Layered eggplant and meat casserole topped with creamy sauce.","id":25,"image":"../assets/recipe-29.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Ratatouille","time":"60 min","calories":"220 kcal","rating":4.6,"tags":["vegan","veg","low-carb"],"tier":"plus","meal":"lunch","ingredients":["Eggplant","Zucchini","Bell Pepper","Tomato","Herbs"],"premium":false,"description":"Provençal vegetable stew, healthy and vibrant.","id":26,"image":"../assets/recipe-20.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Shepherd's Pie","time":"60 min","calories":"500 kcal","rating":4.8,"tags":["high-protein"],"tier":"pro","meal":"dinner","ingredients":["Ground Lamb","Potato","Carrots","Peas","Gravy"],"premium":true,"description":"Hearty meat pie with a crust of mashed potato.","id":27,"image":"../assets/recipe-6.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Beef Wellington","time":"120 min","calories":"800 kcal","rating":4.9,"tags":["high-protein"],"tier":"pro","meal":"dinner","ingredients":["Beef Tenderloin","Puff Pastry","Mushroom Duxelles","Prosciutto","Mustard"],"premium":true,"description":"Elegant beef tenderloin coated with pâté and baked in pastry.","id":28,"image":"../assets/recipe-13.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Caesar Salad","time":"15 min","calories":"350 kcal","rating":4.6,"tags":["low-carb"],"tier":"free","meal":"lunch","ingredients":["Romaine","Croutons","Parmesan","Caesar Dressing","Lemon"],"premium":false,"description":"Crisp romaine tossed with classic creamy Caesar dressing.","id":29,"image":"../assets/recipe-29.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Greek Salad","time":"10 min","calories":"280 kcal","rating":4.7,"tags":["veg","low-carb"],"tier":"plus","meal":"lunch","ingredients":["Cucumber","Tomato","Feta","Olives","Red Onion"],"premium":false,"description":"Refreshing and crunchy salad with feta and Kalamata olives.","id":30,"image":"../assets/recipe-39.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Cobb Salad","time":"20 min","calories":"450 kcal","rating":4.8,"tags":["high-protein","keto"],"tier":"pro","meal":"lunch","ingredients":["Chicken","Bacon","Avocado","Blue Cheese","Egg"],"premium":true,"description":"Hearty American salad loaded with protein and healthy fats.","id":31,"image":"../assets/recipe-39.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Caprese Salad","time":"5 min","calories":"250 kcal","rating":4.9,"tags":["veg","gluten-free"],"tier":"plus","meal":"lunch","ingredients":["Tomato","Mozzarella","Basil","Balsamic Glaze","Olive Oil"],"premium":false,"description":"Simple Italian salad showcasing fresh tomatoes and mozzarella.","id":32,"image":"../assets/recipe-13.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Niçoise Salad","time":"25 min","calories":"380 kcal","rating":4.7,"tags":["high-protein"],"tier":"pro","meal":"lunch","ingredients":["Tuna","Green Beans","Potato","Egg","Olives"],"premium":true,"description":"Classic French composed salad with tuna and fresh vegetables.","id":33,"image":"../assets/recipe-29.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Quinoa Black Bean","time":"15 min","calories":"320 kcal","rating":4.6,"tags":["vegan","veg","high-protein"],"tier":"plus","meal":"lunch","ingredients":["Quinoa","Black Beans","Corn","Cilantro","Lime"],"premium":false,"description":"Zesty and filling plant-based protein salad.","id":34,"image":"../assets/recipe-6.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Waldorf Salad","time":"15 min","calories":"310 kcal","rating":4.5,"tags":["veg"],"tier":"pro","meal":"lunch","ingredients":["Apples","Celery","Walnuts","Grapes","Mayo"],"premium":true,"description":"Sweet and crunchy fruit and nut salad.","id":35,"image":"../assets/recipe-39.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Thai Papaya Salad","time":"20 min","calories":"180 kcal","rating":4.8,"tags":["low-carb","vegan"],"tier":"pro","meal":"lunch","ingredients":["Green Papaya","Peanuts","Chili","Lime","Fish Sauce"],"premium":true,"description":"Spicy, sour, sweet, and crunchy Southeast Asian salad.","id":36,"image":"../assets/recipe-1.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Roasted Beet Salad","time":"45 min","calories":"260 kcal","rating":4.7,"tags":["veg"],"tier":"pro","meal":"dinner","ingredients":["Beets","Arugula","Goat Cheese","Walnuts","Vinaigrette"],"premium":true,"description":"Earthy roasted beets paired with peppery arugula and goat cheese.","id":37,"image":"../assets/recipe-6.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Spinach Strawberry","time":"10 min","calories":"220 kcal","rating":4.6,"tags":["veg","gluten-free"],"tier":"pro","meal":"lunch","ingredients":["Spinach","Strawberries","Pecans","Feta","Balsamic"],"premium":true,"description":"Light and sweet summer salad with a tangy dressing.","id":38,"image":"../assets/recipe-1.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Classic Mojito","time":"5 min","calories":"150 kcal","rating":4.7,"tags":["vegan"],"tier":"free","meal":"breakfast","ingredients":["Mint","Lime","White Rum","Club Soda","Sugar"],"premium":false,"description":"Refreshing Cuban cocktail with mint and lime.","id":39,"image":"../assets/recipe-39.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Mango Lassi","time":"5 min","calories":"220 kcal","rating":4.8,"tags":["veg"],"tier":"plus","meal":"breakfast","ingredients":["Mango","Yogurt","Milk","Cardamom","Sugar"],"premium":false,"description":"Sweet and creamy traditional Indian yogurt drink.","id":40,"image":"../assets/recipe-3.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Matcha Latte","time":"10 min","calories":"120 kcal","rating":4.6,"tags":["veg"],"tier":"plus","meal":"breakfast","ingredients":["Matcha Powder","Milk","Honey","Hot Water"],"premium":false,"description":"Earthy and energizing Japanese green tea latte.","id":41,"image":"../assets/recipe-1.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Espresso Martini","time":"5 min","calories":"200 kcal","rating":4.9,"tags":["vegan"],"tier":"pro","meal":"dinner","ingredients":["Espresso","Vodka","Coffee Liqueur","Coffee Beans"],"premium":true,"description":"Sophisticated and bold caffeinated cocktail.","id":42,"image":"../assets/recipe-13.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Pina Colada","time":"5 min","calories":"350 kcal","rating":4.7,"tags":["veg"],"tier":"pro","meal":"dinner","ingredients":["Pineapple Juice","White Rum","Coconut Cream","Ice"],"premium":true,"description":"Tropical frozen drink blending coconut and pineapple.","id":43,"image":"../assets/recipe-3.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Iced Caramel Macchiato","time":"5 min","calories":"250 kcal","rating":4.8,"tags":["veg"],"tier":"pro","meal":"breakfast","ingredients":["Espresso","Milk","Vanilla Syrup","Caramel Drizzle","Ice"],"premium":true,"description":"Sweet and refreshing iced coffee treat.","id":44,"image":"../assets/recipe-29.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Fresh Lemonade","time":"10 min","calories":"110 kcal","rating":4.6,"tags":["vegan"],"tier":"plus","meal":"lunch","ingredients":["Lemons","Water","Sugar","Ice","Mint"],"premium":false,"description":"Classic thirst-quenching sweet and sour beverage.","id":45,"image":"../assets/recipe-6.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Strawberry Smoothie","time":"5 min","calories":"180 kcal","rating":4.5,"tags":["veg"],"tier":"pro","meal":"breakfast","ingredients":["Strawberries","Banana","Yogurt","Milk","Honey"],"premium":true,"description":"Quick, healthy, and delicious fruit blend.","id":46,"image":"../assets/recipe-39.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Old Fashioned","time":"5 min","calories":"160 kcal","rating":4.9,"tags":["vegan"],"tier":"pro","meal":"dinner","ingredients":["Bourbon","Bitters","Sugar Cube","Orange Peel","Ice"],"premium":true,"description":"The definitive classic whiskey cocktail.","id":47,"image":"../assets/recipe-6.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]},
+  {"name":"Bloody Mary","time":"5 min","calories":"140 kcal","rating":4.7,"tags":["low-carb"],"tier":"pro","meal":"breakfast","ingredients":["Vodka","Tomato Juice","Lemon","Worcestershire","Hot Sauce"],"premium":true,"description":"Savory and spicy brunch favorite.","id":48,"image":"../assets/recipe-1.jpg","steps":["Prepare and measure all ingredients.","Follow traditional cooking methods for this authentic dish.","Plate beautifully and serve hot!"]}
 ];
 
 const MOCK_INGREDIENTS = [
@@ -105,28 +57,28 @@ const MOCK_INGREDIENTS = [
 
 const PLANS = {
   free: {
-    name: "Free",
-    price: "$0",
-    recipes: "Unlimited",
+    name: "Poor",
+    price: "Free",
+    recipes: "Limited",
     features: ["Access to established recipe catalog", "Sort by popular, easy, cheap", "No fridge scans"]
   },
   plus: {
     name: "Plus",
     price: "$4.99/mo",
-    recipes: "Unlimited",
-    features: ["5 daily fridge scans", "Premium badge icon in comments", "Higher priority queue"]
+    recipes: "Most",
+    features: ["5 daily fridge scans", "Access to Community Comments", "Higher priority queue", "24/7 chat support"]
   },
   pro: {
     name: "Pro",
     price: "$9.99/mo",
-    recipes: "Unlimited",
-    features: ["10 daily fridge scans + 25 monthly quota", "Daily left quota roll over", "Dedicated 24/7 support", "First priority in queue"]
+    recipes: "All",
+    features: ["10 daily fridge scans", "Exclusive Video Tutorials", "Dedicated 24/7 call support", "First priority in queue"]
   }
 };
 
 const TESTIMONIALS = [
-  { name: "Sarah M.", role: "Home Cook", text: "PantryPal Pro changed how I cook! No more wasted groceries.", avatar: "S", rating: 5 },
-  { name: "James K.", role: "Student", text: "As a college student, this app saves me money and time every week.", avatar: "J", rating: 5 },
-  { name: "Priya R.", role: "Fitness Enthusiast", text: "The dietary filters are perfect for my high-protein meal prep.", avatar: "P", rating: 4 },
-  { name: "Mike T.", role: "Parent", text: "My kids love the recipes. It's made family meals so much easier!", avatar: "M", rating: 5 }
+  { name: "Bhargav G.", role: "Home Cook", text: "PantryPal Pro changed how I cook! No more wasted groceries.", avatar: "S", rating: 5 },
+  { name: "Yash Y.", role: "Student", text: "As a college student, this app saves me money and time every week.", avatar: "J", rating: 5 },
+  { name: "Swamini P.", role: "Fitness Enthusiast", text: "The dietary filters are perfect for my high-protein meal prep.", avatar: "P", rating: 4 },
+  { name: "Anshul K.", role: "Parent", text: "My kids love the recipes. It's made family meals so much easier!", avatar: "M", rating: 5 }
 ];
