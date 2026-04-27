@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - PantryPal Pro</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body data-page="dashboard">
+
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">🍽️</div> PantryPal Pro
+      </a>
+      <div class="nav-actions">
+        <button onclick="toggleDark()" class="btn btn-ghost btn-sm" id="darkToggleIcon">🌙</button>
+        <span class="plan-badge" id="planBadge">Free Plan</span>
+        <button onclick="logout()" class="btn btn-outline btn-sm">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="user-profile">
+        <div class="avatar" id="sidebarAvatar">👤</div>
+        <div>
+          <strong id="userGreeting">Hello 👋</strong><br>
+          <small class="text-muted">Ready to cook?</small>
+        </div>
+      </div>
+
+      <div class="filters-section mt-8">
+        <h3>Dietary Goals</h3>
+        <p class="text-muted"><small>Filter recipes to match your needs</small></p>
+        <div class="filter-chips">
+          <div class="filter-chip" data-tag="high-protein">💪 High Protein</div>
+          <div class="filter-chip" data-tag="low-carb">🥑 Low Carb</div>
+          <div class="filter-chip" data-tag="keto">🥓 Keto</div>
+          <div class="filter-chip" data-tag="veg">🥗 Vegetarian</div>
+          <div class="filter-chip" data-tag="vegan">🌱 Vegan</div>
+          <div class="filter-chip" data-tag="gluten-free">🌾 Gluten Free</div>
+        </div>
+      </div>
+
+      <div class="mt-8 glass-card" style="padding: 1.5rem;" id="upgradeSidebar">
+        <h4>Upgrade to Pro</h4>
+        <p class="text-muted"><small>Unlock AI features, fridge scans, and priority support.</small></p>
+        <button class="btn btn-primary btn-full btn-sm mt-8"
+          onclick="showToast('Upgraded to Pro (Demo)', 'success'); currentUser.plan='pro'; saveUser(currentUser); location.reload();">Upgrade
+          Now</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- Pantry Scanner -->
+      <section class="mb-8" id="pantryScannerSection">
+        <h2>What's in your pantry?</h2>
+        <p>Upload a photo of your fridge or pantry to generate smart recipes.</p>
+
+        <div class="upload-area" id="uploadArea">
+          <div id="uploadContent">
+            <div class="upload-icon">📸</div>
+            <h3>Click or drag image to scan</h3>
+            <p class="text-muted">Supports JPG, PNG (Max 5MB)</p>
+          </div>
+          <img id="uploadPreview" src="" alt="Preview"
+            style="display: none; max-height: 300px; margin: 0 auto; border-radius: var(--radius-md);">
+        </div>
+        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+
+        <div class="text-center">
+          <button id="scanBtn" class="btn btn-primary" style="display: none;" onclick="scanPantry()">
+            <span>✨</span> Scan Ingredients
+          </button>
+        </div>
+
+        <div id="scanResults" class="glass-card mt-8" style="display: none;">
+          <!-- Injected via JS -->
+        </div>
+      </section>
+
+      <!-- Recommended Recipes -->
+      <section>
+        <div class="flex justify-between items-center mb-8">
+          <div>
+            <h2>Recipe Catalogue</h2>
+            <span class="text-muted">Established recipes for you</span>
+          </div>
+          <select id="sortRecipes" class="btn btn-outline btn-sm" onchange="renderRecipes()"
+            style="padding: 0.5rem; border-radius: var(--radius-md); background: var(--bg);">
+            <option value="popular">Most Popular</option>
+            <option value="easy">Easiest First</option>
+            <option value="time">Fastest First</option>
+            <option value="calories">Lowest Calories</option>
+          </select>
+        </div>
+
+        <div class="recipe-grid" id="recipeGrid">
+          <!-- Injected via JS -->
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
