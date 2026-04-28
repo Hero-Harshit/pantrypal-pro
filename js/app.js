@@ -4,6 +4,7 @@
 let currentUser = null;
 let activeFilters = new Set();
 let detectedIngredients = [];
+let dashboardInitialized = false;
 
 // ---------- Utilities ----------
 function $(sel, ctx = document) { return ctx.querySelector(sel); }
@@ -194,7 +195,7 @@ document.addEventListener('click', (e) => {
 });
 
 // Allergy Modal
-window.openAllergyModal = function() {
+window.openAllergyModal = function () {
   const modal = $('#allergyModalOverlay');
   if (modal) {
     modal.classList.add('active');
@@ -202,7 +203,7 @@ window.openAllergyModal = function() {
   }
 };
 
-window.closeAllergyModal = function(e) {
+window.closeAllergyModal = function (e) {
   if (e && e.target !== $('#allergyModalOverlay') && !e.target.classList.contains('modal-close')) return;
   const modal = $('#allergyModalOverlay');
   if (modal) {
@@ -212,7 +213,7 @@ window.closeAllergyModal = function(e) {
 };
 
 // Dietary Lock Modal
-window.openDietaryLockModal = function() {
+window.openDietaryLockModal = function () {
   const modal = $('#dietaryLockModalOverlay');
   if (modal) {
     modal.classList.add('active');
@@ -220,9 +221,29 @@ window.openDietaryLockModal = function() {
   }
 };
 
-window.closeDietaryLockModal = function(e) {
+window.closeDietaryLockModal = function (e) {
   if (e && e.target !== $('#dietaryLockModalOverlay') && !e.target.classList.contains('modal-close')) return;
   const modal = $('#dietaryLockModalOverlay');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+};
+
+// Premium Locked Modal
+window.openPremiumLockedModal = function (tier) {
+  const modal = $('#premiumLockedModalOverlay');
+  const title = $('#premiumLockedTitle');
+  if (modal) {
+    if (title) title.textContent = `Unlock ${tier.charAt(0).toUpperCase() + tier.slice(1)} Recipe`;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+};
+
+window.closePremiumLockedModal = function (e) {
+  if (e && e.target !== $('#premiumLockedModalOverlay') && !e.target.classList.contains('modal-close')) return;
+  const modal = $('#premiumLockedModalOverlay');
   if (modal) {
     modal.classList.remove('active');
     document.body.style.overflow = 'auto';
@@ -339,6 +360,16 @@ function initAuth() {
 async function initDashboard() {
   if (!isLoggedIn()) { window.location.href = 'auth.html'; return; }
   if (!currentUser) return; // Wait for user to load
+  if (dashboardInitialized) return;
+  dashboardInitialized = true;
+
+  // Shuffle recipes once for variety on dashboard open
+  if (typeof RECIPES !== 'undefined') {
+    for (let i = RECIPES.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [RECIPES[i], RECIPES[j]] = [RECIPES[j], RECIPES[i]];
+    }
+  }
 
   // Greet user
   const greet = $('#userGreeting');
@@ -348,11 +379,24 @@ async function initDashboard() {
     greet.innerHTML = `${currentUser.name} ${badgeIcon}`;
   }
 
-  // Plan badge
-  const badge = $('#planBadge');
-  if (badge) {
-    badge.textContent = currentUser.plan.charAt(0).toUpperCase() + currentUser.plan.slice(1) + ' Plan';
-    badge.className = 'plan-badge plan-' + currentUser.plan;
+  // Plan label inside profile
+  const userInfoSmall = $('.user-info small');
+  if (userInfoSmall) {
+    userInfoSmall.innerHTML = `${currentUser.plan.toUpperCase()} PLAN ▼`;
+  }
+
+  // User Profile Dropdown
+  const userProfile = $('#userProfileDropdown');
+  const logoutDropdown = $('#logoutDropdown');
+  if (userProfile && logoutDropdown) {
+    userProfile.addEventListener('click', (e) => {
+      e.stopPropagation();
+      logoutDropdown.classList.toggle('show');
+    });
+
+    document.addEventListener('click', () => {
+      logoutDropdown.classList.remove('show');
+    });
   }
 
   // Use localStorage for favorites
@@ -388,9 +432,21 @@ async function initDashboard() {
   }
 
   // Dietary filter chips
-  $$('.filter-chip').forEach(chip => {
+  $$('.sidebar .filter-chip').forEach(chip => {
     chip.addEventListener('click', () => {
-      openDietaryLockModal();
+      if (currentUser.plan === 'pro') {
+        const tag = chip.dataset.tag;
+        if (activeFilters.has(tag)) {
+          activeFilters.delete(tag);
+          chip.classList.remove('active');
+        } else {
+          activeFilters.add(tag);
+          chip.classList.add('active');
+        }
+        renderRecipes();
+      } else {
+        openDietaryLockModal();
+      }
     });
   });
 
@@ -454,6 +510,10 @@ window.toggleFavoriteFilter = function () {
     btn.style.background = showFavoritesOnly ? '#fff0f0' : 'var(--bg)';
     btn.style.borderColor = showFavoritesOnly ? '#ff4d4d' : 'var(--border-color)';
   }
+  const subtitle = $('#catalogueSubtitle');
+  if (subtitle) {
+    subtitle.textContent = showFavoritesOnly ? 'Your personally saved collection' : 'Established recipes for you';
+  }
   renderRecipes();
 };
 
@@ -472,7 +532,7 @@ let activeTier = 'all';
 let activeMeal = 'all';
 let activeCuisine = 'all';
 let activeDifficulty = 'all';
-let activeDiet = 'veg'; // Default to veg based on UI state
+let activeDiet = 'all'; // Default to all to show everything initially
 
 window.setTierFilter = function (tier) {
   activeTier = tier;
@@ -495,21 +555,24 @@ window.setDifficultyFilter = function (diff) {
 };
 
 window.toggleDietFilter = function () {
-  activeDiet = (activeDiet === 'veg') ? 'non-veg' : 'veg';
-  
+  if (activeDiet === 'all') activeDiet = 'veg';
+  else if (activeDiet === 'veg') activeDiet = 'non-veg';
+  else activeDiet = 'all';
+
   const btn = $('#dietToggleBtn');
   if (btn) {
     if (activeDiet === 'veg') {
-      btn.innerHTML = 'Veg';
-      btn.style.borderColor = '#000000';
+      btn.innerHTML = 'Veg Only';
       btn.style.color = 'var(--primary)';
-    } else {
-      btn.innerHTML = 'Non-Veg';
-      btn.style.borderColor = '#000000';
+    } else if (activeDiet === 'non-veg') {
+      btn.innerHTML = 'Non-Veg Only';
       btn.style.color = '#ef4444';
+    } else {
+      btn.innerHTML = 'All Diets';
+      btn.style.color = 'var(--text)';
     }
   }
-  
+
   renderRecipes();
 };
 
@@ -519,7 +582,7 @@ function renderRecipes() {
 
   let filtered = [...RECIPES];
 
-  if (activeTier !== 'all' || activeMeal !== 'all' || activeCuisine !== 'all' || activeDiet !== 'all') {
+  if (activeTier !== 'all' || activeMeal !== 'all' || activeCuisine !== 'all' || activeDifficulty !== 'all' || activeDiet !== 'all') {
     filtered = filtered.filter(r => {
       if (activeTier !== 'all' && r.tier !== activeTier) return false;
       if (activeMeal !== 'all' && r.meal !== activeMeal) return false;
@@ -532,8 +595,9 @@ function renderRecipes() {
   }
 
   if (activeFilters && activeFilters.size > 0) {
-    filtered = filtered.filter(r => [...activeFilters].some(f => r.tags.includes(f)));
+    filtered = filtered.filter(r => [...activeFilters].every(f => r.tags.includes(f)));
   }
+
 
   if (typeof currentSearchQuery !== 'undefined' && currentSearchQuery) {
     filtered = filtered.filter(r => r.name.toLowerCase().includes(currentSearchQuery));
@@ -569,13 +633,13 @@ function renderRecipes() {
     const isFav = favoriteRecipes.has(r.id);
 
     return `
-    <div class="recipe-card glass-card ${locked ? 'locked' : ''}" ${locked ? `onclick="showToast('Upgrade to ${r.tier.charAt(0).toUpperCase() + r.tier.slice(1)} to unlock!','info')"` : `onclick="openRecipeModal(${r.id})"`}>
+    <div class="recipe-card ${locked ? 'locked' : ''}" ${locked ? `onclick="openPremiumLockedModal('${r.tier}')"` : `onclick="openRecipeModal(${r.id})"`}>
       <div class="recipe-img-wrap">
         <img src="${r.image}" alt="${r.name}" loading="lazy">
         <button class="fav-btn" onclick="toggleFavorite(event, ${r.id})" style="position: absolute; top: 0.5rem; left: 0.5rem; z-index: 5; background: var(--bg); border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 1.2rem; color: #ff4d4d; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); transition: transform 0.2s;">
           ${isFav ? '♥' : '♡'}
         </button>
-        ${locked ? `<div class="lock-overlay"><p style="font-weight: 700; font-size: 1.2rem;">${r.tier.charAt(0).toUpperCase() + r.tier.slice(1)} Recipe</p></div>` : ''}
+        ${locked ? `<div class="lock-overlay"></div>` : ''}
         ${r.tier !== 'free' ? `<span class="premium-badge">${r.tier.toUpperCase()}</span>` : ''}
       </div>
       <div class="recipe-info">
@@ -588,7 +652,18 @@ function renderRecipes() {
         </div>
       </div>
     </div>`;
+
+
   }).join('');
+
+  if (filtered.length > 0) {
+    grid.innerHTML += `
+      <div class="grid-footer" style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; border-top: 1px solid var(--border); margin-top: 2rem; background: var(--bg-secondary); border-radius: var(--radius-lg); opacity: 0.8;">
+        <p style="font-size: 1.1rem; color: var(--text); font-weight: 600; margin-bottom: 0.5rem;">✨ You've reached the end. <strong>Thanks for visiting PantryPal Pro!</strong></p>
+        <small style="color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500;">More gourmet recipes added every week.</small>
+      </div>
+    `;
+  }
 }
 
 window.openRecipeModal = function (id) {
@@ -598,7 +673,19 @@ window.openRecipeModal = function (id) {
   $('#modalRecipeTitle').textContent = r.name;
   $('#modalRecipeDesc').textContent = r.description;
 
-  const ings = r.ingredients || ['Ingredient 1', 'Ingredient 2', 'Ingredient 3'];
+  // Update Meta Info
+  const metaContainer = $('#modalRecipeMeta');
+  if (metaContainer) {
+    metaContainer.innerHTML = `
+      <span>🕒 ${r.time}</span>
+      <span>🔥 ${r.calories} kcal</span>
+      <span>⭐ ${r.rating} / 5</span>
+      <span class="tag" style="background: var(--bg-secondary); border: 1px solid var(--border);">${r.cuisine.toUpperCase()}</span>
+      <span class="tag" style="background: var(--bg-secondary); border: 1px solid var(--border);">${r.difficulty.toUpperCase()}</span>
+    `;
+  }
+
+  const ings = r.ingredients || [];
   $('#modalIngredients').innerHTML = ings.map(i => `<li>${i}</li>`).join('');
 
   const steps = r.steps || [

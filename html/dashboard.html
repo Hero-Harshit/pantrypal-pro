@@ -11,28 +11,26 @@
 
 <body data-page="dashboard">
 
-  <nav class="navbar">
-    <div class="container nav-container">
-      <a href="landing.html" class="logo">
-        <img src="../assets/logo.png" alt="PantryPal Pro Logo" class="logo-img">
-        PantryPal Pro
-      </a>
-      <div class="nav-actions">
-        <span class="plan-badge" id="planBadge">Free Plan</span>
-        <button onclick="logout()" class="btn btn-outline btn-sm">Logout</button>
-      </div>
-    </div>
-  </nav>
-
   <div class="dashboard-layout">
-
     <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="user-profile">
+      <div class="sidebar-brand">
+        <a href="landing.html" class="logo">
+          <img src="../assets/logo.png" alt="PantryPal Pro Logo" class="logo-img">
+          PantryPal Pro
+        </a>
+      </div>
+
+      <div class="user-profile dropdown" id="userProfileDropdown">
         <div class="avatar" id="sidebarAvatar">👤</div>
-        <div>
+        <div class="user-info">
           <strong id="userGreeting">Hello</strong><br>
-          <small class="text-muted">Ready to cook?</small>
+          <small class="text-muted">Ready to cook? ▼</small>
+        </div>
+        <div class="dropdown-menu" id="logoutDropdown">
+          <button onclick="logout()" class="dropdown-item">
+            <span>👋</span> Logout
+          </button>
         </div>
       </div>
 
@@ -90,8 +88,10 @@
         <div class="flex justify-between items-center mb-8" style="flex-wrap: wrap; gap: 1rem;">
           <div>
             <h2>Recipe Catalogue</h2>
-            <span class="text-muted">Established recipes for you</span>
+            <span class="text-muted" id="catalogueSubtitle">Established recipes for you</span>
           </div>
+
+
           <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
             <button id="favFilterBtn" class="btn btn-outline btn-sm" onclick="toggleFavoriteFilter()"
               title="Show Favorites"
@@ -149,8 +149,9 @@
 
           <button id="dietToggleBtn" class="btn btn-outline btn-sm diet-toggle-single" onclick="toggleDietFilter()"
             style="border-radius: var(--radius-md); min-width: 110px;">
-            Veg
+            All Diets
           </button>
+
 
           <button class="btn btn-outline btn-sm" onclick="openAllergyModal()"
             style="border-radius: var(--radius-md); gap: 0.5rem;">
@@ -173,7 +174,11 @@
       <div class="modal-header">
         <h2 id="modalRecipeTitle">Recipe Name</h2>
         <p class="text-muted" id="modalRecipeDesc">Description</p>
+        <div class="recipe-meta mt-4" id="modalRecipeMeta" style="display: flex; gap: 1.5rem; font-weight: 600; color: var(--text);">
+          <!-- Meta info injected via JS -->
+        </div>
       </div>
+
       <div class="modal-body">
         <div style="display: flex; flex-direction: column; gap: 2rem;">
           <div>
@@ -254,6 +259,25 @@
     </div>
   </div>
 
+  <!-- Premium Locked Modal -->
+  <div class="modal-overlay" id="premiumLockedModalOverlay" onclick="closePremiumLockedModal(event)">
+    <div class="modal-content" style="max-width: 500px; text-align: center; padding: 3rem;">
+      <button class="modal-close" onclick="closePremiumLockedModal()">×</button>
+      <div style="font-size: 3rem; margin-bottom: 1.5rem;">💎</div>
+      <h2 id="premiumLockedTitle" style="margin-bottom: 1rem;">Unlock Premium Recipe</h2>
+      <p id="premiumLockedText" class="text-muted" style="margin-bottom: 2rem;">
+        This exclusive culinary masterpiece is reserved for our <strong>Plus & Pro members</strong>. 
+        Upgrade your plan to access full ingredients, step-by-step video tutorials, and expert cooking tips.
+      </p>
+      <div style="background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid #fbbf24; margin-bottom: 2rem; text-align: left;">
+        <p style="font-size: 0.9rem; color: #b45309; margin: 0;">
+          ✨ <strong>Premium Perk:</strong> Get unlimited access to 100+ gourmet recipes and AI-powered meal planning.
+        </p>
+      </div>
+      <a href="landing.html#pricing" class="btn btn-primary btn-full" style="text-decoration: none;">Explore Plans</a>
+      <button class="btn btn-ghost btn-full mt-8" onclick="closePremiumLockedModal()">Maybe Later</button>
+    </div>
+  </div>
 </body>
 
 </html>

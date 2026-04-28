@@ -11,14 +11,6 @@
 
 <body data-page="auth">
 
-  <nav class="navbar">
-    <div class="container">
-      <a href="landing.html" class="logo">
-        <img src="../assets/logo.png" alt="PantryPal Pro Logo" class="logo-img">
-        PantryPal Pro
-      </a>
-    </div>
-  </nav>
 
   <div class="auth-page">
     <div class="auth-container glass-card fade-up">
@@ -41,7 +33,6 @@
         <div class="form-group">
           <div class="flex justify-between">
             <label for="loginPass">Password</label>
-            <a href="#" class="text-muted" style="font-size: 0.8rem;">Forgot password?</a>
           </div>
           <input type="password" id="loginPass" placeholder="••••••••" required>
         </div>
@@ -98,25 +89,6 @@
         <button type="submit" class="btn btn-primary btn-full mt-8">Create Account</button>
       </form>
 
-      <!-- Supabase Auth Providers Placeholder -->
-      <div class="supabase-placeholder mt-8">
-        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
-          <hr style="flex:1; border:none; border-top: 1px solid var(--border);">
-          <small class="text-muted">or continue with</small>
-          <hr style="flex:1; border:none; border-top: 1px solid var(--border);">
-        </div>
-
-        <div class="flex flex-col gap-4">
-          <button class="btn btn-outline btn-full" id="googleAuthBtn"
-            onclick="AuthService.signInWithOAuth('google').then(r => r.error && showToast(r.error,'error'))">
-            <span style="font-size: 1.2rem; margin-right: 0.5rem;">G</span> Google
-          </button>
-          <button class="btn btn-outline btn-full" id="githubAuthBtn"
-            onclick="AuthService.signInWithOAuth('github').then(r => r.error && showToast(r.error,'error'))">
-            <span style="font-size: 1.2rem; margin-right: 0.5rem;">🐙</span> GitHub
-          </button>
-        </div>
-      </div>
 
       <p class="text-center mt-8 text-muted" style="font-size: 0.75rem;">
         By continuing, you agree to our Terms of Service and Privacy Policy.<br>
