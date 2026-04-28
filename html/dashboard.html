@@ -14,10 +14,10 @@
   <nav class="navbar">
     <div class="container nav-container">
       <a href="landing.html" class="logo">
-        <div class="logo-icon">🍽️</div> PantryPal Pro
+        <img src="../assets/logo.png" alt="PantryPal Pro Logo" class="logo-img">
+        PantryPal Pro
       </a>
       <div class="nav-actions">
-        <button onclick="toggleDark()" class="btn btn-ghost btn-sm" id="darkToggleIcon">🌙</button>
         <span class="plan-badge" id="planBadge">Free Plan</span>
         <button onclick="logout()" class="btn btn-outline btn-sm">Logout</button>
       </div>
@@ -90,32 +90,46 @@
 
       <!-- Recommended Recipes -->
       <section>
-        <div class="flex justify-between items-center mb-8">
+        <div class="flex justify-between items-center mb-8" style="flex-wrap: wrap; gap: 1rem;">
           <div>
             <h2>Recipe Catalogue</h2>
             <span class="text-muted">Established recipes for you</span>
           </div>
-          <select id="sortRecipes" class="btn btn-outline btn-sm" onchange="renderRecipes()"
-            style="padding: 0.5rem; border-radius: var(--radius-md); background: var(--bg);">
-            <option value="popular">Most Popular</option>
-            <option value="easy">Most Easy</option>
-            <option value="healthy">Most Healthy</option>
-          </select>
+          <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+            <button id="favFilterBtn" class="btn btn-outline btn-sm" onclick="toggleFavoriteFilter()"
+              title="Show Favorites"
+              style="padding: 0 0.8rem; height: 38px; border-radius: var(--radius-md); background: var(--bg); font-size: 1.2rem; display: flex; align-items: center; justify-content: center; color: #ff4d4d; border: 1px solid var(--border-color); transition: all 0.2s;">♡</button>
+            <div class="search-container" style="position: relative;">
+              <input type="text" id="recipeSearchInput" class="form-control" placeholder="Search recipes..."
+                style="padding: 0.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); background: var(--bg); color: var(--text); width: 250px;"
+                oninput="handleRecipeSearch()" autocomplete="off">
+              <div id="searchSuggestions" class="suggestions-dropdown" style="display: none;"></div>
+            </div>
+            <select id="sortRecipes" class="btn btn-outline btn-sm" onchange="renderRecipes()"
+              style="padding: 0.5rem; border-radius: var(--radius-md); background: var(--bg);">
+              <option value="popular">Most Popular</option>
+              <option value="easy">Most Easy</option>
+              <option value="healthy">Most Healthy</option>
+            </select>
+          </div>
         </div>
 
         <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
-          <div class="filter-group" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-            <button class="tag tier-tab active" id="tier-all" onclick="setTierFilter('all')">All Tiers</button>
-            <button class="tag tier-tab" id="tier-free" onclick="setTierFilter('free')">Poor</button>
-            <button class="tag tier-tab" id="tier-plus" onclick="setTierFilter('plus')">Plus</button>
-            <button class="tag tier-tab" id="tier-pro" onclick="setTierFilter('pro')">Pro</button>
-          </div>
-          <div class="filter-group" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-            <button class="tag meal-tab active" id="meal-all" onclick="setMealFilter('all')">All Meals</button>
-            <button class="tag meal-tab" id="meal-breakfast" onclick="setMealFilter('breakfast')">Breakfast</button>
-            <button class="tag meal-tab" id="meal-lunch" onclick="setMealFilter('lunch')">Lunch</button>
-            <button class="tag meal-tab" id="meal-dinner" onclick="setMealFilter('dinner')">Dinner</button>
-          </div>
+          <select id="tierFilter" class="btn btn-outline btn-sm" onchange="setTierFilter(this.value)"
+            style="padding: 0.5rem; border-radius: var(--radius-md); background: var(--bg);">
+            <option value="all">All Tiers</option>
+            <option value="free">PantryPal Free</option>
+            <option value="plus">PantryPal Plus</option>
+            <option value="pro">PantryPal Pro</option>
+          </select>
+
+          <select id="mealFilter" class="btn btn-outline btn-sm" onchange="setMealFilter(this.value)"
+            style="padding: 0.5rem; border-radius: var(--radius-md); background: var(--bg);">
+            <option value="all">All Meals</option>
+            <option value="breakfast">Breakfast</option>
+            <option value="lunch">Lunch</option>
+            <option value="dinner">Dinner</option>
+          </select>
         </div>
 
         <div class="recipe-grid" id="recipeGrid">
@@ -138,7 +152,8 @@
         <div style="display: flex; flex-direction: column; gap: 2rem;">
           <div>
             <h3>Ingredients</h3>
-            <ul id="modalIngredients" style="margin-top: 1rem; line-height: 1.8; list-style-type: disc; padding-left: 1.5rem;">
+            <ul id="modalIngredients"
+              style="margin-top: 1rem; line-height: 1.8; list-style-type: disc; padding-left: 1.5rem;">
             </ul>
           </div>
           <div>
@@ -147,12 +162,13 @@
             </ol>
           </div>
         </div>
-        
+
         <div class="video-container" id="modalVideoContainer">
           <!-- Video content or locked message will be injected here -->
         </div>
 
-        <div id="modalCommentsContainer" style="margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 2rem;">
+        <div id="modalCommentsContainer"
+          style="margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 2rem;">
           <!-- Comments content will be injected here -->
         </div>
       </div>

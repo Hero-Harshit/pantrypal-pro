@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PantryPal Pro — Contact Us</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/landing.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    .page-header {
+      padding: 8rem 0 4rem;
+      text-align: center;
+      background: linear-gradient(to bottom, var(--primary-light), transparent);
+    }
+    .page-content {
+      max-width: 900px;
+      margin: 0 auto 6rem;
+    }
+    .page-content h2 {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    .page-content h3 {
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+    .page-content p {
+      margin-bottom: 1rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="landing.html" class="logo">
+        <img src="../assets/logo.png" alt="PantryPal Pro Logo" class="logo-img">
+        PantryPal Pro
+      </a>
+
+      <div class="nav-links">
+        <a href="landing.html#features">Features</a>
+        <a href="landing.html#how-it-works">How It Works</a>
+        <a href="landing.html#pricing">Pricing</a>
+        <a href="about.html">About</a>
+      </div>
+
+      <div class="nav-actions">
+        <a href="auth.html#login" class="btn btn-outline btn-sm">Login</a>
+        <a href="auth.html#signup" class="btn btn-primary btn-sm">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="container">
+      <h1>Contact Us</h1>
+      <p class="text-muted">PantryPal Pro</p>
+    </div>
+  </header>
+
+  <main class="container page-content glass-card fade-up" style="padding: 3rem;">
+    <h2>Get in Touch</h2>
+    <p>We'd love to hear from you. Whether you have a question about our features, pricing, or anything else, our team is ready to answer all your questions.</p>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; margin-top: 3rem;">
+      <div>
+        <h3>Contact Details</h3>
+        <p><strong>Email:</strong> [Your Email Here]</p>
+        <p><strong>Phone:</strong> [Your Phone Number Here]</p>
+        <p><strong>Address:</strong><br>[Your Address Line 1]<br>[Your Address Line 2]<br>[City, Country, Zip]</p>
+        <br>
+        <h3>Support Hours</h3>
+        <p>Monday - Friday: 9am - 5pm</p>
+        <p>Weekend: Closed</p>
+      </div>
+      <div>
+        <h3>Send us a Message</h3>
+        <form style="display: flex; flex-direction: column; gap: 1rem;" onsubmit="event.preventDefault(); alert('Message sent successfully!');">
+          <input type="text" placeholder="Your Name" style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: transparent; color: var(--text);" required>
+          <input type="email" placeholder="Your Email" style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: transparent; color: var(--text);" required>
+          <textarea rows="5" placeholder="Your Message" style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); resize: vertical; background: transparent; color: var(--text);" required></textarea>
+          <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem;">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="logo mb-8">
+            <img src="../assets/logo.png" alt="PantryPal Pro Logo" class="logo-img">
+            PantryPal Pro
+          </div>
+          <p>Pantry to Plate, Perfected. Making smart cooking accessible to everyone.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="landing.html#features">Features</a></li>
+            <li><a href="landing.html#pricing">Pricing</a></li>
+            <li><a href="dashboard.html">Recipes</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="career.html">Careers</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 PantryPal Pro. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/app.js"></script>
+</body>
+</html>

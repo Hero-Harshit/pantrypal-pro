@@ -7,7 +7,7 @@ if (currentUser && currentUser.plan === 'poor') {
   currentUser.plan = 'free';
   localStorage.setItem('pp_user', JSON.stringify(currentUser));
 }
-let darkMode = localStorage.getItem('pp_dark') === 'true';
+// Dark mode disabled
 let activeFilters = new Set();
 let detectedIngredients = [];
 
@@ -15,17 +15,7 @@ let detectedIngredients = [];
 function $(sel, ctx = document) { return ctx.querySelector(sel); }
 function $$(sel, ctx = document) { return [...ctx.querySelectorAll(sel)]; }
 
-function applyDarkMode() {
-  document.documentElement.classList.toggle('dark', darkMode);
-  localStorage.setItem('pp_dark', darkMode);
-  const icon = $('#darkToggleIcon');
-  if (icon) icon.textContent = darkMode ? '☀️' : '🌙';
-}
 
-function toggleDark() {
-  darkMode = !darkMode;
-  applyDarkMode();
-}
 
 // ---------- Auth ----------
 function saveUser(user) {
@@ -43,8 +33,6 @@ function isLoggedIn() { return !!currentUser; }
 
 // ---------- Init on every page ----------
 document.addEventListener('DOMContentLoaded', () => {
-  applyDarkMode();
-
   // Update nav auth buttons
   const authBtns = $('#navAuthBtns');
   if (authBtns) {
@@ -108,13 +96,15 @@ function renderPricing() {
     return `
     <div class="pricing-card glass-card tier-${k} ${popular ? 'popular' : ''}">
       ${popular ? '<span class="badge-popular">Most Popular</span>' : ''}
-      <h3>${p.name}</h3>
-      <div class="price">${p.price}</div>
-      <p class="recipe-count">${p.recipes} recipes</p>
-      <ul>${p.features.map(f => `<li>✓ ${f}</li>`).join('')}</ul>
-      <a href="auth.html${k === 'free' ? '#signup' : '#login'}" class="btn ${popular ? 'btn-primary' : 'btn-outline'} btn-full">
-        ${k === 'free' ? 'Start Free' : 'Get ' + p.name}
-      </a>
+      <div class="card-content-wrap">
+        <h3>${p.name}</h3>
+        <div class="price">${p.price}</div>
+        <p class="recipe-count">${p.recipes} recipes</p>
+        <ul>${p.features.map(f => `<li>✓ ${f}</li>`).join('')}</ul>
+        <a href="auth.html${k === 'free' ? '#signup' : '#login'}" class="btn ${popular ? 'btn-primary' : 'btn-outline'} btn-full">
+          ${k === 'free' ? 'Start Free' : 'Get ' + p.name}
+        </a>
+      </div>
     </div>`;
   }).join('');
 }
@@ -132,6 +122,49 @@ function scrollToSection(id) {
   const mobileMenu = $('#mobileMenu');
   if (mobileMenu) mobileMenu.classList.remove('open');
 }
+
+// --- Authentication Handlers ---
+let currentSearchQuery = "";
+
+function handleRecipeSearch() {
+  const inputEl = $('#recipeSearchInput');
+  if (!inputEl) return;
+  
+  const input = inputEl.value.toLowerCase();
+  currentSearchQuery = input;
+  
+  const suggestionsBox = $('#searchSuggestions');
+  
+  if (input.length > 0) {
+    const matches = RECIPES.filter(r => r.name.toLowerCase().includes(input)).slice(0, 5);
+    if (matches.length > 0) {
+      suggestionsBox.innerHTML = matches.map(m => `<div class="suggestion-item" onclick="selectSearch('${m.name.replace(/'/g, "\\'")}')">${m.name}</div>`).join('');
+      suggestionsBox.style.display = 'block';
+    } else {
+      suggestionsBox.style.display = 'none';
+    }
+  } else {
+    suggestionsBox.style.display = 'none';
+  }
+  
+  renderRecipes();
+}
+
+function selectSearch(name) {
+  const inputEl = $('#recipeSearchInput');
+  if (inputEl) inputEl.value = name;
+  currentSearchQuery = name.toLowerCase();
+  const suggestionsBox = $('#searchSuggestions');
+  if (suggestionsBox) suggestionsBox.style.display = 'none';
+  renderRecipes();
+}
+
+document.addEventListener('click', (e) => {
+  const suggestionsBox = $('#searchSuggestions');
+  if (suggestionsBox && !e.target.closest('.search-container')) {
+    suggestionsBox.style.display = 'none';
+  }
+});
 
 // ===================== AUTH PAGE =====================
 function initAuth() {
@@ -337,22 +370,41 @@ window.scanPantry = function () {
   }, 1500);
 }
 
+let favoriteRecipes = new Set(JSON.parse(localStorage.getItem('pantryPalFavs') || '[]'));
+let showFavoritesOnly = false;
+
+window.toggleFavoriteFilter = function () {
+  showFavoritesOnly = !showFavoritesOnly;
+  const btn = $('#favFilterBtn');
+  if (btn) {
+    btn.innerHTML = showFavoritesOnly ? '♥' : '♡';
+    btn.style.background = showFavoritesOnly ? '#fff0f0' : 'var(--bg)';
+    btn.style.borderColor = showFavoritesOnly ? '#ff4d4d' : 'var(--border-color)';
+  }
+  renderRecipes();
+};
+
+window.toggleFavorite = function (event, id) {
+  event.stopPropagation();
+  if (favoriteRecipes.has(id)) {
+    favoriteRecipes.delete(id);
+  } else {
+    favoriteRecipes.add(id);
+  }
+  localStorage.setItem('pantryPalFavs', JSON.stringify([...favoriteRecipes]));
+  renderRecipes();
+};
+
 let activeTier = 'all';
 let activeMeal = 'all';
 
 window.setTierFilter = function (tier) {
   activeTier = tier;
-  $$('.tier-tab').forEach(b => b.classList.remove('active'));
-  const el = $('#tier-' + tier);
-  if (el) el.classList.add('active');
   renderRecipes();
 };
 
 window.setMealFilter = function (meal) {
   activeMeal = meal;
-  $$('.meal-tab').forEach(b => b.classList.remove('active'));
-  const el = $('#meal-' + meal);
-  if (el) el.classList.add('active');
   renderRecipes();
 };
 
@@ -363,14 +415,7 @@ function renderRecipes() {
   let filtered = [...RECIPES];
 
   if (activeTier !== 'all') {
-    if (activeTier === 'plus') {
-      filtered = filtered.filter(r => r.tier === 'free' || r.tier === 'plus');
-    } else if (activeTier === 'pro') {
-      // Pro includes all tiers, so no filtering needed
-    } else {
-      // Free includes only 'free'
-      filtered = filtered.filter(r => r.tier === 'free');
-    }
+    filtered = filtered.filter(r => r.tier === activeTier);
   }
 
   if (activeMeal !== 'all') {
@@ -379,6 +424,14 @@ function renderRecipes() {
 
   if (activeFilters && activeFilters.size > 0) {
     filtered = filtered.filter(r => [...activeFilters].some(f => r.tags.includes(f)));
+  }
+
+  if (typeof currentSearchQuery !== 'undefined' && currentSearchQuery) {
+    filtered = filtered.filter(r => r.name.toLowerCase().includes(currentSearchQuery));
+  }
+
+  if (typeof showFavoritesOnly !== 'undefined' && showFavoritesOnly) {
+    filtered = filtered.filter(r => favoriteRecipes.has(r.id));
   }
 
   const sortOpt = $('#sortRecipes') ? $('#sortRecipes').value : 'popular';
@@ -403,11 +456,16 @@ function renderRecipes() {
     } else if (r.tier === 'plus' && currentUser.plan === 'free') {
       locked = true;
     }
-    
+
+    const isFav = favoriteRecipes.has(r.id);
+
     return `
-    <div class="recipe-card glass-card ${locked ? 'locked' : ''}" ${locked ? `onclick="showToast('Upgrade to ${r.tier === 'pro' ? 'Pro' : 'Plus'} to unlock!','info')"` : `onclick="openRecipeModal(${r.id})"`}>
+    <div class="recipe-card glass-card ${locked ? 'locked' : ''}" ${locked ? `onclick="showToast('Upgrade to ${r.tier.charAt(0).toUpperCase() + r.tier.slice(1)} to unlock!','info')"` : `onclick="openRecipeModal(${r.id})"`}>
       <div class="recipe-img-wrap">
         <img src="${r.image}" alt="${r.name}" loading="lazy">
+        <button class="fav-btn" onclick="toggleFavorite(event, ${r.id})" style="position: absolute; top: 0.5rem; left: 0.5rem; z-index: 5; background: var(--bg); border: none; border-radius: 50%; width: 32px; height: 32px; font-size: 1.2rem; color: #ff4d4d; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); transition: transform 0.2s;">
+          ${isFav ? '♥' : '♡'}
+        </button>
         ${locked ? `<div class="lock-overlay"><p style="font-weight: 700; font-size: 1.2rem;">${r.tier.charAt(0).toUpperCase() + r.tier.slice(1)} Recipe</p></div>` : ''}
         ${r.tier !== 'free' ? `<span class="premium-badge">${r.tier.toUpperCase()}</span>` : ''}
       </div>
@@ -424,16 +482,16 @@ function renderRecipes() {
   }).join('');
 }
 
-window.openRecipeModal = function(id) {
+window.openRecipeModal = function (id) {
   const r = RECIPES.find(r => r.id === id);
   if (!r) return;
-  
+
   $('#modalRecipeTitle').textContent = r.name;
   $('#modalRecipeDesc').textContent = r.description;
-  
+
   const ings = r.ingredients || ['Ingredient 1', 'Ingredient 2', 'Ingredient 3'];
   $('#modalIngredients').innerHTML = ings.map(i => `<li>${i}</li>`).join('');
-  
+
   const steps = r.steps || [
     'Prepare all ingredients and wash vegetables.',
     'Heat oil in a pan over medium-high heat.',
@@ -442,7 +500,7 @@ window.openRecipeModal = function(id) {
     'Serve hot and enjoy!'
   ];
   $('#modalSteps').innerHTML = steps.map(s => `<li>${s}</li>`).join('');
-  
+
   const videoContainer = $('#modalVideoContainer');
   const playbarHtml = `<div class="video-playbar"></div>`;
   if (currentUser.plan === 'pro') {
@@ -499,12 +557,12 @@ window.openRecipeModal = function(id) {
       </div>
     `;
   }
-  
+
   $('#recipeModalOverlay').classList.add('active');
   document.body.style.overflow = 'hidden';
 };
 
-window.closeRecipeModal = function(e) {
+window.closeRecipeModal = function (e) {
   if (e && e.target !== $('#recipeModalOverlay') && e.target.className !== 'modal-close') return;
   $('#recipeModalOverlay').classList.remove('active');
   document.body.style.overflow = '';
