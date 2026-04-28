@@ -576,10 +576,33 @@ window.toggleDietFilter = function () {
   renderRecipes();
 };
 
+let currentPage = 1;
+const itemsPerPage = 12;
+let allFilteredRecipes = [];
+let scrollObserver;
+
 function renderRecipes() {
   const grid = $('#recipeGrid');
   if (!grid) return;
 
+  // Reset pagination
+  currentPage = 1;
+  grid.innerHTML = `
+    <div class="loader-container">
+      <div class="spinner"></div>
+      <p class="loader-text">Crafting your menu...</p>
+    </div>
+  `;
+
+  setTimeout(() => {
+    allFilteredRecipes = performFiltering();
+    grid.innerHTML = ''; // Clear loader
+    renderNextBatch(true);
+    setupInfiniteScroll();
+  }, 400);
+}
+
+function performFiltering() {
   let filtered = [...RECIPES];
 
   if (activeTier !== 'all' || activeMeal !== 'all' || activeCuisine !== 'all' || activeDifficulty !== 'all' || activeDiet !== 'all') {
@@ -597,7 +620,6 @@ function renderRecipes() {
   if (activeFilters && activeFilters.size > 0) {
     filtered = filtered.filter(r => [...activeFilters].every(f => r.tags.includes(f)));
   }
-
 
   if (typeof currentSearchQuery !== 'undefined' && currentSearchQuery) {
     filtered = filtered.filter(r => r.name.toLowerCase().includes(currentSearchQuery));
@@ -617,19 +639,30 @@ function renderRecipes() {
     filtered.sort((a, b) => parseInt(a.calories) - parseInt(b.calories));
   }
 
-  if (filtered.length === 0) {
-    grid.innerHTML = '<p class="text-muted text-center" style="grid-column: 1 / -1; padding: 2rem;">No recipes match your filters. Try adjusting your preferences.</p>';
+  return filtered;
+}
+
+function renderNextBatch(isFirst = false) {
+  const grid = $('#recipeGrid');
+  if (!grid) return;
+
+  const start = (currentPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const batch = allFilteredRecipes.slice(start, end);
+
+  if (isFirst && batch.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 5rem 2rem;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">🍽️</div>
+        <h3>No Recipes Found</h3>
+        <p class="text-muted">Try adjusting your filters or search query.</p>
+        <button class="btn btn-outline mt-8" onclick="resetAllFilters()">Reset Filters</button>
+      </div>`;
     return;
   }
 
-  grid.innerHTML = filtered.map(r => {
-    let locked = false;
-    if (r.tier === 'pro' && currentUser.plan !== 'pro') {
-      locked = true;
-    } else if (r.tier === 'plus' && currentUser.plan === 'free') {
-      locked = true;
-    }
-
+  const batchHtml = batch.map(r => {
+    const locked = currentUser.plan === 'free' && r.tier !== 'free';
     const isFav = favoriteRecipes.has(r.id);
 
     return `
@@ -652,18 +685,46 @@ function renderRecipes() {
         </div>
       </div>
     </div>`;
-
-
   }).join('');
 
-  if (filtered.length > 0) {
-    grid.innerHTML += `
+  // Remove old footer if it exists
+  const oldFooter = $('.grid-footer');
+  if (oldFooter) oldFooter.remove();
+
+  grid.insertAdjacentHTML('beforeend', batchHtml);
+
+  if (end < allFilteredRecipes.length) {
+    grid.insertAdjacentHTML('beforeend', `
+      <div id="scrollAnchor" style="grid-column: 1 / -1; height: 50px; display: flex; align-items: center; justify-content: center;">
+        <div class="spinner" style="width: 30px; height: 30px; border-width: 3px;"></div>
+      </div>
+    `);
+    const newAnchor = $('#scrollAnchor');
+    if (newAnchor && scrollObserver) scrollObserver.observe(newAnchor);
+  } else if (allFilteredRecipes.length > 0) {
+    grid.insertAdjacentHTML('beforeend', `
       <div class="grid-footer" style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; border-top: 1px solid var(--border); margin-top: 2rem; background: var(--bg-secondary); border-radius: var(--radius-lg); opacity: 0.8;">
         <p style="font-size: 1.1rem; color: var(--text); font-weight: 600; margin-bottom: 0.5rem;">✨ You've reached the end. <strong>Thanks for visiting PantryPal Pro!</strong></p>
         <small style="color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500;">More gourmet recipes added every week.</small>
       </div>
-    `;
+    `);
   }
+}
+
+function setupInfiniteScroll() {
+  if (scrollObserver) scrollObserver.disconnect();
+
+  scrollObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      currentPage++;
+      const anchor = $('#scrollAnchor');
+      if (anchor) anchor.remove();
+      renderNextBatch();
+    }
+  }, { threshold: 0.1 });
+
+  const anchor = $('#scrollAnchor');
+  if (anchor) scrollObserver.observe(anchor);
 }
 
 window.openRecipeModal = function (id) {
