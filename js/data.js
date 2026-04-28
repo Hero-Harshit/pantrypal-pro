@@ -16,7 +16,7 @@ const PLANS = {
   free: {
     name: "PantryPal Free",
     price: "₹0/mo",
-    recipes: "Limited Recipes",
+    recipes: "Limited",
     features: [
       "Access to a wide established recipe catalog",
       "Variety of sorting filters",
@@ -27,12 +27,13 @@ const PLANS = {
   plus: {
     name: "PantryPal Plus",
     price: "₹199/mo",
-    recipes: "Most Recipes",
+    recipes: "Most",
     features: [
       "5 daily fridge scans",
       "Access to Community Comments",
       "Higher priority queue",
       "24/7 chat support",
+      "Dark Theme Unlocked",
       "Everything in Free"
     ]
   },
@@ -45,6 +46,7 @@ const PLANS = {
       "Exclusive Video Tutorials",
       "First priority in queue",
       "Dedicated 24/7 call support",
+      "Glassomorphic Theme Unlocked",
       "Everything in PLUS"
     ]
   }

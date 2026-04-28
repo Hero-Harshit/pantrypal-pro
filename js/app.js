@@ -193,7 +193,43 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// ===================== AUTH PAGE =====================
+// Allergy Modal
+window.openAllergyModal = function() {
+  const modal = $('#allergyModalOverlay');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+};
+
+window.closeAllergyModal = function(e) {
+  if (e && e.target !== $('#allergyModalOverlay') && !e.target.classList.contains('modal-close')) return;
+  const modal = $('#allergyModalOverlay');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+};
+
+// Dietary Lock Modal
+window.openDietaryLockModal = function() {
+  const modal = $('#dietaryLockModalOverlay');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+};
+
+window.closeDietaryLockModal = function(e) {
+  if (e && e.target !== $('#dietaryLockModalOverlay') && !e.target.classList.contains('modal-close')) return;
+  const modal = $('#dietaryLockModalOverlay');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+};
+
+// ===================== UTILS =====================
 function initAuth() {
   initScrollAnimations();
   if (isLoggedIn()) { window.location.href = 'dashboard.html'; return; }
@@ -319,40 +355,6 @@ async function initDashboard() {
     badge.className = 'plan-badge plan-' + currentUser.plan;
   }
 
-  const upgradeSidebar = $('#upgradeSidebar');
-  if (upgradeSidebar) {
-    if (currentUser.plan === 'pro') {
-      upgradeSidebar.innerHTML = `
-        <div style="padding: 1.5rem;">
-          <h4>Your Pro Plan</h4>
-          <p class="text-muted"><small>Unlimited access and priority support.</small></p>
-          <div style="margin-top: 1rem;">
-            <div class="flex justify-between"><small>Daily Scans</small><small>10/10</small></div>
-            <div class="goal-bar mt-8" style="height:4px; margin-top:4px;"><div class="goal-fill" style="width:100%"></div></div>
-          </div>
-        </div>
-      `;
-    } else if (currentUser.plan === 'plus') {
-      upgradeSidebar.innerHTML = `
-        <div style="padding: 1.5rem;">
-          <h4>Upgrade to Pro</h4>
-          <p class="text-muted"><small>Get 10 daily scans and priority 24/7 support.</small></p>
-          <button class="btn btn-primary btn-full btn-sm" style="margin-top:1.5rem;"
-            onclick="upgradePlan('pro')">Upgrade to Pro</button>
-        </div>
-      `;
-    } else {
-      upgradeSidebar.innerHTML = `
-        <div style="padding: 1.5rem;">
-          <h4>Upgrade to Plus</h4>
-          <p class="text-muted"><small>Unlock fridge scans, comments, and more.</small></p>
-          <button class="btn btn-primary btn-full btn-sm" style="margin-top:1.5rem;"
-            onclick="upgradePlan('plus')">Upgrade to Plus</button>
-        </div>
-      `;
-    }
-  }
-
   // Use localStorage for favorites
   favoriteRecipes = new Set(JSON.parse(localStorage.getItem('pantryPalFavs') || '[]'));
 
@@ -366,8 +368,8 @@ async function initDashboard() {
       pantryScannerSection.innerHTML = `
         <div class="glass-card text-center" style="padding: 3rem;">
           <h3 style="margin-bottom: 1rem;">🔒 Fridge Scanning is Locked</h3>
-          <p class="text-muted" style="margin-bottom: 2rem;">Upgrade to Plus or Pro to unlock AI Fridge Scanning.</p>
-          <button class="btn btn-primary" onclick="upgradePlan('plus')">Upgrade to Plus</button>
+          <p class="text-muted" style="margin-bottom: 2rem;">Explore our Plus or Pro plans to unlock AI Fridge Scanning.</p>
+          <button class="btn btn-primary" onclick="upgradePlan('plus')">Explore Plans</button>
         </div>
       `;
     }
@@ -388,10 +390,7 @@ async function initDashboard() {
   // Dietary filter chips
   $$('.filter-chip').forEach(chip => {
     chip.addEventListener('click', () => {
-      chip.classList.toggle('active');
-      const tag = chip.dataset.tag;
-      activeFilters.has(tag) ? activeFilters.delete(tag) : activeFilters.add(tag);
-      renderRecipes();
+      openDietaryLockModal();
     });
   });
 
@@ -401,10 +400,8 @@ async function initDashboard() {
 
 
 async function upgradePlan(plan) {
-  currentUser.plan = plan;
-  saveUser(currentUser);
-  showToast(`Upgraded to ${plan.charAt(0).toUpperCase() + plan.slice(1)}! 🎉`, 'success');
-  location.reload();
+  // Redirect to landing page pricing section
+  window.location.href = 'landing.html#pricing';
 }
 
 function handleImageUpload(file) {
@@ -474,6 +471,7 @@ window.toggleFavorite = function (event, id) {
 let activeTier = 'all';
 let activeMeal = 'all';
 let activeCuisine = 'all';
+let activeDifficulty = 'all';
 let activeDiet = 'veg'; // Default to veg based on UI state
 
 window.setTierFilter = function (tier) {
@@ -491,19 +489,24 @@ window.setCuisineFilter = function (cuisine) {
   renderRecipes();
 };
 
-window.setDietFilter = function (diet) {
-  activeDiet = diet;
+window.setDifficultyFilter = function (diff) {
+  activeDifficulty = diff;
+  renderRecipes();
+};
+
+window.toggleDietFilter = function () {
+  activeDiet = (activeDiet === 'veg') ? 'non-veg' : 'veg';
   
-  // Update UI buttons
-  const vegBtn = $('#vegBtn');
-  const nonVegBtn = $('#nonVegBtn');
-  if (vegBtn && nonVegBtn) {
-    if (diet === 'veg') {
-      vegBtn.classList.add('active');
-      nonVegBtn.classList.remove('active');
+  const btn = $('#dietToggleBtn');
+  if (btn) {
+    if (activeDiet === 'veg') {
+      btn.innerHTML = 'Veg';
+      btn.style.borderColor = '#000000';
+      btn.style.color = 'var(--primary)';
     } else {
-      vegBtn.classList.remove('active');
-      nonVegBtn.classList.add('active');
+      btn.innerHTML = 'Non-Veg';
+      btn.style.borderColor = '#000000';
+      btn.style.color = '#ef4444';
     }
   }
   
@@ -521,6 +524,7 @@ function renderRecipes() {
       if (activeTier !== 'all' && r.tier !== activeTier) return false;
       if (activeMeal !== 'all' && r.meal !== activeMeal) return false;
       if (activeCuisine !== 'all' && r.cuisine !== activeCuisine) return false;
+      if (activeDifficulty !== 'all' && r.difficulty !== activeDifficulty) return false;
       if (activeDiet === 'veg' && !r.tags.includes('veg')) return false;
       if (activeDiet === 'non-veg' && r.tags.includes('veg')) return false;
       return true;

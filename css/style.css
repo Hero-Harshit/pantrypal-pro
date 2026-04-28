@@ -796,6 +796,39 @@ footer {
   font-weight: 600;
 }
 
+.filter-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.filter-chip {
+  padding: 0.75rem 1rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.filter-chip:hover {
+  background: var(--bg-secondary);
+  border-color: var(--primary);
+  transform: translateX(4px);
+}
+
+.filter-chip.active {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+
 .plan-free {
   background: #e2e8f0;
   color: #475569;
@@ -1141,30 +1174,16 @@ footer {
 }
 
 /* Diet Toggle Styles */
-.diet-toggle-container {
-  display: flex;
-  background: var(--glass-bg);
-  padding: 0.2rem;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-color);
-  gap: 0.2rem;
+.diet-toggle-single {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+  border-width: 2px;
+  border-color: #000000 !important;
 }
 
-.diet-toggle-container .btn-ghost {
-  color: var(--text-muted);
-  padding: 0.4rem 0.8rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.diet-toggle-container .btn-ghost.active {
-  background: var(--bg);
-  color: var(--primary);
+.diet-toggle-single:hover {
+  transform: translateY(-1px);
   box-shadow: var(--shadow-sm);
-}
-
-.diet-toggle-container .btn-ghost:hover:not(.active) {
-  background: rgba(255, 255, 255, 0.05);
 }
 
 .modal-close {

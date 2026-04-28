@@ -31,7 +31,7 @@
       <div class="user-profile">
         <div class="avatar" id="sidebarAvatar">👤</div>
         <div>
-          <strong id="userGreeting">Hello 👋</strong><br>
+          <strong id="userGreeting">Hello</strong><br>
           <small class="text-muted">Ready to cook?</small>
         </div>
       </div>
@@ -43,18 +43,15 @@
           <div class="filter-chip" data-tag="high-protein">💪 High Protein</div>
           <div class="filter-chip" data-tag="low-carb">🥑 Low Carb</div>
           <div class="filter-chip" data-tag="keto">🥓 Keto</div>
-          <div class="filter-chip" data-tag="veg">🥗 Vegetarian</div>
           <div class="filter-chip" data-tag="vegan">🌱 Vegan</div>
           <div class="filter-chip" data-tag="gluten-free">🌾 Gluten Free</div>
         </div>
       </div>
 
-      <div class="mt-8 glass-card" style="padding: 1.5rem;" id="upgradeSidebar">
-        <h4>Upgrade to Pro</h4>
-        <p class="text-muted"><small>Unlock AI features, fridge scans, and priority support.</small></p>
-        <button class="btn btn-primary btn-full btn-sm mt-8"
-          onclick="showToast('Upgraded to Pro (Demo)', 'success'); currentUser.plan='pro'; saveUser(currentUser); location.reload();">Upgrade
-          Now</button>
+      <div class="mt-auto" id="chatbotPlaceholder" style="margin-top: 3rem; padding: 1.5rem; border: 2px dashed var(--border); border-radius: var(--radius-lg); text-align: center; background: var(--bg);">
+        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🤖</div>
+        <h4 style="color: var(--text-muted); font-size: 0.9rem;">AI Assistant</h4>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">Coming Soon...</p>
       </div>
     </aside>
 
@@ -134,6 +131,14 @@
             <option value="dinner">Dinner</option>
           </select>
 
+          <select id="difficultyFilter" class="btn btn-outline btn-sm" onchange="setDifficultyFilter(this.value)"
+            style="padding: 0.5rem; border-radius: var(--radius-md); background: var(--bg);">
+            <option value="all">All Difficulties</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </select>
+
           <select id="tierFilter" class="btn btn-outline btn-sm" onchange="setTierFilter(this.value)"
             style="padding: 0.5rem; border-radius: var(--radius-md); background: var(--bg);">
             <option value="all">All Tiers</option>
@@ -142,10 +147,15 @@
             <option value="pro">PantryPal Pro</option>
           </select>
 
-          <div class="diet-toggle-container" style="display: flex; align-items: center; gap: 0.5rem; background: var(--glass-bg); padding: 0.25rem 0.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
-            <button id="vegBtn" class="btn btn-sm btn-ghost active" onclick="setDietFilter('veg')" style="font-size: 0.8rem; border-radius: var(--radius-md);">🥦 Veg</button>
-            <button id="nonVegBtn" class="btn btn-sm btn-ghost" onclick="setDietFilter('non-veg')" style="font-size: 0.8rem; border-radius: var(--radius-md);">🍖 Non-Veg</button>
-          </div>
+          <button id="dietToggleBtn" class="btn btn-outline btn-sm diet-toggle-single" onclick="toggleDietFilter()"
+            style="border-radius: var(--radius-md); min-width: 110px;">
+            Veg
+          </button>
+
+          <button class="btn btn-outline btn-sm" onclick="openAllergyModal()"
+            style="border-radius: var(--radius-md); gap: 0.5rem;">
+            🛡️ Allergy & Restrictions
+          </button>
         </div>
 
         <div class="recipe-grid" id="recipeGrid">
@@ -203,6 +213,47 @@
   <!-- App Data + Logic -->
   <script src="../js/data.js"></script>
   <script src="../js/app.js"></script>
+  <!-- Allergy Modal -->
+  <div class="modal-overlay" id="allergyModalOverlay" onclick="closeAllergyModal(event)">
+    <div class="modal-content" style="max-width: 500px; text-align: center; padding: 3rem;">
+      <button class="modal-close" onclick="closeAllergyModal()">×</button>
+      <div style="font-size: 3rem; margin-bottom: 1.5rem;">🛡️</div>
+      <h2 style="margin-bottom: 1rem;">Personalized Safety</h2>
+      <p class="text-muted" style="margin-bottom: 2rem;">
+        Input your allergies and dietary restrictions, and our <strong>Powerful Pantry Pro AI</strong> will
+        automatically filter out unsafe recipes from your feed in real-time.
+      </p>
+      <div
+        style="background: var(--primary-light); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--primary); margin-bottom: 2rem; text-align: left;">
+        <p style="font-size: 0.9rem; color: var(--primary-dark); margin: 0;">
+          ⭐ <strong>Premium Feature:</strong> This AI-driven safety filter is exclusive to our Plus and Pro members.
+        </p>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="upgradePlan('plus'); closeAllergyModal();">Explore
+        Plans</button>
+      <button class="btn btn-ghost btn-full mt-8" onclick="closeAllergyModal()">Maybe Later</button>
+    </div>
+  </div>
+
+  <!-- Dietary Lock Modal -->
+  <div class="modal-overlay" id="dietaryLockModalOverlay" onclick="closeDietaryLockModal(event)">
+    <div class="modal-content" style="max-width: 500px; text-align: center; padding: 3rem;">
+      <button class="modal-close" onclick="closeDietaryLockModal()">×</button>
+      <div style="font-size: 3rem; margin-bottom: 1.5rem;">✨</div>
+      <h2 style="margin-bottom: 1rem;">Dietary Personalization</h2>
+      <p class="text-muted" style="margin-bottom: 2rem;">
+        These advanced dietary goal filters will automatically customize any recipe into your chosen diet plan (Keto, Vegan, etc.), making all the necessary ingredient and step changes for you.
+      </p>
+      <div style="background: var(--primary-light); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--primary); margin-bottom: 2rem; text-align: left;">
+        <p style="font-size: 0.9rem; color: var(--primary-dark); margin: 0;">
+          ⭐ <strong>Pro Feature:</strong> AI-powered recipe transformation is exclusive to our Pro members.
+        </p>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="upgradePlan('pro'); closeDietaryLockModal();">Explore Plans</button>
+      <button class="btn btn-ghost btn-full mt-8" onclick="closeDietaryLockModal()">Maybe Later</button>
+    </div>
+  </div>
+
 </body>
 
 </html>
