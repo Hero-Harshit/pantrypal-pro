@@ -4,43 +4,126 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PantryPal Pro — About Us</title>
+  <title>About Us | PantryPal Pro — Pantry to Plate, Perfected.</title>
+  <meta name="description" content="Discover the mission and story behind PantryPal Pro, India's favorite AI-powered recipe generator.">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/landing.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
   <style>
-    .page-header {
-      padding: 8rem 0 4rem;
+    /* Scoped styles for About Page */
+    .about-hero {
+      padding: 10rem 0 6rem;
       text-align: center;
-      background: linear-gradient(to bottom, var(--primary-light), transparent);
+      position: relative;
     }
-    .page-content {
+
+    .about-hero h1 {
+      font-size: clamp(3rem, 8vw, 4.5rem);
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .about-hero p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .content-section {
+      padding: 5rem 0;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      color: var(--text);
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: var(--radius-full);
+    }
+
+    .text-content {
       max-width: 800px;
-      margin: 0 auto 6rem;
+      line-height: 1.8;
+      font-size: 1.125rem;
     }
-    .page-content h2 {
-      margin-top: 2rem;
+
+    .text-content p {
+      margin-bottom: 1.5rem;
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .value-card {
+      text-align: center;
+      padding: 3rem 2rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .value-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .value-emoji {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    .value-card h3 {
+      font-size: 1.5rem;
       margin-bottom: 1rem;
-      color: var(--primary);
+      color: var(--text);
     }
-    .page-content p {
-      margin-bottom: 1rem;
-      line-height: 1.6;
-      color: var(--text-muted);
+
+    .cta-banner-wrapper {
+      margin: 6rem 0;
     }
-    .page-content ul {
-      margin-bottom: 1rem;
-      padding-left: 1.5rem;
-      color: var(--text-muted);
+
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(0, 230, 118, 0.1) 0%, rgba(15, 23, 42, 0.05) 100%);
+      border: 1px solid var(--border-color);
+      padding: 5rem 2rem;
+      text-align: center;
+      border-radius: var(--radius-lg);
     }
-    .page-content li {
-      margin-bottom: 0.5rem;
+
+    .cta-banner h2 {
+      font-size: 3rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .about-hero {
+        padding: 8rem 0 4rem;
+      }
+      .section-title {
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
 
-<body>
+<body data-page="about">
 
   <!-- Navbar -->
   <nav class="navbar">
@@ -58,34 +141,96 @@
       </div>
 
       <div class="nav-actions">
-        <a href="auth.html#login" class="btn btn-outline btn-sm">Login</a>
-        <a href="auth.html#signup" class="btn btn-primary btn-sm">Sign Up</a>
+        <div id="navAuthBtns"></div>
       </div>
+
+      <button class="burger-btn" id="burgerBtn">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="landing.html#features" onclick="scrollToSection('features')">Features</a>
+      <a href="landing.html#how-it-works" onclick="scrollToSection('how-it-works')">How It Works</a>
+      <a href="landing.html#pricing" onclick="scrollToSection('pricing')">Pricing</a>
+      <a href="about.html">About</a>
+      <a href="auth.html" class="btn btn-primary">Get Started</a>
     </div>
   </nav>
 
-  <header class="page-header">
-    <div class="container">
-      <h1>About Us</h1>
-      <p class="text-muted">PantryPal Pro</p>
-    </div>
-  </header>
+  <main>
+    <!-- PAGE HEADER -->
+    <header class="about-hero fade-up">
+      <div class="container">
+        <h1>About Us</h1>
+        <p>Pantry to Plate, Perfected.</p>
+      </div>
+    </header>
 
-  <main class="container page-content glass-card fade-up" style="padding: 3rem;">
-    <h2>Our Mission</h2>
-    <p>At PantryPal Pro, our mission is to eliminate food waste and make cooking accessible, enjoyable, and sustainable for everyone. We believe that the best meals are often created from the ingredients you already have.</p>
-    <h2>Our Story</h2>
-    <p>PantryPal Pro started as a small passion project when a group of food enthusiasts and tech developers realized how often good food goes to waste simply because people don't know what to cook with it. We set out to create an AI-powered assistant that bridges the gap between a seemingly empty fridge and a delicious meal.</p>
-    <h2>Our Values</h2>
-    <ul>
-      <li><strong>Sustainability:</strong> We are committed to reducing global food waste.</li>
-      <li><strong>Innovation:</strong> We continuously leverage the latest AI technology to provide better culinary suggestions.</li>
-      <li><strong>Community:</strong> Cooking is better together. We foster a community of mindful and creative home chefs.</li>
-    </ul>
+    <!-- OUR MISSION -->
+    <section class="content-section">
+      <div class="container">
+        <div class="fade-up">
+          <h2 class="section-title">Our Mission</h2>
+          <div class="text-content">
+            <p>We exist to eliminate food waste and make cooking joyful for everyone. In an era where convenience often comes at the cost of sustainability, we're bringing the focus back to the heart of the home: the kitchen.</p>
+            <p>Every Indian household throws away food not because they want to — but because they don't know what to make with those leftover veggies or that half-empty jar of dal. We fix that by turning your pantry into a playground of culinary possibilities.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OUR STORY -->
+    <section class="content-section" style="background: var(--bg-secondary);">
+      <div class="container">
+        <div class="fade-up">
+          <h2 class="section-title">Our Story</h2>
+          <div class="text-content">
+            <p>Founded in 2026 by Hero Harshit, a food lover and engineer from Pune, PantryPal Pro began as a simple side project born out of personal frustration. Watching good ingredients go to waste after a long week of work felt like a problem technology could solve.</p>
+            <p>What started as a tool for friends quickly grew into a full product when we realized the scale of the issue. The "aha moment" was realizing the average Indian family wastes ₹3,000 worth of food per month. We knew we had to build something that wasn't just smart, but truly helpful for busy Indian homes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OUR VALUES -->
+    <section class="content-section">
+      <div class="container">
+        <div class="text-center fade-up">
+          <h2 class="section-title">Our Values</h2>
+        </div>
+        <div class="values-grid">
+          <div class="value-card glass-card fade-up">
+            <span class="value-emoji">🌱</span>
+            <h3>Sustainability</h3>
+            <p>Reduce food waste, one recipe at a time. We believe every ingredient saved is a step toward a greener planet.</p>
+          </div>
+          <div class="value-card glass-card fade-up">
+            <span class="value-emoji">🧠</span>
+            <h3>Innovation</h3>
+            <p>AI that gets smarter the more you cook. We're constantly refining our algorithms to understand your unique taste.</p>
+          </div>
+          <div class="value-card glass-card fade-up">
+            <span class="value-emoji">🤝</span>
+            <h3>Community</h3>
+            <p>Great recipes are better shared. We're building a network of home cooks who inspire and support one another.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA BANNER -->
+    <section class="container cta-banner-wrapper fade-up">
+      <div class="cta-banner glass-card">
+        <h2>Ready to cook smarter?</h2>
+        <a href="auth.html" class="btn btn-primary btn-lg">
+          Get Started Free <span style="margin-left: 0.5rem;">&rarr;</span>
+        </a>
+      </div>
+    </section>
   </main>
 
   <!-- FOOTER -->
-  <footer>
+  <footer id="about">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col">
@@ -125,6 +270,18 @@
     </div>
   </footer>
 
+  <!-- Supabase SDK + Config -->
+  <script src="../js/supabaseLoader.js"></script>
+  <script src="../js/supabase.config.js"></script>
+  <!-- Utilities -->
+  <script src="../js/utils/logger.js"></script>
+  <script src="../js/utils/validators.js"></script>
+  <!-- Services -->
+  <script src="../js/services/supabaseClient.js"></script>
+  <script src="../js/services/authService.js"></script>
+  <!-- App Data + Logic -->
+  <script src="../js/data.js"></script>
   <script src="../js/app.js"></script>
 </body>
+
 </html>

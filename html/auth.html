@@ -107,11 +107,12 @@
         </div>
 
         <div class="flex flex-col gap-4">
-          <!-- TODO: Integrate Supabase Auth here -->
-          <button class="btn btn-outline btn-full" onclick="showToast('Supabase Google Auth Placeholder')">
+          <button class="btn btn-outline btn-full" id="googleAuthBtn"
+            onclick="AuthService.signInWithOAuth('google').then(r => r.error && showToast(r.error,'error'))">
             <span style="font-size: 1.2rem; margin-right: 0.5rem;">G</span> Google
           </button>
-          <button class="btn btn-outline btn-full" onclick="showToast('Supabase GitHub Auth Placeholder')">
+          <button class="btn btn-outline btn-full" id="githubAuthBtn"
+            onclick="AuthService.signInWithOAuth('github').then(r => r.error && showToast(r.error,'error'))">
             <span style="font-size: 1.2rem; margin-right: 0.5rem;">🐙</span> GitHub
           </button>
         </div>
@@ -124,6 +125,16 @@
     </div>
   </div>
 
+  <!-- Supabase SDK + Config -->
+  <script src="../js/supabaseLoader.js"></script>
+  <script src="../js/supabase.config.js"></script>
+  <!-- Utilities -->
+  <script src="../js/utils/logger.js"></script>
+  <script src="../js/utils/validators.js"></script>
+  <!-- Services -->
+  <script src="../js/services/supabaseClient.js"></script>
+  <script src="../js/services/authService.js"></script>
+  <!-- App Data + Logic -->
   <script src="../js/data.js"></script>
   <script src="../js/app.js"></script>
 </body>

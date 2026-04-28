@@ -1,13 +1,7 @@
 // ============ PantryPal Pro — Main App Logic ============
 
 // ---------- State ----------
-let currentUser = JSON.parse(localStorage.getItem('pp_user')) || null;
-// Fix for older 'poor' plan contamination
-if (currentUser && currentUser.plan === 'poor') {
-  currentUser.plan = 'free';
-  localStorage.setItem('pp_user', JSON.stringify(currentUser));
-}
-// Dark mode disabled
+let currentUser = null;
 let activeFilters = new Set();
 let detectedIngredients = [];
 
@@ -15,39 +9,45 @@ let detectedIngredients = [];
 function $(sel, ctx = document) { return ctx.querySelector(sel); }
 function $$(sel, ctx = document) { return [...ctx.querySelectorAll(sel)]; }
 
-
-
-// ---------- Auth ----------
+// ---------- Auth (delegates to AuthService) ----------
 function saveUser(user) {
   currentUser = user;
   localStorage.setItem('pp_user', JSON.stringify(user));
 }
 
-function logout() {
-  currentUser = null;
-  localStorage.removeItem('pp_user');
+async function logout() {
+  if (typeof AuthService !== 'undefined') {
+    await AuthService.signOut();
+  } else {
+    currentUser = null;
+    localStorage.removeItem('pp_user');
+  }
   window.location.href = 'landing.html';
 }
 
-function isLoggedIn() { return !!currentUser; }
+function isLoggedIn() {
+  if (typeof AuthService !== 'undefined') return AuthService.isLoggedIn();
+  return !!JSON.parse(localStorage.getItem('pp_user') || 'null');
+}
 
 // ---------- Init on every page ----------
-document.addEventListener('DOMContentLoaded', () => {
-  // Update nav auth buttons
-  const authBtns = $('#navAuthBtns');
-  if (authBtns) {
-    if (isLoggedIn()) {
-      const isPremium = currentUser.plan === 'plus' || currentUser.plan === 'pro';
-      const badgeIcon = isPremium ? '<span title="Premium User">💎</span>' : '';
-      authBtns.innerHTML = `
-        <span class="nav-user">👋 ${currentUser.name.split(' ')[0]} ${badgeIcon}</span>
-        <a href="dashboard.html" class="btn btn-sm btn-outline">Dashboard</a>
-        <button onclick="logout()" class="btn btn-sm btn-ghost">Logout</button>`;
-    } else {
-      authBtns.innerHTML = `
-        <a href="auth.html" class="btn btn-primary btn-nav">Get Started Free &rarr;</a>`;
+document.addEventListener('DOMContentLoaded', async () => {
+  // Initialize Supabase auth service if available
+  if (typeof AuthService !== 'undefined') {
+    AuthService.init().then(() => {
+      currentUser = AuthService.getCurrentUser();
+      updateNavAuth();
+    });
+  } else {
+    currentUser = JSON.parse(localStorage.getItem('pp_user') || 'null');
+    // Fix legacy plan name
+    if (currentUser && currentUser.plan === 'poor') {
+      currentUser.plan = 'free';
+      localStorage.setItem('pp_user', JSON.stringify(currentUser));
     }
   }
+
+  updateNavAuth();
 
   // Mobile menu
   const burger = $('#burgerBtn');
@@ -63,12 +63,36 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.body.dataset.page === 'landing') initLanding();
   if (document.body.dataset.page === 'auth') initAuth();
   if (document.body.dataset.page === 'dashboard') initDashboard();
+  if (document.body.dataset.page === 'about') initAbout();
 });
 
+function updateNavAuth() {
+  const authBtns = $('#navAuthBtns');
+  if (!authBtns) return;
+
+  if (isLoggedIn()) {
+    const user = currentUser || AuthService.getCurrentUser();
+    if (!user) return;
+    const isPremium = user.plan === 'plus' || user.plan === 'pro';
+    const badgeIcon = isPremium ? '<span title="Premium User">💎</span>' : '';
+    authBtns.innerHTML = `
+      <span class="nav-user">👋 ${user.name.split(' ')[0]} ${badgeIcon}</span>
+      <a href="dashboard.html" class="btn btn-sm btn-outline">Dashboard</a>
+      <button onclick="logout()" class="btn btn-sm btn-ghost">Logout</button>`;
+  } else {
+    authBtns.innerHTML = `
+      <a href="auth.html" class="btn btn-primary btn-nav">Get Started Free &rarr;</a>`;
+  }
+}
+
 // ===================== LANDING PAGE =====================
-function initLanding() {
+async function initLanding() {
   renderTestimonials();
   renderPricing();
+  initScrollAnimations();
+}
+
+function initAbout() {
   initScrollAnimations();
 }
 
@@ -129,12 +153,12 @@ let currentSearchQuery = "";
 function handleRecipeSearch() {
   const inputEl = $('#recipeSearchInput');
   if (!inputEl) return;
-  
+
   const input = inputEl.value.toLowerCase();
   currentSearchQuery = input;
-  
+
   const suggestionsBox = $('#searchSuggestions');
-  
+
   if (input.length > 0) {
     const matches = RECIPES.filter(r => r.name.toLowerCase().includes(input)).slice(0, 5);
     if (matches.length > 0) {
@@ -146,7 +170,7 @@ function handleRecipeSearch() {
   } else {
     suggestionsBox.style.display = 'none';
   }
-  
+
   renderRecipes();
 }
 
@@ -190,36 +214,59 @@ function initAuth() {
     loginForm.classList.remove('active');
   });
 
-  loginForm.addEventListener('submit', e => {
+  // ── Login ──
+  loginForm.addEventListener('submit', async e => {
     e.preventDefault();
-    const email = $('#loginEmail').value;
+    const email = $('#loginEmail').value.trim();
     const pass = $('#loginPass').value;
-    if (!email || !pass) return showToast('Please fill all fields', 'error');
-    // Mock login
-    saveUser({ name: email.split('@')[0], email, plan: 'free' });
-    showToast('Welcome back!', 'success');
+
+    const emailV = Validators.email(email);
+    if (!emailV.valid) return showToast(emailV.error, 'error');
+    if (!pass) return showToast('Password is required.', 'error');
+
+    const btn = loginForm.querySelector('button[type=submit]');
+    btn.disabled = true; btn.textContent = 'Signing in...';
+
+    const { user, error } = await AuthService.signIn(email, pass);
+
+    btn.disabled = false; btn.textContent = 'Log In';
+    if (error) return showToast(error, 'error');
+
+    currentUser = AuthService.getCurrentUser();
+    showToast('Welcome back! 👋', 'success');
     setTimeout(() => window.location.href = 'dashboard.html', 800);
   });
 
-  signupForm.addEventListener('submit', e => {
+  // ── Sign Up ──
+  signupForm.addEventListener('submit', async e => {
     e.preventDefault();
-    const name = $('#signupName').value;
-    const phone = $('#signupPhone').value;
-    const email = $('#signupEmail').value;
+    const name = $('#signupName').value.trim();
+    const phone = $('#signupPhone').value.trim();
+    const email = $('#signupEmail').value.trim();
     const age = $('#signupAge').value;
     const country = $('#signupCountry').value;
     const pass = $('#signupPass').value;
     const confirm = $('#signupConfirm').value;
 
-    if (!name || !phone || !email || !age || !country || !pass || !confirm) {
-      return showToast('Please fill all fields', 'error');
-    }
-    if (pass !== confirm) return showToast('Passwords do not match', 'error');
-    if (pass.length < 6) return showToast('Password must be at least 6 characters', 'error');
+    const v = Validators.all(
+      Validators.required(name, 'Full Name'),
+      Validators.email(email),
+      Validators.password(pass),
+      Validators.passwordMatch(pass, confirm)
+    );
+    if (!v.valid) return showToast(v.error, 'error');
 
-    saveUser({ name, email, plan: 'free' });
-    showToast('Account created!', 'success');
-    setTimeout(() => window.location.href = 'dashboard.html', 800);
+    const btn = signupForm.querySelector('button[type=submit]');
+    btn.disabled = true; btn.textContent = 'Creating account...';
+
+    const { user, error } = await AuthService.signUp({ email, password: pass, name, phone, country, age });
+
+    btn.disabled = false; btn.textContent = 'Create Account';
+    if (error) return showToast(error, 'error');
+
+    currentUser = AuthService.getCurrentUser();
+    showToast('Account created! Welcome to PantryPal 🎉', 'success');
+    setTimeout(() => window.location.href = 'dashboard.html', 1000);
   });
 
   const loginToSignupBtn = $('#loginToSignupBtn');
@@ -239,7 +286,7 @@ function initAuth() {
 }
 
 // ===================== DASHBOARD =====================
-function initDashboard() {
+async function initDashboard() {
   if (!isLoggedIn()) { window.location.href = 'auth.html'; return; }
 
   // Greet user
@@ -267,9 +314,6 @@ function initDashboard() {
           <div style="margin-top: 1rem;">
             <div class="flex justify-between"><small>Daily Scans</small><small>10/10</small></div>
             <div class="goal-bar mt-8" style="height:4px; margin-top:4px;"><div class="goal-fill" style="width:100%"></div></div>
-            
-            <div class="flex justify-between" style="margin-top: 1rem;"><small>Monthly Quota</small><small>25/25</small></div>
-            <div class="goal-bar mt-8" style="height:4px; margin-top:4px;"><div class="goal-fill gf-green" style="width:100%"></div></div>
           </div>
         </div>
       `;
@@ -278,16 +322,24 @@ function initDashboard() {
         <div style="padding: 1.5rem;">
           <h4>Upgrade to Pro</h4>
           <p class="text-muted"><small>Get 10 daily scans and priority 24/7 support.</small></p>
-          <div style="margin-top: 1rem;">
-            <div class="flex justify-between"><small>Daily Scans</small><small>5/5</small></div>
-            <div class="goal-bar mt-8" style="height:4px; margin-top:4px;"><div class="goal-fill" style="width:100%"></div></div>
-          </div>
           <button class="btn btn-primary btn-full btn-sm" style="margin-top:1.5rem;"
-            onclick="showToast('Upgraded to Pro (Demo)', 'success'); currentUser.plan='pro'; saveUser(currentUser); location.reload();">Upgrade to Pro</button>
+            onclick="upgradePlan('pro')">Upgrade to Pro</button>
+        </div>
+      `;
+    } else {
+      upgradeSidebar.innerHTML = `
+        <div style="padding: 1.5rem;">
+          <h4>Upgrade to Plus</h4>
+          <p class="text-muted"><small>Unlock fridge scans, comments, and more.</small></p>
+          <button class="btn btn-primary btn-full btn-sm" style="margin-top:1.5rem;"
+            onclick="upgradePlan('plus')">Upgrade to Plus</button>
         </div>
       `;
     }
   }
+
+  // Use localStorage for favorites
+  favoriteRecipes = new Set(JSON.parse(localStorage.getItem('pantryPalFavs') || '[]'));
 
   // Upload area
   const uploadArea = $('#uploadArea');
@@ -299,8 +351,8 @@ function initDashboard() {
       pantryScannerSection.innerHTML = `
         <div class="glass-card text-center" style="padding: 3rem;">
           <h3 style="margin-bottom: 1rem;">🔒 Fridge Scanning is Locked</h3>
-          <p class="text-muted" style="margin-bottom: 2rem;">Upgrade to Plus or Pro to unlock AI Fridge Scanning and get personalized recipes based on your ingredients.</p>
-          <button class="btn btn-primary" onclick="showToast('Upgraded to Plus (Demo)', 'success'); currentUser.plan='plus'; saveUser(currentUser); location.reload();">Upgrade to Plus</button>
+          <p class="text-muted" style="margin-bottom: 2rem;">Upgrade to Plus or Pro to unlock AI Fridge Scanning.</p>
+          <button class="btn btn-primary" onclick="upgradePlan('plus')">Upgrade to Plus</button>
         </div>
       `;
     }
@@ -329,6 +381,15 @@ function initDashboard() {
   });
 
   renderRecipes();
+}
+
+
+
+async function upgradePlan(plan) {
+  currentUser.plan = plan;
+  saveUser(currentUser);
+  showToast(`Upgraded to ${plan.charAt(0).toUpperCase() + plan.slice(1)}! 🎉`, 'success');
+  location.reload();
 }
 
 function handleImageUpload(file) {
