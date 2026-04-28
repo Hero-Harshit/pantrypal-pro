@@ -32,19 +32,24 @@ function isLoggedIn() {
 
 // ---------- Init on every page ----------
 document.addEventListener('DOMContentLoaded', async () => {
-  // Initialize Supabase auth service if available
+  // 1. Load user from storage immediately (sync)
+  currentUser = JSON.parse(localStorage.getItem('pp_user') || 'null');
+  if (currentUser && currentUser.plan === 'poor') {
+    currentUser.plan = 'free';
+    localStorage.setItem('pp_user', JSON.stringify(currentUser));
+  }
+
+  // 2. Initialize Supabase auth service in background (async)
   if (typeof AuthService !== 'undefined') {
     AuthService.init().then(() => {
-      currentUser = AuthService.getCurrentUser();
-      updateNavAuth();
+      const freshUser = AuthService.getCurrentUser();
+      if (freshUser) {
+        currentUser = freshUser;
+        updateNavAuth();
+        // If we are on dashboard, refresh data with fresh plan if it changed
+        if (document.body.dataset.page === 'dashboard') initDashboard();
+      }
     });
-  } else {
-    currentUser = JSON.parse(localStorage.getItem('pp_user') || 'null');
-    // Fix legacy plan name
-    if (currentUser && currentUser.plan === 'poor') {
-      currentUser.plan = 'free';
-      localStorage.setItem('pp_user', JSON.stringify(currentUser));
-    }
   }
 
   updateNavAuth();
@@ -76,9 +81,7 @@ function updateNavAuth() {
     const isPremium = user.plan === 'plus' || user.plan === 'pro';
     const badgeIcon = isPremium ? '<span title="Premium User">💎</span>' : '';
     authBtns.innerHTML = `
-      <span class="nav-user">👋 ${user.name.split(' ')[0]} ${badgeIcon}</span>
-      <a href="dashboard.html" class="btn btn-sm btn-outline">Dashboard</a>
-      <button onclick="logout()" class="btn btn-sm btn-ghost">Logout</button>`;
+      <a href="dashboard.html" class="btn btn-sm btn-outline">Dashboard</a>`;
   } else {
     authBtns.innerHTML = `
       <a href="auth.html" class="btn btn-primary btn-nav">Get Started Free &rarr;</a>`;
@@ -264,9 +267,20 @@ function initAuth() {
     btn.disabled = false; btn.textContent = 'Create Account';
     if (error) return showToast(error, 'error');
 
+    // Check if we have a session (if email confirmation is off)
     currentUser = AuthService.getCurrentUser();
-    showToast('Account created! Welcome to PantryPal 🎉', 'success');
-    setTimeout(() => window.location.href = 'dashboard.html', 1000);
+
+    if (currentUser) {
+      showToast('Account created! Welcome to PantryPal 🎉', 'success');
+      setTimeout(() => window.location.href = 'dashboard.html', 1000);
+    } else {
+      showToast('Signup successful! Please check your email to confirm your account. 📧', 'info');
+      // Switch to login tab
+      setTimeout(() => {
+        const loginTab = $('#loginTab');
+        if (loginTab) loginTab.click();
+      }, 3000);
+    }
   });
 
   const loginToSignupBtn = $('#loginToSignupBtn');
@@ -288,13 +302,14 @@ function initAuth() {
 // ===================== DASHBOARD =====================
 async function initDashboard() {
   if (!isLoggedIn()) { window.location.href = 'auth.html'; return; }
+  if (!currentUser) return; // Wait for user to load
 
   // Greet user
   const greet = $('#userGreeting');
   if (greet) {
     const isPremium = currentUser.plan === 'plus' || currentUser.plan === 'pro';
     const badgeIcon = isPremium ? '<span title="Premium User">💎</span>' : '';
-    greet.innerHTML = `Hello, ${currentUser.name} 👋 ${badgeIcon}`;
+    greet.innerHTML = `${currentUser.name} ${badgeIcon}`;
   }
 
   // Plan badge
@@ -458,6 +473,8 @@ window.toggleFavorite = function (event, id) {
 
 let activeTier = 'all';
 let activeMeal = 'all';
+let activeCuisine = 'all';
+let activeDiet = 'veg'; // Default to veg based on UI state
 
 window.setTierFilter = function (tier) {
   activeTier = tier;
@@ -469,18 +486,45 @@ window.setMealFilter = function (meal) {
   renderRecipes();
 };
 
+window.setCuisineFilter = function (cuisine) {
+  activeCuisine = cuisine;
+  renderRecipes();
+};
+
+window.setDietFilter = function (diet) {
+  activeDiet = diet;
+  
+  // Update UI buttons
+  const vegBtn = $('#vegBtn');
+  const nonVegBtn = $('#nonVegBtn');
+  if (vegBtn && nonVegBtn) {
+    if (diet === 'veg') {
+      vegBtn.classList.add('active');
+      nonVegBtn.classList.remove('active');
+    } else {
+      vegBtn.classList.remove('active');
+      nonVegBtn.classList.add('active');
+    }
+  }
+  
+  renderRecipes();
+};
+
 function renderRecipes() {
   const grid = $('#recipeGrid');
   if (!grid) return;
 
   let filtered = [...RECIPES];
 
-  if (activeTier !== 'all') {
-    filtered = filtered.filter(r => r.tier === activeTier);
-  }
-
-  if (activeMeal !== 'all') {
-    filtered = filtered.filter(r => r.meal === activeMeal);
+  if (activeTier !== 'all' || activeMeal !== 'all' || activeCuisine !== 'all' || activeDiet !== 'all') {
+    filtered = filtered.filter(r => {
+      if (activeTier !== 'all' && r.tier !== activeTier) return false;
+      if (activeMeal !== 'all' && r.meal !== activeMeal) return false;
+      if (activeCuisine !== 'all' && r.cuisine !== activeCuisine) return false;
+      if (activeDiet === 'veg' && !r.tags.includes('veg')) return false;
+      if (activeDiet === 'non-veg' && r.tags.includes('veg')) return false;
+      return true;
+    });
   }
 
   if (activeFilters && activeFilters.size > 0) {

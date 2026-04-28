@@ -56,6 +56,7 @@ const AuthService = (() => {
       if (!sb) return { error: 'Supabase not configured' };
 
       try {
+        Logger.info('[Auth] Attempting signup for:', email);
         const { data, error } = await sb.auth.signUp({
           email: email.trim(),
           password,
@@ -64,11 +65,15 @@ const AuthService = (() => {
           }
         });
 
-        if (error) return { user: null, error: error.message };
+        if (error) {
+          Logger.error('[Auth] Supabase signUp error:', error);
+          return { user: null, error: error.message };
+        }
 
         // Create profile record in DB
         if (data.user) {
-          await sb.from('profiles').upsert({
+          Logger.info('[Auth] Creating profile for user:', data.user.id);
+          const { error: profileError } = await sb.from('profiles').upsert({
             id: data.user.id,
             email: data.user.email,
             name,
@@ -77,10 +82,17 @@ const AuthService = (() => {
             age: parseInt(age) || null,
             plan: 'free'
           });
+          
+          if (profileError) {
+            Logger.error('[Auth] Profile creation error:', profileError);
+            // We don't return error here because the Auth account WAS created, 
+            // but the profile record failed.
+          }
         }
 
         return { user: data.user, error: null };
       } catch (err) {
+        Logger.error('[Auth] signUp exception:', err);
         return { user: null, error: err.message };
       }
     },

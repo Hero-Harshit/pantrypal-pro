@@ -114,13 +114,16 @@
           </div>
         </div>
 
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
-          <select id="tierFilter" class="btn btn-outline btn-sm" onchange="setTierFilter(this.value)"
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; align-items: center;">
+          <select id="cuisineFilter" class="btn btn-outline btn-sm" onchange="setCuisineFilter(this.value)"
             style="padding: 0.5rem; border-radius: var(--radius-md); background: var(--bg);">
-            <option value="all">All Tiers</option>
-            <option value="free">PantryPal Free</option>
-            <option value="plus">PantryPal Plus</option>
-            <option value="pro">PantryPal Pro</option>
+            <option value="all">All Cuisines</option>
+            <option value="indian">Indian</option>
+            <option value="italian">Italian</option>
+            <option value="french">French</option>
+            <option value="thai">Thai</option>
+            <option value="chinese">Chinese</option>
+            <option value="other">Other</option>
           </select>
 
           <select id="mealFilter" class="btn btn-outline btn-sm" onchange="setMealFilter(this.value)"
@@ -130,6 +133,19 @@
             <option value="lunch">Lunch</option>
             <option value="dinner">Dinner</option>
           </select>
+
+          <select id="tierFilter" class="btn btn-outline btn-sm" onchange="setTierFilter(this.value)"
+            style="padding: 0.5rem; border-radius: var(--radius-md); background: var(--bg);">
+            <option value="all">All Tiers</option>
+            <option value="free">PantryPal Free</option>
+            <option value="plus">PantryPal Plus</option>
+            <option value="pro">PantryPal Pro</option>
+          </select>
+
+          <div class="diet-toggle-container" style="display: flex; align-items: center; gap: 0.5rem; background: var(--glass-bg); padding: 0.25rem 0.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+            <button id="vegBtn" class="btn btn-sm btn-ghost active" onclick="setDietFilter('veg')" style="font-size: 0.8rem; border-radius: var(--radius-md);">🥦 Veg</button>
+            <button id="nonVegBtn" class="btn btn-sm btn-ghost" onclick="setDietFilter('non-veg')" style="font-size: 0.8rem; border-radius: var(--radius-md);">🍖 Non-Veg</button>
+          </div>
         </div>
 
         <div class="recipe-grid" id="recipeGrid">
