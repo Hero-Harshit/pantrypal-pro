@@ -230,18 +230,51 @@ window.closeDietaryLockModal = function (e) {
   }
 };
 
-// Explore Diets Modal
-window.openExploreDietsModal = function () {
-  const modal = $('#exploreDietsModalOverlay');
+// User Profile Modal
+window.openUserProfileModal = function () {
+  const modal = $('#userProfileModalOverlay');
+  if (!modal || !currentUser) return;
+
+  // Populate data
+  const modalName = $('#modalUserName');
+  const modalEmail = $('#modalUserEmail');
+  const modalPlan = $('#modalUserPlan');
+  const modalPhone = $('#modalUserPhone');
+  const modalCountry = $('#modalUserCountry');
+
+  if (modalName) modalName.innerText = currentUser.name;
+  if (modalEmail) modalEmail.innerText = currentUser.email || 'No email provided';
+  if (modalPlan) modalPlan.innerText = `${currentUser.plan.toUpperCase()} PLAN`;
+  
+  // Use mock values if not in user object
+  if (modalPhone) modalPhone.innerText = currentUser.phone || '+91 98765 43210';
+  if (modalCountry) modalCountry.innerText = currentUser.country || 'India';
+
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeUserProfileModal = function (e) {
+  if (e && e.target !== $('#userProfileModalOverlay') && !e.target.classList.contains('modal-close')) return;
+  const modal = $('#userProfileModalOverlay');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+};
+
+// Avatar Lock Modal
+window.openAvatarLockModal = function () {
+  const modal = $('#avatarLockModalOverlay');
   if (modal) {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
 };
 
-window.closeExploreDietsModal = function (e) {
-  if (e && e.target !== $('#exploreDietsModalOverlay') && !e.target.classList.contains('modal-close')) return;
-  const modal = $('#exploreDietsModalOverlay');
+window.closeAvatarLockModal = function (e) {
+  if (e && e.target !== $('#avatarLockModalOverlay') && !e.target.classList.contains('modal-close')) return;
+  const modal = $('#avatarLockModalOverlay');
   if (modal) {
     modal.classList.remove('active');
     document.body.style.overflow = 'auto';
@@ -426,21 +459,7 @@ async function initDashboard() {
   // Plan label inside profile
   const userInfoSmall = $('.user-info small');
   if (userInfoSmall) {
-    userInfoSmall.innerHTML = `${currentUser.plan.toUpperCase()} PLAN ▼`;
-  }
-
-  // User Profile Dropdown
-  const userProfile = $('#userProfileDropdown');
-  const logoutDropdown = $('#logoutDropdown');
-  if (userProfile && logoutDropdown) {
-    userProfile.addEventListener('click', (e) => {
-      e.stopPropagation();
-      logoutDropdown.classList.toggle('show');
-    });
-
-    document.addEventListener('click', () => {
-      logoutDropdown.classList.remove('show');
-    });
+    userInfoSmall.innerHTML = `${currentUser.plan.toUpperCase()} PLAN`;
   }
 
   // Use localStorage for favorites

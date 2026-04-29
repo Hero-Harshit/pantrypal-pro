@@ -21,41 +21,42 @@
         </a>
       </div>
 
-      <div class="user-profile dropdown" id="userProfileDropdown">
-        <div class="avatar" id="sidebarAvatar">👤</div>
+      <div class="user-profile" onclick="openUserProfileModal()">
+        <div class="avatar" id="sidebarAvatar">
+          <img src="../assets/avatar.jpg" alt="User Avatar">
+        </div>
         <div class="user-info">
           <strong id="userGreeting">Hello</strong><br>
-          <small class="text-muted">Ready to cook? ▼</small>
-        </div>
-        <div class="dropdown-menu" id="logoutDropdown">
-          <button onclick="logout()" class="dropdown-item">
-            <span>👋</span> Logout
-          </button>
+          <small class="text-muted">My Account</small>
         </div>
       </div>
 
-      <div class="sidebar-actions mt-8">
-        <button class="btn btn-outline btn-full" onclick="openExploreDietsModal()" style="padding: 1rem; border-style: dashed;">
-          <span>🌈</span> Explore Diets
-        </button>
-      </div>
+
 
       <div class="chatbot-container mt-auto">
         <div class="chatbot-header">
-          <span class="chatbot-status"></span>
-          <h4>AI Chef Assistant</h4>
+          <div class="chatbot-header-left">
+            <span class="chatbot-status"></span>
+            <h4>AI Chef Assistant</h4>
+          </div>
+          <div class="chatbot-avatar">👨‍🍳</div>
         </div>
         <div class="chatbot-messages" id="chatbotMessages">
           <div class="message bot-message">
             Hello! I'm your AI Chef. Ask me anything about your recipes! 🍳
           </div>
         </div>
-        <form class="chatbot-input" id="chatbotForm" onsubmit="event.preventDefault(); openChatbotLockModal();">
-          <input type="text" placeholder="Ask about recipes..." id="chatbotInput">
-          <button type="submit" class="chatbot-send">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-          </button>
-        </form>
+        <div class="chatbot-input-wrap">
+          <form class="chatbot-input" id="chatbotForm" onsubmit="event.preventDefault(); openChatbotLockModal();">
+            <input type="text" placeholder="Ask about recipes..." id="chatbotInput">
+            <button type="submit" class="chatbot-send">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </form>
+        </div>
       </div>
     </aside>
 
@@ -282,36 +283,61 @@
       <button class="btn btn-ghost btn-full mt-8" onclick="closeChatbotLockModal()">Maybe Later</button>
     </div>
   </div>
-  <!-- Explore Diets Modal -->
-  <div class="modal-overlay" id="exploreDietsModalOverlay" onclick="closeExploreDietsModal(event)">
-    <div class="modal-content" style="max-width: 600px; text-align: center; padding: 3rem;">
-      <button class="modal-close" onclick="closeExploreDietsModal()">×</button>
-      <div style="font-size: 3rem; margin-bottom: 1.5rem;">🥗</div>
-      <h2 style="margin-bottom: 1rem;">Explore Dietary Worlds</h2>
-      <p class="text-muted" style="margin-bottom: 2rem;">
-        Discover specialized recipes, nutrition plans, and AI-tailored meal guides for every lifestyle.
-      </p>
+  <!-- User Profile Modal -->
+  <div class="modal-overlay" id="userProfileModalOverlay" onclick="closeUserProfileModal(event)">
+    <div class="modal-content" style="max-width: 400px; text-align: center;">
+      <button class="modal-close" onclick="closeUserProfileModal()">×</button>
       
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
-        <div class="glass-card" style="padding: 1.5rem; cursor: pointer;">
-          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🥑</div>
-          <strong>Keto</strong>
+      <div class="profile-modal-header" style="margin-top: 1rem; margin-bottom: 2rem;">
+        <div class="profile-avatar-wrapper" style="position: relative; width: 100px; height: 100px; margin: 0 auto 1rem;">
+          <div class="avatar" style="width: 100%; height: 100%;">
+            <img src="../assets/avatar.jpg" alt="User Avatar">
+          </div>
+          <button onclick="openAvatarLockModal()" style="position: absolute; bottom: 0; right: 0; background: var(--primary); border: 2px solid #fff; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.9rem; box-shadow: var(--shadow-md); z-index: 10;">
+            📷
+          </button>
         </div>
-        <div class="glass-card" style="padding: 1.5rem; cursor: pointer;">
-          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🌱</div>
-          <strong>Vegan</strong>
+        <h2 id="modalUserName" style="margin-bottom: 0.5rem;">User Name</h2>
+        <span id="modalUserPlan" class="badge" style="background: var(--primary); color: #000; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 700; font-size: 0.8rem;">FREE PLAN</span>
+      </div>
+
+      <div class="profile-details" style="text-align: left; margin-bottom: 2rem; background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--radius-lg); display: flex; flex-direction: column; gap: 1.25rem;">
+        <div>
+          <label class="text-muted" style="font-size: 0.8rem; display: block; margin-bottom: 0.25rem;">Email Address</label>
+          <strong id="modalUserEmail" style="font-size: 1rem; word-break: break-all;">user@example.com</strong>
         </div>
-        <div class="glass-card" style="padding: 1.5rem; cursor: pointer;">
-          <div style="font-size: 2rem; margin-bottom: 0.5rem;">💪</div>
-          <strong>High Protein</strong>
+        <div>
+          <label class="text-muted" style="font-size: 0.8rem; display: block; margin-bottom: 0.25rem;">Phone Number</label>
+          <strong id="modalUserPhone" style="font-size: 1rem;">+91 98765 43210</strong>
         </div>
-        <div class="glass-card" style="padding: 1.5rem; cursor: pointer;">
-          <div style="font-size: 2rem; margin-bottom: 0.5rem;">🌾</div>
-          <strong>Gluten Free</strong>
+        <div>
+          <label class="text-muted" style="font-size: 0.8rem; display: block; margin-bottom: 0.25rem;">Country</label>
+          <strong id="modalUserCountry" style="font-size: 1rem;">India</strong>
+        </div>
+        <div>
+          <label class="text-muted" style="font-size: 0.8rem; display: block; margin-bottom: 0.25rem;">Member Status</label>
+          <strong style="font-size: 1rem; color: var(--primary);">Active</strong>
         </div>
       </div>
 
-      <button class="btn btn-primary btn-full" onclick="closeExploreDietsModal()">Close</button>
+      <div style="display: flex; justify-content: center; margin-top: 2rem; margin-bottom: 1rem;">
+        <button class="btn btn-outline" onclick="logout()" style="color: #ef4444; border-color: #ef4444; padding: 0.6rem 2rem; font-size: 0.9rem; width: auto; font-weight: 700;">
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Avatar Lock Modal -->
+  <div class="modal-overlay" id="avatarLockModalOverlay" onclick="closeAvatarLockModal(event)">
+    <div class="modal-content" style="max-width: 450px; text-align: center; padding: 3rem;">
+      <button class="modal-close" onclick="closeAvatarLockModal()">×</button>
+      <div style="font-size: 3rem; margin-bottom: 1.5rem;">🖼️</div>
+      <h2 style="margin-bottom: 1rem;">Custom Avatars</h2>
+      <p class="text-muted" style="margin-bottom: 2rem;">
+        Upload your own photo or choose from our exclusive designer avatars. This feature is reserved for <strong>Plus</strong> and <strong>Pro</strong> members.
+      </p>
+      <button class="btn btn-primary btn-full" onclick="upgradePlan('plus')">Explore Plans</button>
+      <button class="btn btn-ghost btn-full mt-4" onclick="closeAvatarLockModal()">Maybe Later</button>
     </div>
   </div>
 </body>
