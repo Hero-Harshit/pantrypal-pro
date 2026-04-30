@@ -54,10 +54,10 @@ const PLANS = {
 
 // User testimonials
 const TESTIMONIALS = [
-  { name: "Bhargav G.", role: "Home Cook", text: "PantryPal Pro changed how I cook! No more wasted groceries.", avatar: "B", rating: 5 },
-  { name: "Yash Y.", role: "Student", text: "As a college student, this app saves me money and time every week.", avatar: "Y", rating: 5 },
-  { name: "Swamini P.", role: "Fitness Enthusiast", text: "The dietary filters are perfect for my high-protein meal prep.", avatar: "S", rating: 4 },
-  { name: "Anshul K.", role: "Parent", text: "My kids love the recipes. It's made family meals so much easier!", avatar: "A", rating: 5 }
+  { name: "Bhargav G.", role: "Home Cook", text: "PantryPal Pro changed how I cook! No more wasted groceries.", avatar: "../assets/Bhargav Image.jpg", rating: 5 },
+  { name: "Yash Y.", role: "Student", text: "As a college student, this app saves me money and time every week.", avatar: "../assets/Yash Image.jpg", rating: 5 },
+  { name: "Swamini P.", role: "Fitness Enthusiast", text: "The dietary filters are perfect for my high-protein meal prep.", avatar: "../assets/Swamini Image.png", rating: 4 },
+  { name: "Anshul K.", role: "Parent", text: "My kids love the recipes. It's made family meals so much easier!", avatar: "../assets/Anshul Image.jpg", rating: 5 }
 ];
 
 // Local recipe fallback
@@ -1525,7 +1525,7 @@ const RECIPES = [
     "meal": "lunch",
     "cuisine": "indian",
     "difficulty": "beginner",
-    "image": "../assets/45.jpg",
+    "image": "../assets/45.jpeg",
     "calories": 350,
     "time": "20 min",
     "rating": 4.6

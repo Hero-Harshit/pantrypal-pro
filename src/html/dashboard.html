@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - PantryPal Pro</title>
+  <meta name="description"
+    content="Manage your pantry, scan ingredients, and discover personalized AI-generated recipes on your PantryPal Pro dashboard.">
   <link rel="stylesheet" href="../css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -31,7 +33,14 @@
         </div>
       </div>
 
+      <div class="daily-thought glass-card">
+        <div class="thought-header">
+          <h5>Thought of the Day</h5>
+        </div>
+        <p id="dailyThoughtText" class="thought-text">"Good food is the foundation of genuine happiness."</p>
+      </div>
 
+      <hr class="sidebar-divider">
 
       <div class="chatbot-container mt-auto">
         <div class="chatbot-header">
@@ -50,7 +59,8 @@
           <form class="chatbot-input" id="chatbotForm" onsubmit="event.preventDefault(); openChatbotLockModal();">
             <input type="text" placeholder="Ask about recipes..." id="chatbotInput">
             <button type="submit" class="chatbot-send">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
                 <line x1="22" y1="2" x2="11" y2="13"></line>
                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
               </svg>
@@ -181,7 +191,7 @@
       <div class="modal-header">
         <h2 id="modalRecipeTitle">Recipe Name</h2>
         <p class="text-muted" id="modalRecipeDesc">Description</p>
-        <div class="recipe-meta mt-4" id="modalRecipeMeta" style="display: flex; gap: 1.5rem; font-weight: 600; color: var(--text);">
+        <div class="recipe-meta mt-4" id="modalRecipeMeta">
           <!-- Meta info injected via JS -->
         </div>
       </div>
@@ -241,7 +251,8 @@
           ⭐ <strong>Premium Feature:</strong> This AI-driven safety filter is exclusive to our Plus and Pro members.
         </p>
       </div>
-      <button class="btn btn-primary btn-full" onclick="upgradePlan('plus'); closeAllergyModal();">Explore Plans</button>
+      <button class="btn btn-primary btn-full" onclick="upgradePlan('plus'); closeAllergyModal();">Explore
+        Plans</button>
       <button class="btn btn-ghost btn-full mt-8" onclick="closeAllergyModal()">Maybe Later</button>
     </div>
   </div>
@@ -253,14 +264,17 @@
       <div style="font-size: 3rem; margin-bottom: 1.5rem;">✨</div>
       <h2 style="margin-bottom: 1rem;">Dietary Personalization</h2>
       <p class="text-muted" style="margin-bottom: 2rem;">
-        These advanced dietary goal filters will automatically customize any recipe into your chosen diet plan (Keto, Vegan, etc.), making all the necessary ingredient and step changes for you.
+        These advanced dietary goal filters will automatically customize any recipe into your chosen diet plan (Keto,
+        Vegan, etc.), making all the necessary ingredient and step changes for you.
       </p>
-      <div style="background: var(--primary-light); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--primary); margin-bottom: 2rem; text-align: left;">
+      <div
+        style="background: var(--primary-light); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--primary); margin-bottom: 2rem; text-align: left;">
         <p style="font-size: 0.9rem; color: var(--primary-dark); margin: 0;">
           ⭐ <strong>Pro Feature:</strong> AI-powered recipe transformation is exclusive to our Pro members.
         </p>
       </div>
-      <button class="btn btn-primary btn-full" onclick="upgradePlan('pro'); closeDietaryLockModal();">Explore Plans</button>
+      <button class="btn btn-primary btn-full" onclick="upgradePlan('pro'); closeDietaryLockModal();">Explore
+        Plans</button>
       <button class="btn btn-ghost btn-full mt-8" onclick="closeDietaryLockModal()">Maybe Later</button>
     </div>
   </div>
@@ -272,42 +286,72 @@
       <div style="font-size: 3rem; margin-bottom: 1.5rem;">🤖</div>
       <h2 style="margin-bottom: 1rem;">AI Recipe Assistant</h2>
       <p class="text-muted" style="margin-bottom: 2rem;">
-        Get real-time answers to your cooking questions, ingredient substitutions, and meal planning advice from our advanced AI Chef.
+        Get real-time answers to your cooking questions, ingredient substitutions, and meal planning advice from our
+        advanced AI Chef.
       </p>
-      <div style="background: var(--primary-light); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--primary); margin-bottom: 2rem; text-align: left;">
+      <div
+        style="background: var(--primary-light); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--primary); margin-bottom: 2rem; text-align: left;">
         <p style="font-size: 0.9rem; color: var(--primary-dark); margin: 0;">
           ⭐ <strong>Premium Feature:</strong> The AI Chef Assistant is exclusive to our Plus and Pro members.
         </p>
       </div>
-      <button class="btn btn-primary btn-full" onclick="upgradePlan('plus'); closeChatbotLockModal();">Explore Plans</button>
+      <button class="btn btn-primary btn-full" onclick="upgradePlan('plus'); closeChatbotLockModal();">Explore
+        Plans</button>
       <button class="btn btn-ghost btn-full mt-8" onclick="closeChatbotLockModal()">Maybe Later</button>
+    </div>
+  </div>
+  <!-- Theme Lock Modal -->
+  <div class="modal-overlay" id="themeLockModalOverlay" onclick="closeThemeLockModal(event)">
+    <div class="modal-content" style="max-width: 500px; text-align: center; padding: 3rem;">
+      <button class="modal-close" onclick="closeThemeLockModal()">×</button>
+      <div id="themeLockIcon" style="font-size: 3rem; margin-bottom: 1.5rem;">🎭</div>
+      <h2 id="themeLockTitle" style="margin-bottom: 1rem;">Premium Theme Locked</h2>
+      <p class="text-muted" id="themeLockDesc" style="margin-bottom: 2rem;">
+        This exclusive theme is reserved for our Plus and Pro members. Upgrade your plan to personalize your kitchen
+        dashboard with stunning new looks.
+      </p>
+      <div
+        style="background: var(--primary-light); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--primary); margin-bottom: 2rem; text-align: left;">
+        <p style="font-size: 0.9rem; color: var(--primary-dark); margin: 0;">
+          ⭐ <strong id="themeLockTier">Plus Feature:</strong> Access this theme and more with our premium plans.
+        </p>
+      </div>
+      <button class="btn btn-primary btn-full" id="themeLockUpgradeBtn">Explore Plans</button>
+      <button class="btn btn-ghost btn-full mt-8" onclick="closeThemeLockModal()">Maybe Later</button>
     </div>
   </div>
   <!-- User Profile Modal -->
   <div class="modal-overlay" id="userProfileModalOverlay" onclick="closeUserProfileModal(event)">
     <div class="modal-content" style="max-width: 400px; text-align: center;">
       <button class="modal-close" onclick="closeUserProfileModal()">×</button>
-      
+
       <div class="profile-modal-header" style="margin-top: 1rem; margin-bottom: 2rem;">
-        <div class="profile-avatar-wrapper" style="position: relative; width: 100px; height: 100px; margin: 0 auto 1rem;">
+        <div class="profile-avatar-wrapper"
+          style="position: relative; width: 100px; height: 100px; margin: 0 auto 1rem;">
           <div class="avatar" style="width: 100%; height: 100%;">
             <img src="../assets/avatar.jpg" alt="User Avatar">
           </div>
-          <button onclick="openAvatarLockModal()" style="position: absolute; bottom: 0; right: 0; background: var(--primary); border: 2px solid #fff; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.9rem; box-shadow: var(--shadow-md); z-index: 10;">
+          <button onclick="openAvatarLockModal()"
+            style="position: absolute; bottom: 0; right: 0; background: var(--primary); border: 2px solid #fff; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.9rem; box-shadow: var(--shadow-md); z-index: 10;">
             📷
           </button>
         </div>
         <h2 id="modalUserName" style="margin-bottom: 0.5rem;">User Name</h2>
-        <span id="modalUserPlan" class="badge" style="background: var(--primary); color: #000; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 700; font-size: 0.8rem;">FREE PLAN</span>
+        <span id="modalUserPlan" class="badge"
+          style="background: var(--primary); color: #000; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 700; font-size: 0.8rem;">FREE
+          PLAN</span>
       </div>
 
-      <div class="profile-details" style="text-align: left; margin-bottom: 2rem; background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--radius-lg); display: flex; flex-direction: column; gap: 1.25rem;">
+      <div class="profile-details"
+        style="text-align: left; margin-bottom: 2rem; background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--radius-lg); display: flex; flex-direction: column; gap: 1.25rem;">
         <div>
-          <label class="text-muted" style="font-size: 0.8rem; display: block; margin-bottom: 0.25rem;">Email Address</label>
+          <label class="text-muted" style="font-size: 0.8rem; display: block; margin-bottom: 0.25rem;">Email
+            Address</label>
           <strong id="modalUserEmail" style="font-size: 1rem; word-break: break-all;">user@example.com</strong>
         </div>
         <div>
-          <label class="text-muted" style="font-size: 0.8rem; display: block; margin-bottom: 0.25rem;">Phone Number</label>
+          <label class="text-muted" style="font-size: 0.8rem; display: block; margin-bottom: 0.25rem;">Phone
+            Number</label>
           <strong id="modalUserPhone" style="font-size: 1rem;">+91 98765 43210</strong>
         </div>
         <div>
@@ -315,13 +359,30 @@
           <strong id="modalUserCountry" style="font-size: 1rem;">India</strong>
         </div>
         <div>
-          <label class="text-muted" style="font-size: 0.8rem; display: block; margin-bottom: 0.25rem;">Member Status</label>
+          <label class="text-muted" style="font-size: 0.8rem; display: block; margin-bottom: 0.25rem;">Member
+            Status</label>
           <strong style="font-size: 1rem; color: var(--primary);">Active</strong>
+        </div>
+        <div>
+          <label class="text-muted" style="font-size: 0.8rem; display: block; margin-bottom: 0.25rem;">Display
+            Theme</label>
+          <select id="themeSelector" onchange="changeTheme(this.value)"
+            style="width: 100%; padding: 0.6rem; border-radius: var(--radius-md); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-weight: 600; cursor: pointer;">
+            <option value="greenic">Greenic (Default)</option>
+            <option value="night">Night (Free)</option>
+            <option value="glass">Glassomorphism (Pro)</option>
+            <option value="neon">Neon (Plus)</option>
+            <option value="gold">Golden Black (Pro)</option>
+            <option value="aqua">Aqua (Plus)</option>
+            <option value="space">Space (Plus)</option>
+            <option value="lava">Lava (Pro)</option>
+          </select>
         </div>
       </div>
 
       <div style="display: flex; justify-content: center; margin-top: 2rem; margin-bottom: 1rem;">
-        <button class="btn btn-outline" onclick="logout()" style="color: #ef4444; border-color: #ef4444; padding: 0.6rem 2rem; font-size: 0.9rem; width: auto; font-weight: 700;">
+        <button class="btn btn-outline" onclick="logout()"
+          style="color: #ef4444; border-color: #ef4444; padding: 0.6rem 2rem; font-size: 0.9rem; width: auto; font-weight: 700;">
           Logout
         </button>
       </div>
@@ -334,7 +395,8 @@
       <div style="font-size: 3rem; margin-bottom: 1.5rem;">🖼️</div>
       <h2 style="margin-bottom: 1rem;">Custom Avatars</h2>
       <p class="text-muted" style="margin-bottom: 2rem;">
-        Upload your own photo or choose from our exclusive designer avatars. This feature is reserved for <strong>Plus</strong> and <strong>Pro</strong> members.
+        Upload your own photo or choose from our exclusive designer avatars. This feature is reserved for
+        <strong>Plus</strong> and <strong>Pro</strong> members.
       </p>
       <button class="btn btn-primary btn-full" onclick="upgradePlan('plus')">Explore Plans</button>
       <button class="btn btn-ghost btn-full mt-4" onclick="closeAvatarLockModal()">Maybe Later</button>

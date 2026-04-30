@@ -6,15 +6,34 @@ let activeFilters = new Set();
 let detectedIngredients = [];
 let dashboardInitialized = false;
 
+const FOOD_QUOTES = [
+  "One cannot think well, love well, sleep well, if one has not dined well.",
+  "Let food be thy medicine and medicine be thy food.",
+  "Cooking is like love. It should be entered into with abandon or not at all.",
+  "The only thing I like better than talking about food is eating.",
+  "Food is our common ground, a universal experience.",
+  "First we eat, then we do everything else.",
+  "Good food is the foundation of genuine happiness.",
+  "Health is a state of complete harmony of the body, mind and spirit.",
+  "A healthy outside starts from the inside.",
+  "Eat food. Not too much. Mostly plants.",
+  "Laughter is brightest in the place where food is.",
+  "People who love to eat are always the best people.",
+  "Life is uncertain. Eat dessert first.",
+  "The secret of success in life is to eat what you like and let the food fight it out inside.",
+  "An empty stomach is not a good political adviser.",
+  "Food is not just eating energy. It's an experience.",
+  "I followed my heart and it led me to the fridge.",
+  "Everything you see I owe to spaghetti.",
+  "If you really want to make a friend, go to someone's house and eat with him.",
+  "You don't need a silver fork to eat good food."
+];
+
 // ---------- Utilities ----------
 function $(sel, ctx = document) { return ctx.querySelector(sel); }
 function $$(sel, ctx = document) { return [...ctx.querySelectorAll(sel)]; }
 
 // ---------- Auth (delegates to AuthService) ----------
-function saveUser(user) {
-  currentUser = user;
-  localStorage.setItem('pp_user', JSON.stringify(user));
-}
 
 async function logout() {
   if (typeof AuthService !== 'undefined') {
@@ -35,10 +54,6 @@ function isLoggedIn() {
 document.addEventListener('DOMContentLoaded', async () => {
   // 1. Load user from storage immediately (sync)
   currentUser = JSON.parse(localStorage.getItem('pp_user') || 'null');
-  if (currentUser && currentUser.plan === 'poor') {
-    currentUser.plan = 'free';
-    localStorage.setItem('pp_user', JSON.stringify(currentUser));
-  }
 
   // 2. Initialize Supabase auth service in background (async)
   if (typeof AuthService !== 'undefined') {
@@ -70,7 +85,82 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (document.body.dataset.page === 'auth') initAuth();
   if (document.body.dataset.page === 'dashboard') initDashboard();
   if (document.body.dataset.page === 'about') initAbout();
+
+  // 3. Initialize theme
+  initTheme();
 });
+
+function initTheme() {
+  const savedTheme = localStorage.getItem('pp_theme') || 'greenic';
+  applyTheme(savedTheme);
+
+  const themeSelector = $('#themeSelector');
+  if (themeSelector) themeSelector.value = savedTheme;
+}
+
+window.changeTheme = function (theme) {
+  const premiumConfig = {
+    glass: { name: 'Glassomorphism', tier: 'pro', icon: '💎' },
+    neon: { name: 'Neon', tier: 'plus', icon: '✨' },
+    gold: { name: 'Golden Black', tier: 'pro', icon: '🏆' },
+    aqua: { name: 'Aqua', tier: 'plus', icon: '🌊' },
+    space: { name: 'Space', tier: 'plus', icon: '🌌' },
+    lava: { name: 'Lava', tier: 'pro', icon: '🔥' }
+  };
+
+  if (premiumConfig[theme]) {
+    const config = premiumConfig[theme];
+    const isLocked = (currentUser.plan === 'free') || (currentUser.plan === 'plus' && config.tier === 'pro');
+
+    if (isLocked) {
+      openThemeLockModal(theme, config);
+      const savedTheme = localStorage.getItem('pp_theme') || 'greenic';
+      const selector = $('#themeSelector');
+      if (selector) selector.value = savedTheme;
+      return;
+    }
+  }
+
+  localStorage.setItem('pp_theme', theme);
+  applyTheme(theme);
+}
+
+window.openThemeLockModal = function (themeId, config) {
+  const modal = $('#themeLockModalOverlay');
+  if (!modal) return;
+
+  $('#themeLockIcon').textContent = config.icon;
+  $('#themeLockTitle').textContent = `${config.name} Theme Locked`;
+  $('#themeLockTier').textContent = `${config.tier.charAt(0).toUpperCase() + config.tier.slice(1)} Feature:`;
+
+  const upgradeBtn = $('#themeLockUpgradeBtn');
+  if (upgradeBtn) {
+    upgradeBtn.onclick = () => {
+      upgradePlan(config.tier);
+      closeThemeLockModal();
+    };
+  }
+
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+window.closeThemeLockModal = function (e) {
+  if (e && e.target !== $('#themeLockModalOverlay') && !e.target.classList.contains('modal-close')) return;
+  const modal = $('#themeLockModalOverlay');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+}
+
+function applyTheme(theme) {
+  if (theme === 'night') {
+    document.body.classList.add('dark');
+  } else {
+    document.body.classList.remove('dark');
+  }
+}
 
 function updateNavAuth() {
   const authBtns = $('#navAuthBtns');
@@ -108,7 +198,7 @@ function renderTestimonials() {
       <div class="stars">${'★'.repeat(t.rating)}${'☆'.repeat(5 - t.rating)}</div>
       <p class="testimonial-text">"${t.text}"</p>
       <div class="testimonial-author">
-        <div class="avatar">${t.avatar}</div>
+        <div class="avatar"><img src="${t.avatar}" alt="${t.name}"></div>
         <div><strong>${t.name}</strong><br><small>${t.role}</small></div>
       </div>
     </div>`).join('');
@@ -129,13 +219,137 @@ function renderPricing() {
         <div class="price">${p.price}</div>
         <p class="recipe-count">${p.recipes} recipes</p>
         <ul>${p.features.map(f => `<li>✓ ${f}</li>`).join('')}</ul>
-        <a href="auth.html${k === 'free' ? '#signup' : '#login'}" class="btn ${popular ? 'btn-primary' : 'btn-outline'} btn-full">
+        <a href="javascript:void(0)" onclick="handlePricingClick('${k}')" class="btn ${popular ? 'btn-primary' : 'btn-outline'} btn-full">
           ${k === 'free' ? 'Start Free' : 'Get ' + p.name}
         </a>
       </div>
     </div>`;
   }).join('');
 }
+
+window.handlePricingClick = function (tier) {
+  if (tier === 'free') {
+    window.location.href = 'auth.html#signup';
+    return;
+  }
+
+  // For Plus and Pro, show payment modal
+  openPaymentModal(tier);
+};
+
+// ===================== PAYMENT GATEWAY LOGIC =====================
+window.openPaymentModal = function (tier) {
+  const modal = $('#paymentModalOverlay');
+  const planName = $('#paymentPlanName');
+  const planPrice = $('#paymentPlanPrice');
+  const planTotal = $('#paymentTotal');
+
+  if (!modal) return;
+
+  const p = PLANS[tier];
+  if (planName) planName.textContent = p.name;
+  if (planPrice) planPrice.textContent = p.price;
+  if (planTotal) planTotal.textContent = p.price.split('/')[0];
+
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  // Reset states
+  $('#paymentInitialState').style.display = 'block';
+  $('#paymentProcessingState').classList.remove('active');
+  $('#paymentSuccessState').classList.remove('active');
+};
+
+window.closePaymentModal = function () {
+  const modal = $('#paymentModalOverlay');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+};
+
+function initPaymentFormListeners() {
+  const form = $('#paymentForm');
+  const cardInput = $('#cardNumber');
+  const nameInput = $('#cardName');
+  const expiryInput = $('#cardExpiry');
+  const cvvInput = $('#cardCVV');
+
+  const previewNumber = $('#previewNumber');
+  const previewName = $('#previewName');
+  const previewExpiry = $('#previewExpiry');
+  const cardTypeDisplay = $('#cardType');
+
+  if (!cardInput) return;
+
+  // Card Number Formatting
+  cardInput.oninput = (e) => {
+    let value = e.target.value.replace(/\D/g, '');
+    let formattedValue = '';
+    for (let i = 0; i < value.length; i++) {
+      if (i > 0 && i % 4 === 0) formattedValue += ' ';
+      formattedValue += value[i];
+    }
+    e.target.value = formattedValue;
+    previewNumber.textContent = formattedValue || '•••• •••• •••• ••••';
+
+    // Detect Card Type (Simple)
+    if (value.startsWith('4')) cardTypeDisplay.textContent = 'VISA';
+    else if (value.startsWith('5')) cardTypeDisplay.textContent = 'MC';
+    else cardTypeDisplay.textContent = 'CARD';
+  };
+
+  // Name Formatting
+  nameInput.oninput = (e) => {
+    previewName.textContent = e.target.value || 'Your Name';
+  };
+
+  // Expiry Formatting
+  expiryInput.oninput = (e) => {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 2) {
+      value = value.substring(0, 2) + '/' + value.substring(2, 4);
+    }
+    e.target.value = value;
+    previewExpiry.textContent = value || 'MM/YY';
+  };
+
+  // Form Submit
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    processPayment();
+  };
+}
+
+function processPayment() {
+  $('#paymentInitialState').style.display = 'none';
+  $('#paymentProcessingState').classList.add('active');
+
+  // NOTE: This is a pure frontend mock. 
+  // No real payment is processed and no actual plan upgrade occurs.
+
+  // Mock processing delay
+  setTimeout(() => {
+    $('#paymentProcessingState').classList.remove('active');
+    $('#paymentSuccessState').classList.add('active');
+  }, 2500);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const closeBtn = $('#closePaymentBtn');
+  if (closeBtn) closeBtn.onclick = closePaymentModal;
+
+  const successBtn = $('#paymentSuccessBtn');
+  if (successBtn) {
+    successBtn.onclick = () => {
+      closePaymentModal();
+      // Redirect to dashboard without changing user plan (as per requirement)
+      window.location.href = 'dashboard.html';
+    };
+  }
+
+  initPaymentFormListeners();
+});
 
 function initScrollAnimations() {
   const observer = new IntersectionObserver((entries) => {
@@ -245,7 +459,7 @@ window.openUserProfileModal = function () {
   if (modalName) modalName.innerText = currentUser.name;
   if (modalEmail) modalEmail.innerText = currentUser.email || 'No email provided';
   if (modalPlan) modalPlan.innerText = `${currentUser.plan.toUpperCase()} PLAN`;
-  
+
   // Use mock values if not in user object
   if (modalPhone) modalPhone.innerText = currentUser.phone || '+91 98765 43210';
   if (modalCountry) modalCountry.innerText = currentUser.country || 'India';
@@ -425,6 +639,15 @@ function initAuth() {
   }
 }
 
+function initDailyThought() {
+  const thoughtEl = $('#dailyThoughtText');
+  if (!thoughtEl) return;
+
+  // Pick a random quote each time the dashboard loads
+  const quoteIndex = Math.floor(Math.random() * FOOD_QUOTES.length);
+  thoughtEl.textContent = `"${FOOD_QUOTES[quoteIndex]}"`;
+}
+
 // ===================== DASHBOARD =====================
 async function initDashboard() {
   if (!isLoggedIn()) { window.location.href = 'auth.html'; return; }
@@ -517,6 +740,7 @@ async function initDashboard() {
   });
 
   renderRecipes();
+  initDailyThought();
   initScrollAnimations();
 }
 
@@ -699,7 +923,14 @@ function performFiltering() {
   const sortOpt = $('#sortRecipes') ? $('#sortRecipes').value : 'popular';
 
   if (sortOpt === 'popular') {
-    filtered.sort((a, b) => b.rating - a.rating);
+    filtered.sort((a, b) => {
+      // Prioritize Free tier at the top for better conversion/UX
+      const tierOrder = { 'free': 0, 'plus': 1, 'pro': 2 };
+      if (tierOrder[a.tier] !== tierOrder[b.tier]) {
+        return tierOrder[a.tier] - tierOrder[b.tier];
+      }
+      return b.rating - a.rating;
+    });
   } else if (sortOpt === 'easy') {
     filtered.sort((a, b) => parseInt(a.time) - parseInt(b.time));
   } else if (sortOpt === 'healthy') {
@@ -814,11 +1045,21 @@ window.openRecipeModal = function (id) {
   const metaContainer = $('#modalRecipeMeta');
   if (metaContainer) {
     metaContainer.innerHTML = `
-      <span>🕒 ${r.time}</span>
-      <span>🔥 ${r.calories} kcal</span>
-      <span>⭐ ${r.rating} / 5</span>
-      <span class="tag" style="background: var(--bg-secondary); border: 1px solid var(--border);">${r.cuisine.toUpperCase()}</span>
-      <span class="tag" style="background: var(--bg-secondary); border: 1px solid var(--border);">${r.difficulty.toUpperCase()}</span>
+      <div class="meta-item">
+        <span class="meta-icon">🕒</span>
+        <span class="meta-label">${r.time}</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-icon">🔥</span>
+        <span class="meta-label">${r.calories} kcal</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-icon">⭐</span>
+        <span class="meta-label">${r.rating} / 5</span>
+      </div>
+      <div class="meta-divider"></div>
+      <span class="badge badge-cuisine">${r.cuisine.toUpperCase()}</span>
+      <span class="badge badge-difficulty difficulty-${r.difficulty}">${r.difficulty.toUpperCase()}</span>
     `;
   }
 

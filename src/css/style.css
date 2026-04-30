@@ -33,6 +33,35 @@
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Custom Global Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 20px;
+  border: 3px solid var(--bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+  border: 3px solid var(--bg);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
 .dark {
   --bg: #0f172a;
   --bg-secondary: #1e293b;
@@ -608,6 +637,13 @@ p {
   align-items: center;
   justify-content: center;
   font-weight: bold;
+  overflow: hidden;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* ---------- Footer ---------- */
@@ -767,10 +803,10 @@ footer {
 }
 
 .sidebar {
-  width: 280px;
+  width: 320px;
   background: var(--bg-secondary);
   border-right: 1px solid var(--border);
-  padding: 1.5rem;
+  padding: 1.25rem;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -796,7 +832,7 @@ footer {
 
 .main-content {
   flex: 1;
-  margin-left: 280px;
+  margin-left: 320px;
   padding: 2rem;
 }
 
@@ -974,6 +1010,79 @@ footer {
 }
 
 
+/* Thought of the Day */
+.daily-thought {
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  animation: slideInLeft 0.6s ease-out;
+  text-align: center;
+}
+
+.thought-header {
+  margin-bottom: 1.25rem;
+  display: flex;
+  justify-content: center;
+}
+
+.thought-header h5 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 900;
+  margin: 0;
+  color: #000;
+  border: 1px solid #000;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+}
+
+
+.thought-text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text);
+  font-style: italic;
+  font-weight: 500;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.dark .thought-header h5 {
+  color: #fff;
+  border-color: #fff;
+}
+
+.dark .thought-text {
+  color: #fff;
+}
+
+.sidebar-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--primary), transparent);
+  margin: 2rem 0;
+  opacity: 0.6;
+}
+
+.dark .sidebar-divider {
+  opacity: 0.4;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 
 
 /* Recipe Grid */
@@ -1015,7 +1124,7 @@ footer {
 .recipe-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.9) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0.9) 100%);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -1121,7 +1230,7 @@ footer {
 
 .fav-btn:hover {
   transform: scale(1.1);
-  background: rgba(255,255,255,0.4) !important;
+  background: rgba(255, 255, 255, 0.4) !important;
 }
 
 .lock-overlay p {
@@ -1214,6 +1323,92 @@ footer {
   transform: translateY(0);
 }
 
+/* Recipe Modal Meta */
+.recipe-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.meta-icon {
+  font-size: 1.1rem;
+}
+
+.meta-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border);
+}
+
+.badge {
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: var(--shadow-sm);
+}
+
+.badge-cuisine {
+  background: rgba(0, 230, 118, 0.1);
+  color: #00b35c;
+  border: 1px solid rgba(0, 230, 118, 0.2);
+}
+
+.dark .badge-cuisine {
+  color: #00e676;
+}
+
+.badge-difficulty {
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+
+.difficulty-beginner {
+  background: rgba(34, 197, 94, 0.1);
+  color: #166534;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.dark .difficulty-beginner {
+  color: #4ade80;
+}
+
+.difficulty-intermediate {
+  background: rgba(245, 158, 11, 0.1);
+  color: #92400e;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.dark .difficulty-intermediate {
+  color: #fbbf24;
+}
+
+.difficulty-advanced {
+  background: rgba(239, 68, 68, 0.1);
+  color: #991b1b;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.dark .difficulty-advanced {
+  color: #f87171;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 992px) {
   .hero-grid {
@@ -1288,6 +1483,10 @@ footer {
 .modal-overlay.active {
   opacity: 1;
   pointer-events: auto;
+}
+
+#themeLockModalOverlay {
+  z-index: 2000;
 }
 
 .modal-content {
@@ -1483,6 +1682,13 @@ footer {
   max-height: 450px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   margin-bottom: 1rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+.dark .chatbot-container {
+  background: var(--bg-secondary);
+  border-color: var(--border);
 }
 
 .chatbot-header {
@@ -1517,7 +1723,7 @@ footer {
 
 .chatbot-avatar {
   font-size: 1.5rem;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .chatbot-messages {
@@ -1530,6 +1736,18 @@ footer {
   min-height: 150px;
   max-height: 250px;
   background: #ffffff;
+}
+
+.dark .chatbot-messages {
+  background: var(--bg-secondary);
+}
+
+.dark .chatbot-header {
+  background: rgba(0, 230, 118, 0.05);
+}
+
+.dark .chatbot-header h4 {
+  color: var(--primary);
 }
 
 .message {
@@ -1547,6 +1765,12 @@ footer {
   align-self: flex-start;
 }
 
+.dark .bot-message {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
 .user-message {
   background: var(--primary);
   color: #000;
@@ -1559,6 +1783,10 @@ footer {
   background: #ffffff;
 }
 
+.dark .chatbot-input-wrap {
+  background: var(--bg-secondary);
+}
+
 .chatbot-input {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -1569,6 +1797,13 @@ footer {
   gap: 0.25rem;
   transition: all 0.2s;
   width: 100%;
+  box-sizing: border-box;
+  min-width: 0; /* Critical for flex parents */
+}
+
+.dark .chatbot-input {
+  background: var(--bg);
+  border-color: var(--border);
 }
 
 .chatbot-input input {
@@ -1579,7 +1814,8 @@ footer {
   color: var(--text);
   outline: none;
   padding: 0.5rem 0;
-  min-width: 0; /* Prevents input from forcing width */
+  min-width: 0;
+  width: 0; /* Force flex-grow to dictate width */
 }
 
 .chatbot-send {
@@ -1671,7 +1907,7 @@ footer {
   font-weight: 700;
   margin-bottom: 0.75rem;
   color: white;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .banner-subtitle {
@@ -1685,6 +1921,7 @@ footer {
   .locked-scanner-banner {
     height: 300px;
   }
+
   .banner-title {
     font-size: 1.25rem;
   }

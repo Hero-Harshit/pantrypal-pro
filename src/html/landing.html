@@ -5,8 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PantryPal Pro — Pantry to Plate, Perfected!</title>
+  <meta name="description" content="PantryPal Pro uses AI to scan your pantry and generate personalized, healthy recipes. Reduce waste and eat better with smart meal planning.">
+  <meta name="keywords" content="AI recipes, pantry scanner, meal planning, healthy eating, food waste reduction, smart kitchen">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/landing.css">
+  <link rel="stylesheet" href="../css/payment.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
 </head>
@@ -25,7 +28,7 @@
         <a href="#features">Features</a>
         <a href="#how-it-works">How It Works</a>
         <a href="#pricing">Pricing</a>
-        <a href="#about">About</a>
+        <a href="about.html">About</a>
       </div>
 
       <div class="nav-actions">
@@ -40,7 +43,7 @@
       <a href="#features" onclick="scrollToSection('features')">Features</a>
       <a href="#how-it-works" onclick="scrollToSection('how-it-works')">How It Works</a>
       <a href="#pricing" onclick="scrollToSection('pricing')">Pricing</a>
-      <a href="#about">About</a>
+      <a href="about.html">About</a>
       <a href="auth.html" class="btn btn-primary">Get Started</a>
     </div>
   </nav>
@@ -316,6 +319,84 @@
       </div>
     </div>
   </footer>
+
+  <!-- ==================== PAYMENT MODAL ==================== -->
+  <div class="payment-modal-overlay" id="paymentModalOverlay">
+    <div class="payment-modal">
+      <div id="paymentInitialState">
+        <div class="payment-header">
+          <h2>Secure Checkout</h2>
+          <button class="close-payment" id="closePaymentBtn">&times;</button>
+        </div>
+
+        <div class="payment-body">
+          <div class="order-summary">
+            <div class="summary-row">
+              <span id="paymentPlanName">PantryPal Pro</span>
+              <span id="paymentPlanPrice">₹499/mo</span>
+            </div>
+            <div class="summary-row total">
+              <span>Total Amount</span>
+              <span id="paymentTotal">₹499.00</span>
+            </div>
+          </div>
+
+          <div class="card-preview">
+            <div class="card-chip"></div>
+            <div class="card-number-display" id="previewNumber">•••• •••• •••• ••••</div>
+            <div class="card-bottom-info">
+              <div class="card-holder-display" id="previewName">Your Name</div>
+              <div class="card-expiry-display" id="previewExpiry">MM/YY</div>
+            </div>
+            <div class="card-type-icon" id="cardType">VISA</div>
+          </div>
+
+          <form class="payment-form" id="paymentForm">
+            <div class="input-group">
+              <label>Cardholder Name</label>
+              <input type="text" id="cardName" placeholder="John Doe" required>
+            </div>
+            <div class="input-group">
+              <label>Card Number</label>
+              <input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19" required>
+            </div>
+            <div class="form-row">
+              <div class="input-group">
+                <label>Expiry Date</label>
+                <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" required>
+              </div>
+              <div class="input-group">
+                <label>CVV</label>
+                <input type="password" id="cardCVV" placeholder="***" maxlength="3" required>
+              </div>
+            </div>
+
+            <div class="payment-footer">
+              <button type="submit" class="pay-btn" id="payBtn">
+                <span class="lock-icon">🔒</span> Pay Securely
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+      <!-- Processing State -->
+      <div class="processing-view" id="paymentProcessingState">
+        <div class="spinner-circle"></div>
+        <h3>Processing Payment</h3>
+        <p>Please do not close this window or refresh the page.</p>
+      </div>
+
+      <!-- Success State -->
+      <div class="success-view" id="paymentSuccessState">
+        <div class="success-icon">✓</div>
+        <h2 class="success-title">Payment Successful!</h2>
+        <p class="success-text">Welcome to the premium club. Your account has been upgraded successfully.</p>
+        <button class="btn btn-primary btn-full" id="paymentSuccessBtn">Go to Dashboard</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Supabase SDK + Config -->
   <script src="../js/supabaseLoader.js"></script>
