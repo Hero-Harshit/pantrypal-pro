@@ -35,7 +35,7 @@
   transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   border: 1px solid var(--border);
-  margin: 2rem auto;
+  margin: 1rem auto;
 }
 
 .payment-modal::-webkit-scrollbar {
@@ -348,6 +348,10 @@
 
 /* Responsive Scaling */
 @media (max-width: 480px) {
+  .payment-header {
+    padding: 1rem 1.25rem;
+  }
+
   .payment-body {
     padding: 1.25rem;
   }
@@ -355,28 +359,59 @@
   .card-preview {
     padding: 1.25rem;
     margin-bottom: 1.5rem;
+    border-radius: 12px;
   }
   
   .card-number-display {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     letter-spacing: 1px;
+    margin-bottom: 1rem;
   }
   
   .card-chip {
-    width: 35px;
-    height: 25px;
-    margin-bottom: 1.5rem;
+    width: 32px;
+    height: 22px;
+    margin-bottom: 1rem;
   }
   
   .card-holder-display, .card-expiry-display {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
   }
   
   .card-type-icon {
-    width: 40px;
-    height: 24px;
-    bottom: 1.25rem;
-    right: 1.25rem;
-    font-size: 1rem;
+    width: 36px;
+    height: 22px;
+    bottom: 1rem;
+    right: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .order-summary {
+    padding: 0.85rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .payment-modal {
+    width: 95%;
+  }
+
+  .payment-body {
+    padding: 1rem;
+  }
+
+  .card-number-display {
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+  }
+
+  .pay-btn {
+    font-size: 0.9rem;
+    padding: 0.85rem;
   }
 }
