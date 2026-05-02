@@ -4,42 +4,184 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PantryPal Pro — Careers</title>
+  <title>Careers | PantryPal Pro</title>
+  <meta name="description" content="Join the team building the future of AI-powered cooking. Explore open positions at PantryPal Pro.">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/landing.css">
   <link rel="icon" type="image/png" href="../assets/Logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
   <style>
-    .page-header {
-      padding: 8rem 0 4rem;
+    .career-hero {
+      padding: 10rem 0 6rem;
       text-align: center;
-      background: linear-gradient(to bottom, var(--primary-light), transparent);
+      background: var(--bg-gradient);
     }
-    .page-content {
-      max-width: 800px;
-      margin: 0 auto 6rem;
+
+    .career-hero h1 {
+      font-size: clamp(3rem, 8vw, 5rem);
+      margin-bottom: 1.5rem;
+      font-weight: 900;
     }
-    .page-content h2 {
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-      color: var(--primary);
-    }
-    .page-content p {
-      margin-bottom: 1rem;
-      line-height: 1.6;
+
+    .career-hero p {
+      font-size: 1.25rem;
       color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .benefit-card {
+      padding: 2.5rem;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .benefit-emoji {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    .jobs-section {
+      padding: 6rem 0;
+    }
+
+    .jobs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .job-card {
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid var(--border-color);
+    }
+
+    .job-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 10px 40px rgba(0, 230, 118, 0.1);
+      transform: scale(1.02);
+    }
+
+    .job-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .job-meta {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-remote {
+      background: rgba(0, 230, 118, 0.1);
+      color: var(--primary);
+      border: 1px solid rgba(0, 230, 118, 0.2);
+    }
+
+    .badge-hybrid {
+      background: rgba(255, 179, 0, 0.1);
+      color: #ffb300;
+      border: 1px solid rgba(255, 179, 0, 0.2);
+    }
+
+    .badge-dept {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+    }
+
+    .job-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .process-section {
+      padding: 6rem 0;
+      background: var(--bg-secondary);
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 4rem;
+      margin-top: 4rem;
+    }
+
+    .process-step {
+      text-align: center;
+      position: relative;
+    }
+
+    .step-number {
+      width: 60px;
+      height: 60px;
+      background: var(--primary);
+      color: #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin: 0 auto 2rem;
+      box-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
+    }
+
+    .no-role-section {
+      padding: 8rem 0;
+      text-align: center;
+    }
+
+    .no-role-card {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 4rem;
     }
   </style>
 </head>
 
-<body>
+<body data-page="career">
+  <!-- Background Blobs -->
+  <div class="blob-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
 
   <!-- Navbar -->
   <nav class="navbar">
     <div class="container nav-container">
       <a href="landing.html" class="logo">
-        <img src="../assets/Logo.png" alt="PantryPal Pro Logo" class="logo-img">
+        <img src="../assets/Logo.png" alt="PantryPal Pro Logo" class="logo-img" loading="lazy">
         PantryPal Pro
       </a>
 
@@ -51,46 +193,159 @@
       </div>
 
       <div class="nav-actions">
-        <a href="auth.html#login" class="btn btn-outline btn-sm">Login</a>
-        <a href="auth.html#signup" class="btn btn-primary btn-sm">Sign Up</a>
+        <div id="navAuthBtns"></div>
       </div>
+
+      <button class="burger-btn" id="burgerBtn">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="landing.html#features">Features</a>
+      <a href="landing.html#how-it-works">How It Works</a>
+      <a href="landing.html#pricing">Pricing</a>
+      <a href="about.html">About</a>
+      <a href="auth.html" class="btn btn-primary">Get Started</a>
     </div>
   </nav>
 
-  <header class="page-header">
-    <div class="container">
-      <h1>Careers</h1>
-      <p class="text-muted">PantryPal Pro</p>
-    </div>
-  </header>
+  <main>
+    <!-- HERO -->
+    <header class="career-hero">
+      <div class="container">
+        <h1 class="fade-up">Join Our Team</h1>
+        <p class="fade-up stagger-1">We're building the future of cooking — come build it with us.</p>
+        
+        <div class="benefits-grid">
+          <div class="benefit-card glass-card fade-up stagger-1">
+            <span class="benefit-emoji">🚀</span>
+            <h3>Early Stage</h3>
+            <p class="text-muted">Shape the product from day one and have a real impact.</p>
+          </div>
+          <div class="benefit-card glass-card fade-up stagger-2">
+            <span class="benefit-emoji">🌍</span>
+            <h3>Remote Friendly</h3>
+            <p class="text-muted">Work from the comfort of your home, anywhere in India.</p>
+          </div>
+          <div class="benefit-card glass-card fade-up stagger-3">
+            <span class="benefit-emoji">🍱</span>
+            <h3>Free Subscription</h3>
+            <p class="text-muted">Pro plan for all employees forever. Cook like a king.</p>
+          </div>
+          <div class="benefit-card glass-card fade-up stagger-4">
+            <span class="benefit-emoji">📈</span>
+            <h3>Equity Options</h3>
+            <p class="text-muted">You're more than an employee; you're an owner.</p>
+          </div>
+        </div>
+      </div>
+    </header>
 
-  <main class="container page-content glass-card fade-up" style="padding: 3rem;">
-    <h2>Join Our Team</h2>
-    <p>Are you passionate about food, technology, and sustainability? Come build the future of cooking with us! At PantryPal Pro, we are always looking for talented individuals to join our growing team.</p>
-    <h2>Open Positions</h2>
-    <div style="margin-top: 2rem;">
-      <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
-        <h3>Senior AI Engineer</h3>
-        <p><strong>Location:</strong> Remote / Hybrid</p>
-        <p>Help us refine our recipe-matching algorithms and computer vision models for fridge scanning.</p>
-        <button class="btn btn-outline btn-sm">Apply Now</button>
+    <!-- OPEN POSITIONS -->
+    <section class="jobs-section" id="openings">
+      <div class="container">
+        <div class="text-center fade-up">
+          <h2 class="section-title">Open Positions</h2>
+          <p>Find your next challenge at PantryPal Pro.</p>
+        </div>
+
+        <div class="jobs-grid">
+          <!-- Job 1 -->
+          <div class="job-card glass-card fade-up stagger-1">
+            <div class="job-header">
+              <div class="job-meta">
+                <span class="badge badge-remote">Remote</span>
+                <span class="badge badge-dept">Engineering</span>
+              </div>
+              <h3 class="job-title">Senior AI/ML Engineer</h3>
+              <p class="text-muted">Build and improve our computer vision ingredient detection and LLM recipe generation pipeline.</p>
+            </div>
+            <a href="contact.html" class="btn btn-outline btn-block">Apply Now</a>
+          </div>
+
+          <!-- Job 2 -->
+          <div class="job-card glass-card fade-up stagger-2">
+            <div class="job-header">
+              <div class="job-meta">
+                <span class="badge badge-remote">Remote</span>
+                <span class="badge badge-dept">Engineering</span>
+              </div>
+              <h3 class="job-title">Full Stack Developer</h3>
+              <p class="text-muted">Own both frontend and backend — Next.js, Supabase, and Node. Ship features users love every week.</p>
+            </div>
+            <a href="contact.html" class="btn btn-outline btn-block">Apply Now</a>
+          </div>
+
+          <!-- Job 3 -->
+          <div class="job-card glass-card fade-up stagger-3">
+            <div class="job-header">
+              <div class="job-meta">
+                <span class="badge badge-hybrid">Hybrid (Pune)</span>
+                <span class="badge badge-dept">Design</span>
+              </div>
+              <h3 class="job-title">UI/UX Designer</h3>
+              <p class="text-muted">Create beautiful, intuitive experiences for home cooks. Own the visual identity end-to-end.</p>
+            </div>
+            <a href="contact.html" class="btn btn-outline btn-block">Apply Now</a>
+          </div>
+
+          <!-- Job 4 -->
+          <div class="job-card glass-card fade-up stagger-4">
+            <div class="job-header">
+              <div class="job-meta">
+                <span class="badge badge-remote">Remote</span>
+                <span class="badge badge-dept">Growth</span>
+              </div>
+              <h3 class="job-title">Marketing & Growth Intern</h3>
+              <p class="text-muted">Run our social media, SEO, and user acquisition campaigns. Great for students wanting startup experience.</p>
+            </div>
+            <a href="contact.html" class="btn btn-outline btn-block">Apply Now</a>
+          </div>
+        </div>
       </div>
-      <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
-        <h3>Frontend Developer</h3>
-        <p><strong>Location:</strong> Remote</p>
-        <p>Create beautiful, intuitive, and highly responsive user interfaces for our growing community of home chefs.</p>
-        <button class="btn btn-outline btn-sm">Apply Now</button>
+    </section>
+
+    <!-- HIRING PROCESS -->
+    <section class="process-section">
+      <div class="container">
+        <div class="text-center fade-up">
+          <h2 class="section-title">Our Hiring Process</h2>
+          <p>We value your time. Our process is quick, transparent, and respectful.</p>
+        </div>
+
+        <div class="process-grid">
+          <div class="process-step fade-up stagger-1">
+            <div class="step-number">1</div>
+            <h3>Apply</h3>
+            <p class="text-muted">Submit your profile via our contact page. We'll review it within 48 hours.</p>
+          </div>
+          <div class="process-step fade-up stagger-2">
+            <div class="step-number">2</div>
+            <h3>Intro Call</h3>
+            <p class="text-muted">A 30-minute chat to get to know each other and align on goals.</p>
+          </div>
+          <div class="process-step fade-up stagger-3">
+            <div class="step-number">3</div>
+            <h3>Final Round</h3>
+            <p class="text-muted">A short take-home task followed by a final technical/design interview.</p>
+          </div>
+        </div>
       </div>
-      <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
-        <h3>Content & Community Manager</h3>
-        <p><strong>Location:</strong> Hybrid</p>
-        <p>Engage with our users, manage social media channels, and curate amazing culinary content.</p>
-        <button class="btn btn-outline btn-sm">Apply Now</button>
+    </section>
+
+    <!-- NO ROLE FITS -->
+    <section class="no-role-section">
+      <div class="container">
+        <div class="no-role-card glass-card fade-up">
+          <h2 style="margin-bottom: 1.5rem;">Didn't see the right role?</h2>
+          <p style="margin-bottom: 2.5rem; color: var(--text-muted); font-size: 1.1rem;">We're always looking for talented, passionate people to join our mission. If you think you'd be a great fit, drop us a line with your resume and what you're passionate about.</p>
+          <a href="contact.html" class="btn btn-primary btn-lg">Drop us a line</a>
+        </div>
       </div>
-    </div>
+    </section>
   </main>
 
-  <!-- FOOTER -->
+  <!-- Footer -->
   <footer>
     <div class="container">
       <div class="footer-grid">
@@ -131,6 +386,8 @@
     </div>
   </footer>
 
+  <!-- Scripts -->
   <script src="../js/app.js"></script>
 </body>
+
 </html>

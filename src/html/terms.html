@@ -4,42 +4,153 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PantryPal Pro — Terms of Service</title>
+  <title>Terms of Service | PantryPal Pro</title>
+  <meta name="description" content="Read the terms and conditions for using PantryPal Pro services.">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/landing.css">
   <link rel="icon" type="image/png" href="../assets/Logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
   <style>
-    .page-header {
-      padding: 8rem 0 4rem;
+    .terms-hero {
+      padding: 10rem 0 4rem;
       text-align: center;
-      background: linear-gradient(to bottom, var(--primary-light), transparent);
+      background: var(--bg-gradient);
     }
-    .page-content {
-      max-width: 800px;
-      margin: 0 auto 6rem;
-    }
-    .page-content h2 {
-      margin-top: 2rem;
+
+    .terms-hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
       margin-bottom: 1rem;
-      color: var(--primary);
     }
-    .page-content p {
-      margin-bottom: 1.5rem;
-      line-height: 1.6;
+
+    .terms-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 4rem;
+      padding: 4rem 0 8rem;
+      align-items: start;
+    }
+
+    .terms-sidebar {
+      position: sticky;
+      top: 100px;
+      padding: 2rem;
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .toc-link {
+      text-decoration: none;
       color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      display: block;
+      padding: 0.5rem 0;
+      border-left: 2px solid transparent;
+      padding-left: 1.5rem;
+    }
+
+    .toc-link:hover, .toc-link.active {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .terms-content {
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    .plain-english-box {
+      background: rgba(0, 230, 118, 0.05);
+      border: 1px solid rgba(0, 230, 118, 0.2);
+      margin-bottom: 4rem;
+    }
+
+    .plain-english-box h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .terms-content h2 {
+      font-size: 2rem;
+      margin: 4rem 0 1.5rem;
+      color: var(--text);
+      scroll-margin-top: 120px;
+    }
+
+    .terms-content p {
+      margin-bottom: 1.5rem;
+      color: var(--text-muted);
+    }
+
+    .terms-content ul {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+
+    .terms-content li {
+      margin-bottom: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .terms-content strong {
+      color: var(--text);
+    }
+
+    @media (max-width: 1024px) {
+      .terms-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .terms-sidebar {
+        position: static;
+        padding: 1.5rem;
+      }
+
+      .toc-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .toc-link {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-full);
+      }
+
+      .toc-link.active {
+        background: var(--primary);
+        color: #000;
+        border-color: var(--primary);
+      }
     }
   </style>
 </head>
 
-<body>
+<body data-page="terms">
+  <!-- Background Blobs -->
+  <div class="blob-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
 
   <!-- Navbar -->
   <nav class="navbar">
     <div class="container nav-container">
       <a href="landing.html" class="logo">
-        <img src="../assets/Logo.png" alt="PantryPal Pro Logo" class="logo-img">
+        <img src="../assets/Logo.png" alt="PantryPal Pro Logo" class="logo-img" loading="lazy">
         PantryPal Pro
       </a>
 
@@ -51,31 +162,131 @@
       </div>
 
       <div class="nav-actions">
-        <a href="auth.html#login" class="btn btn-outline btn-sm">Login</a>
-        <a href="auth.html#signup" class="btn btn-primary btn-sm">Sign Up</a>
+        <div id="navAuthBtns"></div>
       </div>
+
+      <button class="burger-btn" id="burgerBtn">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="landing.html#features">Features</a>
+      <a href="landing.html#how-it-works">How It Works</a>
+      <a href="landing.html#pricing">Pricing</a>
+      <a href="about.html">About</a>
+      <a href="auth.html" class="btn btn-primary">Get Started</a>
     </div>
   </nav>
 
-  <header class="page-header">
-    <div class="container">
-      <h1>Terms of Service</h1>
-      <p class="text-muted">PantryPal Pro</p>
-    </div>
-  </header>
+  <main>
+    <header class="terms-hero">
+      <div class="container">
+        <h1 class="fade-up">Terms of Service</h1>
+        <p class="fade-up stagger-1">Last Updated: April 28, 2026</p>
+      </div>
+    </header>
 
-  <main class="container page-content glass-card fade-up" style="padding: 3rem;">
-    <h2>1. Acceptance of Terms</h2>
-    <p>By accessing and using PantryPal Pro, you accept and agree to be bound by the terms and provision of this agreement. In addition, when using these particular services, you shall be subject to any posted guidelines or rules applicable to such services.</p>
-    <h2>2. Description of Service</h2>
-    <p>PantryPal Pro provides users with access to a rich collection of resources, including various recipe search tools, personalized content, and an active community. You also understand and agree that the service may include advertisements.</p>
-    <h2>3. User Conduct</h2>
-    <p>You agree to use the service only for lawful purposes. You agree not to take any action that might compromise the security of the site, render the site inaccessible to others or otherwise cause damage to the site or the Content.</p>
-    <h2>4. Modifications to Service</h2>
-    <p>PantryPal Pro reserves the right at any time and from time to time to modify or discontinue, temporarily or permanently, the Service (or any part thereof) with or without notice.</p>
+    <div class="container terms-layout">
+      <!-- Sidebar TOC -->
+      <aside class="terms-sidebar glass-card fade-up">
+        <ul class="toc-list">
+          <li><a href="#agreement" class="toc-link">1. Agreement to Terms</a></li>
+          <li><a href="#ip" class="toc-link">2. Intellectual Property</a></li>
+          <li><a href="#obligations" class="toc-link">3. User Obligations</a></li>
+          <li><a href="#payments" class="toc-link">4. Payments & Billing</a></li>
+          <li><a href="#disclaimer" class="toc-link">5. AI Disclaimer</a></li>
+          <li><a href="#liability" class="toc-link">6. Liability</a></li>
+          <li><a href="#termination" class="toc-link">7. Termination</a></li>
+          <li><a href="#governing-law" class="toc-link">8. Governing Law</a></li>
+          <li><a href="#contact" class="toc-link">9. Contact Us</a></li>
+        </ul>
+      </aside>
+
+      <!-- Main Content -->
+      <article class="terms-content fade-up stagger-1">
+        <!-- Plain English Summary -->
+        <div class="glass-card plain-english-box">
+          <h3><span class="emoji">⚖️</span> Plain English Summary</h3>
+          <ul>
+            <li>By using PantryPal Pro, you agree to these rules.</li>
+            <li>The AI's advice is a suggestion—always check for food safety yourself.</li>
+            <li>Don't try to hack, scrape, or misuse our service.</li>
+            <li>You can cancel your subscription at any time.</li>
+          </ul>
+        </div>
+
+        <section id="agreement">
+          <h2>1. Agreement to Terms</h2>
+          <p>By accessing or using PantryPal Pro, you agree to be bound by these Terms of Service. If you do not agree to all the terms and conditions, you are prohibited from using the service.</p>
+          <p>These terms constitute a legally binding agreement between you and PantryPal Pro, regarding your access to and use of our website and mobile applications.</p>
+        </section>
+
+        <section id="ip">
+          <h2>2. Intellectual Property</h2>
+          <p>Unless otherwise indicated, the service, including all source code, databases, functionality, software, website designs, audio, video, text, and graphics on the site are owned or controlled by us and are protected by copyright and trademark laws.</p>
+          <p><strong>Your Content:</strong> You retain ownership of the photos you upload to our service. However, by uploading them, you grant us a worldwide, non-exclusive license to process these images for the purpose of identifying ingredients and improving our AI models.</p>
+        </section>
+
+        <section id="obligations">
+          <h2>3. User Obligations</h2>
+          <p>As a user of the service, you agree not to:</p>
+          <ul>
+            <li>Systematically retrieve data or other content from the service to create or compile, directly or indirectly, a collection, compilation, database, or directory without written permission from us.</li>
+            <li>Trick, defraud, or mislead us and other users, especially in any attempt to learn sensitive account information such as user passwords.</li>
+            <li>Use the service in a manner inconsistent with any applicable laws or regulations.</li>
+            <li>Upload or transmit (or attempt to upload or to transmit) viruses, Trojan horses, or other material that interferes with any party's uninterrupted use and enjoyment of the service.</li>
+          </ul>
+        </section>
+
+        <section id="payments">
+          <h2>4. Payments & Billing</h2>
+          <p>Some parts of the Service are billed on a subscription basis ("Subscription(s)"). You will be billed in advance on a recurring and periodic basis ("Billing Cycle"). Billing cycles are set either on a monthly or annual basis, depending on the type of subscription plan you select when purchasing a Subscription.</p>
+          <p><strong>Cancellations:</strong> You may cancel your Subscription renewal either through your online account management page or by contacting our customer support team. No refunds are provided for the current billing period.</p>
+        </section>
+
+        <section id="disclaimer">
+          <h2>5. AI Disclaimer & Food Safety</h2>
+          <p><strong>PantryPal Pro uses artificial intelligence to generate recipes. You acknowledge and agree that:</strong></p>
+          <ul>
+            <li>AI-generated content may contain inaccuracies, omissions, or errors.</li>
+            <li>Recipes are suggestions only. You must use your own judgment regarding food safety, allergens, and cooking temperatures.</li>
+            <li>We are not responsible for any allergic reactions or health issues resulting from following an AI-generated recipe.</li>
+            <li>Suggestions provided by the AI do not constitute professional nutritional or medical advice.</li>
+          </ul>
+        </section>
+
+        <section id="liability">
+          <h2>6. Limitation of Liability</h2>
+          <p>In no event will we or our directors, employees, or agents be liable to you or any third party for any direct, indirect, consequential, exemplary, incidental, special, or punitive damages, including lost profit, lost revenue, loss of data, or other damages arising from your use of the service.</p>
+          <p>We are not responsible for any damages resulting from food preparation, kitchen accidents, or the consumption of food prepared using our recipes.</p>
+        </section>
+
+        <section id="termination">
+          <h2>7. Termination</h2>
+          <p>We may terminate or suspend your account and bar access to the service immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever and without limitation, including but not limited to a breach of the Terms.</p>
+          <p>If you wish to terminate your account, you may simply discontinue using the service or request account deletion via email.</p>
+        </section>
+
+        <section id="governing-law">
+          <h2>8. Governing Law</h2>
+          <p>These terms shall be governed by and defined following the laws of India. PantryPal Pro and yourself irrevocably consent that the courts of Pune, Maharashtra shall have exclusive jurisdiction to resolve any dispute which may arise in connection with these terms.</p>
+        </section>
+
+        <section id="contact">
+          <h2>9. Contact Us</h2>
+          <p>In order to resolve a complaint regarding the service or to receive further information regarding use of the service, please contact us at:</p>
+          <div class="glass-card" style="padding: 1.5rem; margin-top: 1rem;">
+            <strong>PantryPal Pro Legal Team</strong><br>
+            Hinjawadi Phase 1, Pune,<br>
+            Maharashtra, India - 411057<br>
+            Email: <a href="mailto:support@pantrypalpro.com" style="color: var(--primary);">support@pantrypalpro.com</a>
+          </div>
+        </section>
+      </article>
+    </div>
   </main>
 
-  <!-- FOOTER -->
+  <!-- Footer -->
   <footer>
     <div class="container">
       <div class="footer-grid">
@@ -116,6 +327,8 @@
     </div>
   </footer>
 
+  <!-- Scripts -->
   <script src="../js/app.js"></script>
 </body>
+
 </html>

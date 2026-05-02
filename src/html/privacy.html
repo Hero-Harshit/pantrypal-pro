@@ -4,42 +4,153 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PantryPal Pro — Privacy Policy</title>
+  <title>Privacy Policy | PantryPal Pro</title>
+  <meta name="description" content="Your privacy is our priority. Read the PantryPal Pro Privacy Policy to understand how we protect your data.">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/landing.css">
   <link rel="icon" type="image/png" href="../assets/Logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
   <style>
-    .page-header {
-      padding: 8rem 0 4rem;
+    .privacy-hero {
+      padding: 10rem 0 4rem;
       text-align: center;
-      background: linear-gradient(to bottom, var(--primary-light), transparent);
+      background: var(--bg-gradient);
     }
-    .page-content {
-      max-width: 800px;
-      margin: 0 auto 6rem;
-    }
-    .page-content h2 {
-      margin-top: 2rem;
+
+    .privacy-hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
       margin-bottom: 1rem;
-      color: var(--primary);
     }
-    .page-content p {
-      margin-bottom: 1.5rem;
-      line-height: 1.6;
+
+    .privacy-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 4rem;
+      padding: 4rem 0 8rem;
+      align-items: start;
+    }
+
+    .privacy-sidebar {
+      position: sticky;
+      top: 100px;
+      padding: 2rem;
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .toc-link {
+      text-decoration: none;
       color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      display: block;
+      padding: 0.5rem 0;
+      border-left: 2px solid transparent;
+      padding-left: 1.5rem;
+    }
+
+    .toc-link:hover, .toc-link.active {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .privacy-content {
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    .plain-english-box {
+      background: rgba(0, 230, 118, 0.05);
+      border: 1px solid rgba(0, 230, 118, 0.2);
+      margin-bottom: 4rem;
+    }
+
+    .plain-english-box h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .privacy-content h2 {
+      font-size: 2rem;
+      margin: 4rem 0 1.5rem;
+      color: var(--text);
+      scroll-margin-top: 120px;
+    }
+
+    .privacy-content p {
+      margin-bottom: 1.5rem;
+      color: var(--text-muted);
+    }
+
+    .privacy-content ul {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+
+    .privacy-content li {
+      margin-bottom: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .privacy-content strong {
+      color: var(--text);
+    }
+
+    @media (max-width: 1024px) {
+      .privacy-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .privacy-sidebar {
+        position: static;
+        padding: 1.5rem;
+      }
+
+      .toc-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .toc-link {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-full);
+      }
+
+      .toc-link.active {
+        background: var(--primary);
+        color: #000;
+        border-color: var(--primary);
+      }
     }
   </style>
 </head>
 
-<body>
+<body data-page="privacy">
+  <!-- Background Blobs -->
+  <div class="blob-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
 
   <!-- Navbar -->
   <nav class="navbar">
     <div class="container nav-container">
       <a href="landing.html" class="logo">
-        <img src="../assets/Logo.png" alt="PantryPal Pro Logo" class="logo-img">
+        <img src="../assets/Logo.png" alt="PantryPal Pro Logo" class="logo-img" loading="lazy">
         PantryPal Pro
       </a>
 
@@ -51,31 +162,154 @@
       </div>
 
       <div class="nav-actions">
-        <a href="auth.html#login" class="btn btn-outline btn-sm">Login</a>
-        <a href="auth.html#signup" class="btn btn-primary btn-sm">Sign Up</a>
+        <div id="navAuthBtns"></div>
       </div>
+
+      <button class="burger-btn" id="burgerBtn">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="landing.html#features">Features</a>
+      <a href="landing.html#how-it-works">How It Works</a>
+      <a href="landing.html#pricing">Pricing</a>
+      <a href="about.html">About</a>
+      <a href="auth.html" class="btn btn-primary">Get Started</a>
     </div>
   </nav>
 
-  <header class="page-header">
-    <div class="container">
-      <h1>Privacy Policy</h1>
-      <p class="text-muted">PantryPal Pro</p>
-    </div>
-  </header>
+  <main>
+    <header class="privacy-hero">
+      <div class="container">
+        <h1 class="fade-up">Privacy Policy</h1>
+        <p class="fade-up stagger-1">Last Updated: April 28, 2026</p>
+      </div>
+    </header>
 
-  <main class="container page-content glass-card fade-up" style="padding: 3rem;">
-    <h2>1. Information We Collect</h2>
-    <p>We collect information you provide directly to us, such as when you create or modify your account, request on-demand services, contact customer support, or otherwise communicate with us. This information may include: name, email, phone number, postal address, profile picture, payment method, and other information you choose to provide.</p>
-    <h2>2. Use of Information</h2>
-    <p>We may use the information we collect about you to provide, maintain, and improve our Services, including, for example, to facilitate payments, send receipts, provide products and services you request, develop new features, provide customer support, and send product updates.</p>
-    <h2>3. Data Security</h2>
-    <p>We take reasonable measures to help protect information about you from loss, theft, misuse and unauthorized access, disclosure, alteration and destruction.</p>
-    <h2>4. Contact Us</h2>
-    <p>If you have any questions about this Privacy Policy, please contact us via our Contact page.</p>
+    <div class="container privacy-layout">
+      <!-- Sidebar TOC -->
+      <aside class="privacy-sidebar glass-card fade-up">
+        <ul class="toc-list">
+          <li><a href="#intro" class="toc-link">1. Introduction</a></li>
+          <li><a href="#collection" class="toc-link">2. What We Collect</a></li>
+          <li><a href="#usage" class="toc-link">3. How We Use Data</a></li>
+          <li><a href="#security" class="toc-link">4. Storage & Security</a></li>
+          <li><a href="#cookies" class="toc-link">5. Cookies & Tracking</a></li>
+          <li><a href="#rights" class="toc-link">6. Your Rights</a></li>
+          <li><a href="#third-party" class="toc-link">7. Third-Parties</a></li>
+          <li><a href="#changes" class="toc-link">8. Policy Changes</a></li>
+          <li><a href="#contact" class="toc-link">9. Contact Us</a></li>
+        </ul>
+      </aside>
+
+      <!-- Main Content -->
+      <article class="privacy-content fade-up stagger-1">
+        <!-- Plain English Summary -->
+        <div class="glass-card plain-english-box">
+          <h3><span class="emoji">📝</span> Plain English Summary</h3>
+          <ul>
+            <li>We collect only what's necessary to make your AI recipes awesome.</li>
+            <li>We don't sell your data to third parties. Ever.</li>
+            <li>Your kitchen photos are processed for scanning and then deleted within 24 hours.</li>
+            <li>You have full control over your data—you can ask us to delete it at any time.</li>
+          </ul>
+        </div>
+
+        <section id="intro">
+          <h2>1. Introduction</h2>
+          <p>Welcome to PantryPal Pro ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy applies to all information collected through our website (pantrypalpro.com) and any related services, sales, marketing, or events.</p>
+          <p>Our goal is to explain to you in the clearest way possible what information we collect, how we use it, and what rights you have in relation to it. If there are any terms in this privacy policy that you do not agree with, please discontinue use of our services immediately.</p>
+        </section>
+
+        <section id="collection">
+          <h2>2. Information We Collect</h2>
+          <p>We collect personal information that you voluntarily provide to us when you register on the website, express an interest in obtaining information about us or our products and services, or otherwise when you contact us.</p>
+          
+          <strong>Account & Profile Data</strong>
+          <p>We collect your full name, email address, phone number, age, and country. This information is used to create your secure account and personalize your experience based on demographic trends and regional availability of ingredients.</p>
+
+          <strong>Usage & Interaction Data</strong>
+          <p>We track which recipes you view, the filters you apply (e.g., "Keto," "Vegan"), and your scan history. This allows our AI to learn your preferences and suggest better meals over time.</p>
+
+          <strong>Uploaded Images (The "Scanning" Data)</strong>
+          <p>When you use our AI Scan feature, you upload photos of your fridge or pantry. These images are processed by our vision models to extract ingredient names. We do not store these images permanently; they are used solely for identification.</p>
+
+          <strong>Payment Information</strong>
+          <p>For premium subscriptions, we collect data related to your plan tier. However, all payment processing is handled by third-party gateways. We never see or store your full credit card numbers or banking credentials.</p>
+        </section>
+
+        <section id="usage">
+          <h2>3. How We Use Your Information</h2>
+          <p>We use personal information collected via our website for a variety of business purposes described below:</p>
+          <ul>
+            <li><strong>Personalizing Recipes:</strong> Using your dietary preferences and available ingredients to generate unique, safe, and delicious recipes.</li>
+            <li><strong>Improving AI Models:</strong> Using anonymized data to train our computer vision and natural language models to better recognize ingredients.</li>
+            <li><strong>Communication:</strong> Sending you product updates, security alerts, and support messages.</li>
+            <li><strong>Processing Payments:</strong> Managing your subscription status and ensuring access to Pro features.</li>
+            <li><strong>Customer Support:</strong> Responding to your inquiries and resolving any technical issues you may face.</li>
+          </ul>
+        </section>
+
+        <section id="security">
+          <h2>4. Data Storage & Security</h2>
+          <p>We implement a variety of security measures to maintain the safety of your personal information. Your data is stored on secure cloud servers and is encrypted in transit using HTTPS (TLS) protocols.</p>
+          <p><strong>The 24-Hour Rule:</strong> To protect your privacy, all kitchen and pantry images uploaded for AI scanning are automatically discarded from our processing buffers within 24 hours of successful identification.</p>
+          <p>We do not sell, trade, or otherwise transfer your personally identifiable information to outside parties. This does not include trusted third parties who assist us in operating our website, so long as those parties agree to keep this information confidential.</p>
+        </section>
+
+        <section id="cookies">
+          <h2>5. Cookies & Tracking</h2>
+          <p>We keep our tracking minimal to ensure a fast and private experience.</p>
+          <ul>
+            <li><strong>localStorage:</strong> We use browser localStorage to manage your login session and save your theme preferences. This stays on your device.</li>
+            <li><strong>No Ad Trackers:</strong> We do not use third-party advertising trackers or pixel tags to follow you across the web.</li>
+            <li><strong>Google Fonts:</strong> We load fonts from Google's CDN to ensure a beautiful UI. Your IP address may be visible to Google during this process, subject to their privacy policy.</li>
+          </ul>
+        </section>
+
+        <section id="rights">
+          <h2>6. Your Rights</h2>
+          <p>In accordance with the Information Technology Act, 2000 and global privacy standards, you have the following rights:</p>
+          <ul>
+            <li><strong>Access:</strong> You can request a copy of the data we hold about you.</li>
+            <li><strong>Correction:</strong> You can update any inaccurate or incomplete information in your profile.</li>
+            <li><strong>Deletion:</strong> You can request the permanent deletion of your account and all associated data.</li>
+          </ul>
+          <p>To exercise these rights, please email us at <strong>support@pantrypalpro.com</strong>. We will respond to all requests within 30 days.</p>
+        </section>
+
+        <section id="third-party">
+          <h2>7. Third-Party Services</h2>
+          <p>To provide a world-class experience, we use the following trusted partners:</p>
+          <ul>
+            <li><strong>Supabase:</strong> For secure authentication and database management.</li>
+            <li><strong>Payment Gateway:</strong> For secure processing of Pro subscriptions.</li>
+            <li><strong>Google Fonts:</strong> For typography.</li>
+          </ul>
+          <p>Each of these services has its own privacy policy, which we encourage you to review on their respective websites.</p>
+        </section>
+
+        <section id="changes">
+          <h2>8. Changes to This Policy</h2>
+          <p>We may update this privacy policy from time to time. The updated version will be indicated by an updated "Revised" date and the updated version will be effective as soon as it is accessible.</p>
+          <p>If we make material changes to this privacy policy, we may notify you either by prominently posting a notice of such changes or by directly sending you a notification via email.</p>
+        </section>
+
+        <section id="contact">
+          <h2>9. Contact Us</h2>
+          <p>If you have questions or comments about this policy, you may contact our Data Protection Officer at:</p>
+          <div class="glass-card" style="padding: 1.5rem; margin-top: 1rem;">
+            <strong>PantryPal Pro HQ</strong><br>
+            Hinjawadi Phase 1, Pune,<br>
+            Maharashtra, India - 411057<br>
+            Email: <a href="mailto:support@pantrypalpro.com" style="color: var(--primary);">support@pantrypalpro.com</a>
+          </div>
+        </section>
+      </article>
+    </div>
   </main>
 
-  <!-- FOOTER -->
+  <!-- Footer -->
   <footer>
     <div class="container">
       <div class="footer-grid">
@@ -116,6 +350,8 @@
     </div>
   </footer>
 
+  <!-- Scripts -->
   <script src="../js/app.js"></script>
 </body>
+
 </html>

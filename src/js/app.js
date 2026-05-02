@@ -33,6 +33,18 @@ const FOOD_QUOTES = [
 function $(sel, ctx = document) { return ctx.querySelector(sel); }
 function $$(sel, ctx = document) { return [...ctx.querySelectorAll(sel)]; }
 
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
 // ---------- Auth (delegates to AuthService) ----------
 
 async function logout() {
@@ -80,11 +92,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
+  // Dashboard sidebar mobile toggle
+  const dashBurger = $('#dashboardBurgerBtn');
+  const sidebar = $('.sidebar');
+  if (dashBurger && sidebar) {
+    dashBurger.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      dashBurger.classList.toggle('active');
+    });
+  }
+
   // Page-specific init
   if (document.body.dataset.page === 'landing') initLanding();
   if (document.body.dataset.page === 'auth') initAuth();
   if (document.body.dataset.page === 'dashboard') initDashboard();
   if (document.body.dataset.page === 'about') initAbout();
+  if (document.body.dataset.page === 'contact') initContact();
+  if (['privacy', 'terms', 'career'].includes(document.body.dataset.page)) {
+    initScrollAnimations();
+  }
 
   // 3. Initialize theme
   initTheme();
@@ -181,13 +207,91 @@ function updateNavAuth() {
 
 // ===================== LANDING PAGE =====================
 async function initLanding() {
+  initScrollAnimations();
   renderTestimonials();
   renderPricing();
-  initScrollAnimations();
+}
+
+function initScrollAnimations() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  $$('.fade-up').forEach(el => observer.observe(el));
 }
 
 function initAbout() {
   initScrollAnimations();
+  initStatCounters();
+}
+
+function initContact() {
+  initScrollAnimations();
+  
+  // FAQ Accordion
+  $$('.faq-question').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const isActive = item.classList.contains('active');
+      
+      // Close others
+      $$('.faq-item').forEach(i => i.classList.remove('active'));
+      
+      if (!isActive) item.classList.add('active');
+    });
+  });
+
+  // Contact Form
+  const form = $('#contactForm');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      showToast("Thanks! We'll get back to you within 48 hours.", "success");
+      form.reset();
+    });
+  }
+}
+
+function initStatCounters() {
+  const stats = $$('.stat-number');
+  if (!stats.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCounter(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  stats.forEach(s => observer.observe(s));
+}
+
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  const suffix = el.dataset.suffix || '';
+  const duration = 2000; // 2 seconds
+  const frameRate = 1000 / 60; // 60 fps
+  const totalFrames = Math.round(duration / frameRate);
+  let frame = 0;
+
+  const counter = setInterval(() => {
+    frame++;
+    const progress = frame / totalFrames;
+    const current = Math.round(target * progress);
+
+    el.textContent = current + suffix;
+
+    if (frame === totalFrames) {
+      el.textContent = target + suffix;
+      clearInterval(counter);
+    }
+  }, frameRate);
 }
 
 function renderTestimonials() {
@@ -351,13 +455,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initPaymentFormListeners();
 });
 
-function initScrollAnimations() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1 });
-  $$('.fade-up').forEach(el => observer.observe(el));
-}
-
 function scrollToSection(id) {
   const el = document.getElementById(id);
   if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -368,7 +465,7 @@ function scrollToSection(id) {
 // --- Authentication Handlers ---
 let currentSearchQuery = "";
 
-function handleRecipeSearch() {
+const handleRecipeSearch = debounce(() => {
   const inputEl = $('#recipeSearchInput');
   if (!inputEl) return;
 
@@ -390,7 +487,7 @@ function handleRecipeSearch() {
   }
 
   renderRecipes();
-}
+}, 300);
 
 function selectSearch(name) {
   const inputEl = $('#recipeSearchInput');
@@ -964,10 +1061,10 @@ function renderNextBatch(isFirst = false) {
     const isFav = favoriteRecipes.has(r.id);
 
     return `
-    <div class="recipe-card ${locked ? 'locked' : ''}" ${locked ? `onclick="openPremiumLockedModal('${r.tier}')"` : `onclick="openRecipeModal(${r.id})"`}>
+    <div class="recipe-card recipe-card-reveal ${locked ? 'locked' : ''}" ${locked ? `onclick="openPremiumLockedModal('${r.tier}')"` : `onclick="openRecipeModal(${r.id})"`}>
       <img src="${r.image}" alt="${r.name}" class="recipe-bg-img" loading="lazy">
       <div class="recipe-card-overlay">
-        <button class="fav-btn" onclick="toggleFavorite(event, ${r.id})" style="position: absolute; top: 1rem; left: 1rem; z-index: 20; background: rgba(255,255,255,0.2); backdrop-filter: blur(4px); border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 1.2rem; color: #ff4d4d; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+        <button class="fav-btn" onclick="toggleFavorite(event, ${r.id})">
           ${isFav ? '♥' : '♡'}
         </button>
         
@@ -999,6 +1096,14 @@ function renderNextBatch(isFirst = false) {
   if (oldFooter) oldFooter.remove();
 
   grid.insertAdjacentHTML('beforeend', batchHtml);
+
+  // Trigger staggered animation
+  const newCards = grid.querySelectorAll('.recipe-card-reveal:not(.visible)');
+  newCards.forEach((card, index) => {
+    setTimeout(() => {
+      card.classList.add('visible');
+    }, index * 150); // Increased stagger to 150ms for more impact
+  });
 
   if (end < allFilteredRecipes.length) {
     grid.insertAdjacentHTML('beforeend', `

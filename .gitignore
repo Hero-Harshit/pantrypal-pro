@@ -1,18 +1,25 @@
 # Dependencies
 node_modules/
+dist/
+build/
+.npm/
 
 # Secrets & Configuration
-js/supabase.config.js
-
-# Environment Variables
+# We ignore the actual config file because it contains API keys
+src/js/supabase.config.js
 .env
 .env.local
+.env.*.local
+*.pem
+*.key
 
 # IDE / System files
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
+*.swp
+*.swo
 
 # Logs
 npm-debug.log*
@@ -20,3 +27,8 @@ yarn-debug.log*
 yarn-error.log*
 logs/
 *.log
+
+# Temp files
+tmp/
+temp/
+.cache/

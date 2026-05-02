@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About Us | PantryPal Pro — Pantry to Plate, Perfected.</title>
+  <title>About Us | PantryPal Pro</title>
   <meta name="description" content="Discover the mission and story behind PantryPal Pro, India's favorite AI-powered recipe generator.">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/landing.css">
@@ -24,6 +24,7 @@
       margin-bottom: 1rem;
       background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
@@ -49,7 +50,8 @@
       content: '';
       position: absolute;
       bottom: -10px;
-      left: 0;
+      left: 50%;
+      transform: translateX(-50%);
       width: 60px;
       height: 4px;
       background: var(--primary);
@@ -60,6 +62,8 @@
       max-width: 800px;
       line-height: 1.8;
       font-size: 1.125rem;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .text-content p {
@@ -90,27 +94,18 @@
       display: block;
     }
 
-    .value-card h3 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: var(--text);
-    }
-
-    .cta-banner-wrapper {
-      margin: 6rem 0;
-    }
-
     .cta-banner {
       background: linear-gradient(135deg, rgba(0, 230, 118, 0.1) 0%, rgba(15, 23, 42, 0.05) 100%);
       border: 1px solid var(--border-color);
       padding: 5rem 2rem;
       text-align: center;
       border-radius: var(--radius-lg);
+      margin: 4rem 0;
     }
 
     .cta-banner h2 {
-      font-size: 3rem;
-      margin-bottom: 2rem;
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 1.5rem;
     }
 
     @media (max-width: 768px) {
@@ -125,12 +120,18 @@
 </head>
 
 <body data-page="about">
+  <!-- Background Blobs -->
+  <div class="blob-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
 
   <!-- Navbar -->
   <nav class="navbar">
     <div class="container nav-container">
       <a href="landing.html" class="logo">
-        <img src="../assets/Logo.png" alt="PantryPal Pro Logo" class="logo-img">
+        <img src="../assets/Logo.png" alt="PantryPal Pro Logo" class="logo-img" loading="lazy">
         PantryPal Pro
       </a>
 
@@ -150,9 +151,9 @@
       </button>
     </div>
     <div class="mobile-menu" id="mobileMenu">
-      <a href="landing.html#features" onclick="scrollToSection('features')">Features</a>
-      <a href="landing.html#how-it-works" onclick="scrollToSection('how-it-works')">How It Works</a>
-      <a href="landing.html#pricing" onclick="scrollToSection('pricing')">Pricing</a>
+      <a href="landing.html#features">Features</a>
+      <a href="landing.html#how-it-works">How It Works</a>
+      <a href="landing.html#pricing">Pricing</a>
       <a href="about.html">About</a>
       <a href="auth.html" class="btn btn-primary">Get Started</a>
     </div>
@@ -170,7 +171,7 @@
     <!-- OUR MISSION -->
     <section class="content-section">
       <div class="container">
-        <div class="fade-up">
+        <div class="fade-up text-center">
           <h2 class="section-title">Our Mission</h2>
           <div class="text-content">
             <p>We exist to eliminate food waste and make cooking joyful for everyone. In an era where convenience often comes at the cost of sustainability, we're bringing the focus back to the heart of the home: the kitchen.</p>
@@ -183,7 +184,7 @@
     <!-- OUR STORY -->
     <section class="content-section" style="background: var(--bg-secondary);">
       <div class="container">
-        <div class="fade-up">
+        <div class="fade-up text-center">
           <h2 class="section-title">Our Story</h2>
           <div class="text-content">
             <p>Founded in 2026 by Hero Harshit, a food lover and engineer from Pune, PantryPal Pro began as a simple side project born out of personal frustration. Watching good ingredients go to waste after a long week of work felt like a problem technology could solve.</p>
@@ -197,7 +198,8 @@
     <section class="content-section">
       <div class="container">
         <div class="text-center fade-up">
-          <h2 class="section-title">Our Values</h2>
+          <h2 class="section-title">Our Core Values</h2>
+          <p style="margin-bottom: 3rem;">The principles that guide every recipe we generate.</p>
         </div>
         <div class="values-grid">
           <div class="value-card glass-card fade-up">
@@ -219,24 +221,77 @@
       </div>
     </section>
 
+    <!-- IMPACT STATS -->
+    <section class="content-section" style="background: var(--bg-secondary);">
+      <div class="container">
+        <div class="text-center fade-up">
+          <h2 class="section-title">Our Impact</h2>
+        </div>
+        <div class="values-grid">
+          <div class="text-center fade-up">
+            <h3 class="stat-number" data-target="500" data-suffix="k+" style="font-size: 3.5rem; color: var(--primary);">0</h3>
+            <p>Meals Generated</p>
+          </div>
+          <div class="text-center fade-up">
+            <h3 class="stat-number" data-target="12" data-suffix=" Tons" style="font-size: 3.5rem; color: var(--primary);">0</h3>
+            <p>Food Waste Saved</p>
+          </div>
+          <div class="text-center fade-up">
+            <h3 class="stat-number" data-target="10" data-suffix="k+" style="font-size: 3.5rem; color: var(--primary);">0</h3>
+            <p>Happy Families</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OUR TECHNOLOGY -->
+    <section class="content-section">
+      <div class="container">
+        <div class="text-center fade-up">
+          <h2 class="section-title">The Tech Inside Your Kitchen</h2>
+          <p style="margin-bottom: 4rem;">How PantryPal Pro turns simple ingredients into gourmet meals.</p>
+        </div>
+        <div class="values-grid">
+          <div class="value-card glass-card fade-up">
+            <span class="value-emoji">📸</span>
+            <h3>Computer Vision</h3>
+            <p>Our proprietary AI model identifies over 2,000 unique ingredients from a single photo of your fridge or pantry with 98% accuracy.</p>
+          </div>
+          <div class="value-card glass-card fade-up">
+            <span class="value-emoji">🥑</span>
+            <h3>Nutritional Intelligence</h3>
+            <p>Every recipe is analyzed for macros and micros, ensuring your meals align perfectly with your health and fitness goals.</p>
+          </div>
+          <div class="value-card glass-card fade-up">
+            <span class="value-emoji">⚡</span>
+            <h3>Real-time Synthesis</h3>
+            <p>Recipes aren't just pulled from a database; they are dynamically synthesized based on your available items and taste profile.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- CTA BANNER -->
-    <section class="container cta-banner-wrapper fade-up">
-      <div class="cta-banner glass-card">
-        <h2>Ready to cook smarter?</h2>
-        <a href="auth.html" class="btn btn-primary btn-lg">
-          Get Started Free <span style="margin-left: 0.5rem;">&rarr;</span>
-        </a>
+    <section class="content-section">
+      <div class="container fade-up">
+        <div class="cta-banner glass-card">
+          <h2>Ready to cook smarter?</h2>
+          <p style="margin-bottom: 2rem;">Join thousands of families saving time, money, and the planet.</p>
+          <a href="auth.html" class="btn btn-primary btn-lg">
+            Get Started Free <span style="margin-left: 0.5rem;">&rarr;</span>
+          </a>
+        </div>
       </div>
     </section>
   </main>
 
   <!-- FOOTER -->
-  <footer id="about">
+  <footer>
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col">
           <div class="logo mb-8">
-            <img src="../assets/Logo.png" alt="PantryPal Pro Logo" class="logo-img">
+            <img src="../assets/Logo.png" alt="PantryPal Pro Logo" class="logo-img" loading="lazy">
             PantryPal Pro
           </div>
           <p>Pantry to Plate, Perfected. Making smart cooking accessible to everyone.</p>
@@ -271,17 +326,7 @@
     </div>
   </footer>
 
-  <!-- Supabase SDK + Config -->
-  <script src="../js/supabaseLoader.js"></script>
-  <script src="../js/supabase.config.js"></script>
-  <!-- Utilities -->
-  <script src="../js/utils/logger.js"></script>
-  <script src="../js/utils/validators.js"></script>
-  <!-- Services -->
-  <script src="../js/services/supabaseClient.js"></script>
-  <script src="../js/services/authService.js"></script>
-  <!-- App Data + Logic -->
-  <script src="../js/data.js"></script>
+  <!-- Scripts -->
   <script src="../js/app.js"></script>
 </body>
 

@@ -305,18 +305,12 @@
   z-index: 2;
   border: 6px solid #1e293b;
   animation: floatFront 6s ease-in-out infinite;
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes floatFront {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-15px);
-  }
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(-1deg); }
 }
 
 .dark .phone-front {
@@ -410,6 +404,21 @@
   padding: 1rem;
   text-align: center;
   margin-bottom: 0.75rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  animation: scan-pulse 3s infinite;
+}
+
+@keyframes scan-pulse {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 .dark .scan-card {
@@ -519,15 +528,24 @@
   position: absolute;
   background: var(--glass-bg);
   backdrop-filter: blur(12px);
-  padding: 0.6rem 1.2rem;
-  border-radius: 12px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  border: 1px solid var(--border);
+  padding: 0.75rem 1.5rem;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--glass-border);
   z-index: 5;
   animation: floatTag 6s ease-in-out infinite;
   white-space: nowrap;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.float-tag:hover {
+  transform: scale(1.1) !important;
+  background: var(--primary);
+  color: #000;
+  border-color: #000;
 }
 
 .ft-protein {
@@ -567,6 +585,8 @@
   z-index: 0;
   opacity: 0.85;
   pointer-events: none;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .deco-veggies {
@@ -798,11 +818,19 @@
 @media (max-width: 1024px) {
   .hero-grid {
     grid-template-columns: 1fr;
-    text-align: left;
+    text-align: center;
   }
 
   .hero-left {
     padding-right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-subtitle {
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .hero-right {
@@ -812,6 +840,7 @@
   .hero-features {
     flex-wrap: wrap;
     gap: 1.25rem;
+    justify-content: center;
   }
 
   .features-grid,

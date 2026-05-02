@@ -4,47 +4,216 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PantryPal Pro — Contact Us</title>
+  <title>Contact Us | PantryPal Pro</title>
+  <meta name="description" content="Get in touch with the PantryPal Pro team for support, billing, or feature requests.">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/landing.css">
   <link rel="icon" type="image/png" href="../assets/Logo.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
   <style>
-    .page-header {
-      padding: 8rem 0 4rem;
+    .contact-hero {
+      padding: 10rem 0 4rem;
       text-align: center;
-      background: linear-gradient(to bottom, var(--primary-light), transparent);
+      background: var(--bg-gradient);
     }
-    .page-content {
-      max-width: 900px;
-      margin: 0 auto 6rem;
-    }
-    .page-content h2 {
-      margin-top: 2rem;
+
+    .contact-hero h1 {
+      font-size: clamp(3rem, 7vw, 4.5rem);
       margin-bottom: 1rem;
+      font-weight: 900;
+    }
+
+    .contact-hero p {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+    }
+
+    .tier-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 6rem;
+    }
+
+    .tier-card {
+      padding: 2.5rem;
+      text-align: center;
+      position: relative;
+      transition: transform 0.3s ease;
+    }
+
+    .tier-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .tier-card.featured {
+      border: 2px solid var(--primary);
+      background: rgba(0, 230, 118, 0.05);
+    }
+
+    .best-support-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: #000;
+      padding: 0.25rem 1rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .tier-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .contact-main {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 4rem;
+      padding-bottom: 8rem;
+    }
+
+    .contact-info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .info-item h4 {
+      margin-bottom: 0.5rem;
       color: var(--primary);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
-    .page-content h3 {
-      margin-top: 1.5rem;
-      margin-bottom: 1rem;
+
+    .info-item p {
+      font-size: 1.1rem;
       color: var(--text);
     }
-    .page-content p {
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .social-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      transition: all 0.3s ease;
+    }
+
+    .social-btn:hover {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+      transform: scale(1.1);
+    }
+
+    .contact-form-panel {
+      padding: 3rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .faq-section {
+      padding: 6rem 0;
+      background: var(--bg-secondary);
+    }
+
+    .faq-item {
       margin-bottom: 1rem;
-      line-height: 1.6;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 1.5rem 2rem;
+      background: var(--glass-bg);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .faq-answer-content {
+      padding: 1.5rem 2rem;
       color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 200px;
+    }
+
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+    }
+
+    .faq-icon {
+      transition: transform 0.3s ease;
+      color: var(--primary);
+    }
+
+    @media (max-width: 1024px) {
+      .contact-main {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 
-<body>
+<body data-page="contact">
+  <!-- Background Blobs -->
+  <div class="blob-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
 
   <!-- Navbar -->
   <nav class="navbar">
     <div class="container nav-container">
       <a href="landing.html" class="logo">
-        <img src="../assets/Logo.png" alt="PantryPal Pro Logo" class="logo-img">
+        <img src="../assets/Logo.png" alt="PantryPal Pro Logo" class="logo-img" loading="lazy">
         PantryPal Pro
       </a>
 
@@ -56,47 +225,166 @@
       </div>
 
       <div class="nav-actions">
-        <a href="auth.html#login" class="btn btn-outline btn-sm">Login</a>
-        <a href="auth.html#signup" class="btn btn-primary btn-sm">Sign Up</a>
+        <div id="navAuthBtns"></div>
       </div>
+
+      <button class="burger-btn" id="burgerBtn">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="landing.html#features">Features</a>
+      <a href="landing.html#how-it-works">How It Works</a>
+      <a href="landing.html#pricing">Pricing</a>
+      <a href="about.html">About</a>
+      <a href="auth.html" class="btn btn-primary">Get Started</a>
     </div>
   </nav>
 
-  <header class="page-header">
-    <div class="container">
-      <h1>Contact Us</h1>
-      <p class="text-muted">PantryPal Pro</p>
-    </div>
-  </header>
+  <main>
+    <header class="contact-hero">
+      <div class="container">
+        <h1 class="fade-up">Contact Us</h1>
+        <p class="fade-up stagger-1">We're here to help — choose the best way to reach us.</p>
+      </div>
+    </header>
 
-  <main class="container page-content glass-card fade-up" style="padding: 3rem;">
-    <h2>Get in Touch</h2>
-    <p>We'd love to hear from you. Whether you have a question about our features, pricing, or anything else, our team is ready to answer all your questions.</p>
-    
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; margin-top: 3rem;">
-      <div>
-        <h3>Contact Details</h3>
-        <p><strong>Email:</strong> [Your Email Here]</p>
-        <p><strong>Phone:</strong> [Your Phone Number Here]</p>
-        <p><strong>Address:</strong><br>[Your Address Line 1]<br>[Your Address Line 2]<br>[City, Country, Zip]</p>
-        <br>
-        <h3>Support Hours</h3>
-        <p>Monday - Friday: 9am - 5pm</p>
-        <p>Weekend: Closed</p>
+    <div class="container">
+      <!-- SUPPORT TIERS -->
+      <div class="tier-grid">
+        <div class="tier-card glass-card fade-up stagger-1">
+          <span class="tier-icon">📧</span>
+          <h3>Free Plan</h3>
+          <p class="text-muted" style="margin-top: 1rem;">Email support, response within 48 hours.</p>
+        </div>
+        <div class="tier-card glass-card fade-up stagger-2">
+          <span class="tier-icon">💬</span>
+          <h3>Plus Plan</h3>
+          <p class="text-muted" style="margin-top: 1rem;">24/7 live chat support from our expert team.</p>
+        </div>
+        <div class="tier-card glass-card featured fade-up stagger-3">
+          <div class="best-support-badge">Best Support</div>
+          <span class="tier-icon">📞</span>
+          <h3>Pro Plan</h3>
+          <p class="text-muted" style="margin-top: 1rem;">24/7 dedicated phone call support + priority email handling.</p>
+        </div>
       </div>
-      <div>
-        <h3>Send us a Message</h3>
-        <form style="display: flex; flex-direction: column; gap: 1rem;" onsubmit="event.preventDefault(); alert('Message sent successfully!');">
-          <input type="text" placeholder="Your Name" style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: transparent; color: var(--text);" required>
-          <input type="email" placeholder="Your Email" style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: transparent; color: var(--text);" required>
-          <textarea rows="5" placeholder="Your Message" style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); resize: vertical; background: transparent; color: var(--text);" required></textarea>
-          <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem;">Send Message</button>
-        </form>
+
+      <!-- CONTACT MAIN -->
+      <div class="contact-main">
+        <!-- INFO -->
+        <div class="contact-info-list fade-up">
+          <div class="info-item">
+            <h4>Email Us</h4>
+            <p><a href="mailto:support@pantrypalpro.com" style="color: var(--text);">support@pantrypalpro.com</a></p>
+          </div>
+          <div class="info-item">
+            <h4>Call Us</h4>
+            <p><a href="tel:+919876543210" style="color: var(--text);">+91 98765 43210</a></p>
+          </div>
+          <div class="info-item">
+            <h4>Our Office</h4>
+            <p>Hinjawadi Phase 1, Pune,<br>Maharashtra, India - 411057</p>
+          </div>
+          <div class="info-item">
+            <h4>Support Hours</h4>
+            <p><strong>Chat & Email:</strong> Mon–Sun, 9am–11pm IST</p>
+            <p><strong>Phone (Pro only):</strong> 24/7</p>
+          </div>
+        </div>
+
+        <!-- FORM -->
+        <div class="contact-form-panel glass-card fade-up stagger-1">
+          <form id="contactForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" class="input" placeholder="Enter your name" required>
+              </div>
+              <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" class="input" placeholder="Enter your email" required>
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+              <label>Subject</label>
+              <select class="input">
+                <option>General Inquiry</option>
+                <option>Billing & Plans</option>
+                <option>Bug Report</option>
+                <option>Feature Request</option>
+                <option>Partnership</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 2rem;">
+              <label>Message</label>
+              <textarea class="input" rows="5" placeholder="How can we help you?" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Send Message &rarr;</button>
+          </form>
+        </div>
       </div>
     </div>
+
+    <!-- FAQ -->
+    <section class="faq-section">
+      <div class="container">
+        <div class="text-center fade-up" style="margin-bottom: 4rem;">
+          <h2 class="section-title">Common Questions</h2>
+          <p>Quick answers to our most frequently asked questions.</p>
+        </div>
+
+        <div class="faq-list fade-up stagger-1" style="max-width: 800px; margin: 0 auto;">
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>How do I cancel my subscription?</span>
+              <span class="faq-icon">▼</span>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-content">
+                You can cancel anytime via the 'Profile' section in your dashboard. Your Pro features will remain active until the end of your current billing cycle.
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>Is my payment data secure?</span>
+              <span class="faq-icon">▼</span>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-content">
+                Yes. We use industry-standard encryption and processed through certified third-party payment gateways. We never store your card details on our servers.
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>Can I switch from Plus to Pro mid-month?</span>
+              <span class="faq-icon">▼</span>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-content">
+                Absolutely! When you upgrade, we calculate the remaining value of your current plan and apply it as a discount to your new subscription.
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>I found a bug — how do I report it?</span>
+              <span class="faq-icon">▼</span>
+            </div>
+            <div class="faq-answer">
+              <div class="faq-answer-content">
+                We love feedback! Use the form above and select 'Bug Report' as the subject. Including steps to reproduce the issue helps us fix it faster.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- FOOTER -->
+  <!-- Footer -->
   <footer>
     <div class="container">
       <div class="footer-grid">
@@ -137,6 +425,8 @@
     </div>
   </footer>
 
+  <!-- Scripts -->
   <script src="../js/app.js"></script>
 </body>
+
 </html>
