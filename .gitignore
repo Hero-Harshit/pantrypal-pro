@@ -5,8 +5,6 @@ build/
 .npm/
 
 # Secrets & Configuration
-# We ignore the actual config file because it contains API keys
-src/js/supabase.config.js
 .env
 .env.local
 .env.*.local
