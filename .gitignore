@@ -31,4 +31,5 @@ logs/
 # Temp files
 tmp/
 temp/
-.cache/
+# AI Metadata
+brain/
