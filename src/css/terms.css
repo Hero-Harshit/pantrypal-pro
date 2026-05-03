@@ -1,0 +1,149 @@
+.terms-hero {
+    padding: 10rem 0 4rem;
+    text-align: center;
+    background: var(--bg-gradient);
+}
+
+.terms-hero h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: 1rem;
+}
+
+.terms-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 4rem;
+    padding: 4rem 0 8rem;
+    align-items: start;
+}
+
+.terms-sidebar {
+    position: sticky;
+    top: 100px;
+    padding: 2rem;
+}
+
+.toc-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.toc-link {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    display: block;
+    padding: 0.5rem 0;
+    border-left: 2px solid transparent;
+    padding-left: 1.5rem;
+}
+
+.toc-link:hover,
+.toc-link.active {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.terms-content {
+    line-height: 1.8;
+    color: var(--text);
+}
+
+.plain-english-box {
+    background: rgba(0, 230, 118, 0.05);
+    border: 1px solid rgba(0, 230, 118, 0.2);
+    margin-bottom: 4rem;
+}
+
+.plain-english-box h3 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.terms-content h2 {
+    font-size: 2rem;
+    margin: 4rem 0 1.5rem;
+    color: var(--text);
+    scroll-margin-top: 120px;
+}
+
+.terms-content p {
+    margin-bottom: 1.5rem;
+    color: var(--text-muted);
+}
+
+.terms-content ul {
+    margin-bottom: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+.terms-content li {
+    margin-bottom: 0.75rem;
+    color: var(--text-muted);
+}
+
+.terms-content strong {
+    color: var(--text);
+}
+
+@media (max-width: 1024px) {
+    .terms-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .terms-sidebar {
+        position: static;
+        padding: 1rem 0;
+    }
+
+    .toc-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .toc-link {
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-full);
+        font-size: 0.85rem;
+        padding-left: 1rem;
+    }
+
+    .toc-link.active {
+        background: var(--primary);
+        color: #000;
+        border-color: var(--primary);
+    }
+}
+
+@media (max-width: 768px) {
+    .terms-hero {
+        padding: 7rem 0 3rem;
+    }
+
+    .terms-hero h1 {
+        font-size: 2.25rem;
+    }
+
+    .terms-layout {
+        padding: 1rem 0 5rem;
+    }
+
+    .terms-content h2 {
+        font-size: 1.75rem;
+        margin: 2.5rem 0 1rem;
+    }
+
+    .plain-english-box {
+        margin-bottom: 3rem;
+    }
+}

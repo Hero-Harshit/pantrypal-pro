@@ -1,15 +1,14 @@
-// ============================================================
-// PantryPal Pro — Local Data (Fallback + Mock Data)
-// /js/data.js
-//
-// Used when Supabase is not configured or for offline fallback.
-// When Supabase IS configured, RecipeService fetches from DB.
-// ============================================================
+// src/js/data.js — mock simulation code removed 2026-05-03
+// Real server integrations are marked with 🔌
 
-// Mock ingredients returned by AI scan simulation
-const MOCK_INGREDIENTS = [
-
-];
+// ─────────────────────────────────────────────
+// 🔌 SERVER CALL PLACEHOLDER
+// What this does: Fetches a list of ingredients detected from a fridge/pantry photo.
+// Future implementation: A real computer vision API call (e.g. Google Cloud Vision or Claude Vision API) 
+// that receives the uploaded image and returns a list of detected food items.
+// Phase: Phase 2
+// ─────────────────────────────────────────────
+const MOCK_INGREDIENTS = []; // Kept as empty placeholder to avoid reference errors
 
 // Subscription plans (pricing)
 const PLANS = {
@@ -1579,6 +1578,7 @@ const RECIPES = [
   { "id": 92, "name": "Tandoori Salmon", "description": "Salmon marinated in Indian spices and grilled.", "ingredients": [], "steps": [], "tier": "pro", "meal": "dinner", "cuisine": "indian", "difficulty": "advanced", "tags": ["high-protein"], "image": "../assets/Random Food Pics (23).jpg", "time": "40 min", "calories": 520, "rating": 4.8 },
   { "id": 93, "name": "Veggie Burrito Bowl", "description": "Mexican-style bowl with rice, beans, and toppings.", "ingredients": [], "steps": [], "tier": "plus", "meal": "lunch", "cuisine": "other", "difficulty": "beginner", "tags": ["veg"], "image": "../assets/Random Food Pics (24).jpg", "time": "25 min", "calories": 450, "rating": 4.4 },
   { "id": 94, "name": "Lamb Chops with Herb Crust", "description": "Tender lamb chops coated with herb crust.", "ingredients": [], "steps": [], "tier": "pro", "meal": "dinner", "cuisine": "french", "difficulty": "advanced", "tags": ["high-protein"], "image": "../assets/Random Food Pics (1).jpg", "time": "45 min", "calories": 700, "rating": 4.9 },
+  { "id": 95, "name": "Vegetable Jalfrezi", "description": "Spicy stir-fried vegetables in a tangy tomato-based sauce.", "ingredients": [], "steps": [], "tier": "plus", "meal": "dinner", "cuisine": "indian", "difficulty": "intermediate", "tags": ["veg"], "image": "../assets/Random Food Pics (2).jpg", "time": "35 min", "calories": 380, "rating": 4.6 },
   { "id": 96, "name": "Baked Ziti Pasta", "description": "Oven-baked pasta layered with cheese and rich tomato sauce.", "ingredients": [], "steps": [], "tier": "plus", "meal": "dinner", "cuisine": "italian", "difficulty": "intermediate", "tags": ["veg"], "image": "../assets/Random Food Pics (3).jpg", "time": "45 min", "calories": 520, "rating": 4.6 },
   { "id": 97, "name": "Shakshuka", "description": "Eggs poached in spicy tomato sauce with herbs.", "ingredients": [], "steps": [], "tier": "pro", "meal": "breakfast", "cuisine": "other", "difficulty": "advanced", "tags": ["high-protein", "gluten-free"], "image": "../assets/Random Food Pics (4).jpg", "time": "35 min", "calories": 380, "rating": 4.8 },
   { "id": 98, "name": "Chicken Shawarma Bowl", "description": "Middle Eastern spiced chicken served with rice and sauces.", "ingredients": [], "steps": [], "tier": "plus", "meal": "lunch", "cuisine": "other", "difficulty": "intermediate", "tags": ["high-protein"], "image": "../assets/Random Food Pics (5).jpg", "time": "40 min", "calories": 550, "rating": 4.7 },
