@@ -1,5 +1,7 @@
 # PantryPal Pro
 
+> **Note:** Due to limit reaching and Supabase exhausting again and again, the Supabase integration has been removed. Authentication and profile data are now stored entirely in the browser's LocalStorage.
+
 PantryPal Pro is a static web app prototype for a smart kitchen assistant and recipe generator. It combines a marketing landing experience, user authentication, and a dashboard for browsing recipes, saving favorites, and simulating pantry scanning.
 
 ---
