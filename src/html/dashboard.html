@@ -63,27 +63,20 @@
       <div class="chatbot-container mt-auto">
         <div class="chatbot-header">
           <div class="chatbot-header-left">
-            <span class="chatbot-status"></span>
+            <span class="chatbot-status" style="background: #94a3b8; box-shadow: none;"></span>
             <h4>AI Chef Assistant</h4>
           </div>
           <div class="chatbot-avatar">👨‍🍳</div>
         </div>
-        <div class="chatbot-messages" id="chatbotMessages">
+        <div class="chatbot-messages" id="chatbotMessages" style="opacity: 0.6; filter: blur(1.5px); pointer-events: none;">
           <div class="message bot-message">
             Hello! I'm your AI Chef. Ask me anything about your recipes! 🍳
           </div>
         </div>
-        <div class="chatbot-input-wrap">
-          <form class="chatbot-input" id="chatbotForm" onsubmit="event.preventDefault(); openChatbotLockModal();">
-            <input type="text" placeholder="Ask about recipes..." id="chatbotInput">
-            <button type="submit" class="chatbot-send">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-            </button>
-          </form>
+        <div class="chatbot-input-wrap" style="padding: 0.75rem 1rem; border-top: 1px solid var(--border); background: var(--bg-secondary); cursor: pointer;" onclick="openChatbotLockModal()">
+          <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; background: var(--bg); border: 1px dashed var(--border); padding: 0.6rem; border-radius: 30px; width: 100%;">
+            <span>🔒 AI Chef is Locked</span>
+          </div>
         </div>
       </div>
     </aside>
@@ -246,14 +239,10 @@
     </div>
   </div>
 
-  <!-- Supabase SDK + Config -->
-  <script src="../js/supabaseLoader.js"></script>
-  <script src="../js/supabase.config.js"></script>
   <!-- Utilities -->
   <script src="../js/utils/logger.js"></script>
   <script src="../js/utils/validators.js"></script>
   <!-- Services -->
-  <script src="../js/services/supabaseClient.js"></script>
   <script src="../js/services/authService.js"></script>
   <!-- App Data + Logic -->
   <script src="../js/data.js"></script>
@@ -425,6 +414,18 @@
       </p>
       <button class="btn btn-primary btn-full" onclick="upgradePlan('plus')">Explore Plans</button>
       <button class="btn btn-ghost btn-full mt-4" onclick="closeAvatarLockModal()">Maybe Later</button>
+    </div>
+  </div>
+  <!-- Premium Locked Modal -->
+  <div class="modal-overlay" id="premiumLockedModalOverlay" onclick="closePremiumLockedModal(event)">
+    <div class="modal-content" style="max-width: 500px; text-align: center; padding: 3rem;">
+      <button class="modal-close" onclick="closePremiumLockedModal()">×</button>
+      <div style="font-size: 3rem; margin-bottom: 1.5rem;">🔒</div>
+      <h2 id="premiumLockedTitle" style="margin-bottom: 1rem;">Unlock Premium Recipe</h2>
+      <p class="text-muted" style="margin-bottom: 2rem;">
+        Upgrades are disabled in the free offline version.
+      </p>
+      <button class="btn btn-primary btn-full" onclick="closePremiumLockedModal()">OK</button>
     </div>
   </div>
 </body>

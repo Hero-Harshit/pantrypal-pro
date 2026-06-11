@@ -100,16 +100,7 @@ function initPaymentFormListeners() {
 }
 
 function processPayment() {
-    // ─────────────────────────────────────────────
-    // 🔌 SERVER CALL PLACEHOLDER
-    // What this does: Processes the user's subscription payment and upgrades their plan.
-    // Future implementation: Plan upgrades will be handled via a payment gateway 
-    // webhook (Razorpay) which will update the 'plan' column in the Supabase 
-    // 'profiles' table. The client should then re-fetch the user profile 
-    // from Supabase to get the confirmed plan — never trust client-side mutation.
-    // Phase: MVP+1
-    // ─────────────────────────────────────────────
-    showToast('Payment processing integration planned for MVP+1', 'info');
+    showToast('Subscription upgrades are disabled in this offline version.', 'warning');
 }
 
 document.addEventListener('DOMContentLoaded', () => {

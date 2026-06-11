@@ -71,8 +71,7 @@ window.changeTheme = function (theme) {
 
     if (premiumConfig[theme]) {
         const config = premiumConfig[theme];
-        const user = currentUser || (typeof AuthService !== 'undefined' ? AuthService.getCurrentUser() : JSON.parse(localStorage.getItem('pp_user') || 'null'));
-        const plan = user ? user.plan : 'free';
+        const plan = 'free';
         const isLocked = (plan === 'free') || (plan === 'plus' && config.tier === 'pro');
 
         if (isLocked) {
@@ -153,13 +152,15 @@ function scrollToSection(id) {
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Load user from storage
     currentUser = JSON.parse(localStorage.getItem('pp_user') || 'null');
+    if (currentUser) currentUser.plan = 'free';
 
-    // 2. Initialize Supabase if available
+    // 2. Initialize Auth
     if (typeof AuthService !== 'undefined') {
         AuthService.init().then(() => {
             const freshUser = AuthService.getCurrentUser();
             if (freshUser) {
                 currentUser = freshUser;
+                currentUser.plan = 'free';
                 updateNavAuth();
                 if (typeof initDashboard === 'function' && document.body.dataset.page === 'dashboard') initDashboard();
             }
